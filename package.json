@@ -22,7 +22,7 @@
     "webpack-cli": "^4.2.0"
   },
   "scripts": {
-    "build": "rm -r dist/ && webpack",
+    "build": "rm -rf dist/ && webpack",
     "publish": "npm publish --access public",
     "storybook": "start-storybook -p 6006 --no-dll",
     "build-storybook": "build-storybook --no-dll"
