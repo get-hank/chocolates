@@ -98,10 +98,35 @@ storybook` to kick off a storybook webpack build.
 
 ### Deployment
 
-```
-yarn build
-yarn publish
-```
+Chocolates is published to npm as a public package under the
+@hank-technology user. There are two kinds of deployment: stable &
+alpha.
+
+Alpha deploys apply an "-alpha-_SHA_" postfix to the latest stable's
+semver, where _SHA_ is the 8-digit abbreviated SHA of the published
+commit.
+
+Stable deployments use semver and their changes have been tested on
+all known clients via alpha versions.
 
 You'll need to log in to the npm command line as `hank-technology`
 before running publish.
+
+#### Alpha deployment
+
+1. Commit all changes with a meaningful commit.
+1. Rebase and push to alpha branch (or make a PR to alpha and merge it)
+1. Get the new short SHA with `git rev-parse --short=8 HEAD`
+1. Tag the commit in github `git tag -a <version>` where version is the new version string
+1. Push tags `git push --tags`
+1. Update the version post-fix in package.json to include alpha and the SHA
+1. Build and publish: `yarn build && yarn publish`
+1. Clear any changes to package.json, no need to add a commit for the alpha version.
+
+#### Stable deployment
+
+1. Bump the version number in `package.json` according to semver standards
+1. Commit all changes with a meaningful commit
+1. Tag the commit in github `git tag -a <version>` where version is the new version string
+1. Push tags `git push --tags`
+1. Build and publish: `yarn build && yarn publish`
