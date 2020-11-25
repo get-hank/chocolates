@@ -13,6 +13,9 @@ export interface SpacingProps extends React.HTMLAttributes<HTMLDivElement> {
 
   smP?: number;
   smPy?: number;
+
+  hideUnder?: string;
+  hideOver?: string;
 }
 
 export const padding = (rule: string, size: number) =>
@@ -21,6 +24,12 @@ export const padding = (rule: string, size: number) =>
 export const mediaPadding = (bp: string, rule: string, size: number) => `
   @media (max-width: ${breakPoint(bp)}px) {
     ${padding(rule, size)}
+  }
+`;
+
+export const hideAt = (bp: string, under: boolean) => `
+  @media (${under ? "max" : "min"}-width: ${breakPoint(bp)}px) {
+    display: none;
   }
 `;
 
@@ -43,6 +52,9 @@ export const SpacingContainer = styled.div<SpacingProps>`
       ? mediaPadding("sm", "padding-top", smPy) +
       mediaPadding("sm", "padding-bottom", smPy)
       : ""};
+
+  ${({ hideUnder }) => (hideUnder ? hideAt(hideUnder, true) : "")}
+  ${({ hideOver }) => (hideOver ? hideAt(hideOver, false) : "")}
 `;
 
 export const Div = SpacingContainer;
