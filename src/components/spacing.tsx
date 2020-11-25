@@ -29,7 +29,7 @@ export const mediaPadding = (bp: string, rule: string, size: number) => `
 
 export const hideAt = (bp: string, under: boolean) => `
   @media (${under ? "max" : "min"}-width: ${breakPoint(bp)}px) {
-    display: none;
+    display: none !important;
   }
 `;
 
