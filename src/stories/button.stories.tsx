@@ -20,4 +20,7 @@ export const Standard = Template.bind({});
 Standard.args = {
   children: "Click me",
   disabled: false,
+  size: "small",
+  secondary: false,
+  wide: false,
 };

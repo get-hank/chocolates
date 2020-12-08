@@ -11,7 +11,8 @@ export const defaultTheme = {
   colors: {
     primary: colors.primary700,
     primaryDark: colors.primary900,
-    primaryLight: colors.primary100,
+    primaryLight: colors.primary200,
+    primaryLightest: colors.primary100,
     white: colors.white,
     black: colors.black,
     grayLight: colors.gray10,
