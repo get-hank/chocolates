@@ -13,6 +13,7 @@ type TableProps = {
 
 const TableStyle = styled.table`
   width: 100%;
+  border-collapse: collapse;
   ${({ theme }) => fontSize(1, theme.typography.baseSize)}
   ${({ theme }) => passThroughRule("font-family", theme.typography.baseType)}
 
