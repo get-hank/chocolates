@@ -4,3 +4,4 @@ export * from "./components/spacing";
 export * from "./components/typography";
 export * from "./util/helpers";
 export * from "./util/layout";
+export * as Button from "./components/Button";

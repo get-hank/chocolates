@@ -1,8 +1,9 @@
 import React from "react";
 import styled from "styled-components";
 import { SpacingProps, SpacingContainer } from "./spacing";
-import { rem } from "../util/helpers";
+import { passThroughRule, rem } from "../util/helpers";
 import { breakPoint } from "../util/layout";
+import { colors } from "../util/colors";
 
 export const fontSize = (size = 1, base = 1) =>
   `font-size: ${rem(size, base)};`;
@@ -20,9 +21,6 @@ const colorRule = (color: string | undefined) =>
 
 const lineHeightRule = (lineHeight: number | undefined) =>
   lineHeight ? `line-height: ${lineHeight}%;` : "";
-
-const passThroughRule = (rule: string, value: any) =>
-  value !== undefined ? `${rule}: ${value};` : "";
 
 const rulesForTextProps = ({
   center,
@@ -46,10 +44,10 @@ const components = nativeTags.reduce((memo = {}, tag) => {
 }, tagMap);
 
 export const H1 = styled(components.h1) <TextProps>`
-  color: #13463b;
+  color: ${({ theme }) => theme.colors.text};
   ${({ theme }) => fontSize(3, theme.typography.baseSize)}
+  ${({ theme }) => passThroughRule("font-family", theme.typography.headingType)}
   font-weight: 300;
-  font-family: "Poppins", sans-serif;
 
   @media (max-width: ${breakPoint("sm")}px) {
     ${({ theme }) => fontSize(2, theme.typography.baseSize)}
@@ -60,10 +58,10 @@ export const H1 = styled(components.h1) <TextProps>`
 `;
 
 export const H2 = styled(components.h2) <TextProps>`
-  color: #292827;
+  color: ${({ theme }) => theme.colors.text};
   ${({ theme }) => fontSize(2, theme.typography.baseSize)}
+  ${({ theme }) => passThroughRule("font-family", theme.typography.headingType)}
   font-weight: 400;
-  font-family: "Poppins", sans-serif;
 
   @media (max-width: ${breakPoint("sm")}px) {
     ${({ theme }) => fontSize(1.75, theme.typography.baseSize)}
@@ -73,10 +71,10 @@ export const H2 = styled(components.h2) <TextProps>`
 `;
 
 export const H3 = styled(components.h3) <TextProps>`
-  color: #292827;
+  color: ${({ theme }) => theme.colors.text};
   ${({ theme }) => fontSize(1.5, theme.typography.baseSize)}
+  ${({ theme }) => passThroughRule("font-family", theme.typography.headingType)}
   font-weight: 400;
-  font-family: "Poppins", sans-serif;
 
   @media (max-width: ${breakPoint("sm")}px) {
     ${({ theme }) => fontSize(1.375, theme.typography.baseSize)}
@@ -86,10 +84,10 @@ export const H3 = styled(components.h3) <TextProps>`
 `;
 
 export const H4 = styled(components.h4) <TextProps>`
-  color: #292827;
+  color: ${({ theme }) => theme.colors.text};
   ${({ theme }) => fontSize(1.25, theme.typography.baseSize)}
+  ${({ theme }) => passThroughRule("font-family", theme.typography.headingType)}
   font-weight: 400;
-  font-family: "Poppins", sans-serif;
 
   @media (max-width: ${breakPoint("sm")}px) {
     ${({ theme }) => fontSize(1.125, theme.typography.baseSize)}
@@ -99,17 +97,19 @@ export const H4 = styled(components.h4) <TextProps>`
 `;
 
 export const H5 = styled(components.h5) <TextProps>`
+  color: ${({ theme }) => theme.colors.text};
   ${({ theme }) => fontSize(0.75, theme.typography.baseSize)}
+  ${({ theme }) => passThroughRule("font-family", theme.typography.headingType)}
   font-weight: 400;
-  font-family: "Poppins", sans-serif;
   letter-spacing: 1px;
 
   ${rulesForTextProps}
 `;
 
 export const P = styled(components.p) <TextProps>`
+  color: ${({ theme }) => theme.colors.text};
   ${({ theme }) => fontSize(1, theme.typography.baseSize)}
-  font-family: "Lato", sans-serif;
+  ${({ theme }) => passThroughRule("font-family", theme.typography.baseType)}
 
   ${rulesForTextProps}
 `;
