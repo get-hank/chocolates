@@ -8,6 +8,7 @@
     "module": "esnext",
     "jsx": "react",
     "allowSyntheticDefaultImports": true,
-    "noImplicitAny": true
+    "noImplicitAny": true,
+    "moduleResolution": "node"
   }
 }
