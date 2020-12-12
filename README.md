@@ -93,8 +93,7 @@ it'll be rare that you'll need to use this component.
 
 ### Storybook
 
-We use storybook to iterate on components in chocolates. Use `yarn run
-storybook` to kick off a storybook webpack build.
+We use storybook to iterate on components in chocolates. Use `yarn run storybook` to kick off a storybook webpack build.
 
 ### Deployment
 

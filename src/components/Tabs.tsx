@@ -49,7 +49,7 @@ const Tabs = ({ tabs }: TabsProps) => {
     <div>
       <LabelRow>
         {tabs.map((t, idx) => (
-          <LabelWrapper key={`tab-idx`} px={1}>
+          <LabelWrapper key={`tab-${idx}`} px={1}>
             <TabLabel onClick={() => setActive(idx)} active={active === idx}>
               {t.label}
             </TabLabel>
