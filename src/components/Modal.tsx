@@ -55,21 +55,13 @@ const Modal: React.FC<ModalProps> = ({
 
   if (!open) return null;
 
-  const dismiss = (e: any) => {
-    e.stopPropagation();
+  const dismiss = () => {
     onCancel && onCancel();
   };
 
-  const submit = onSubmit
-    ? (e: any) => {
-      e.stopPropagation();
-      onSubmit();
-    }
-    : null;
-
   return ReactDOM.createPortal(
     <Overlay center onClick={dismiss}>
-      <ModalWrapper p={3}>
+      <ModalWrapper p={3} onClick={(e: any) => e.stopPropagation()}>
         <Container pb={2} align="center" justify="space-between">
           <H3 weight={600} pr={4}>
             {titleText}
@@ -85,7 +77,7 @@ const Modal: React.FC<ModalProps> = ({
               </Link>
             </SpacingContainer>
           ) : null}
-          {submit ? <Button onClick={submit}>{submitText}</Button> : null}
+          {onSubmit ? <Button onClick={onSubmit}>{submitText}</Button> : null}
         </Container>
       </ModalWrapper>
     </Overlay>,
