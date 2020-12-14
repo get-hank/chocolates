@@ -10,6 +10,7 @@ export interface ButtonProps extends React.HTMLAttributes<HTMLButtonElement> {
   size?: SizeType;
   secondary?: boolean;
   wide?: boolean;
+  disabled?: boolean;
 }
 
 const sizeRules = (size: SizeType, wide: boolean | null) => {
