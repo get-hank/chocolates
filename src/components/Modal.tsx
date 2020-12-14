@@ -66,7 +66,7 @@ const Modal: React.FC<ModalProps> = ({
           <H3 weight={600} pr={4}>
             {titleText}
           </H3>
-          <Close />
+          <Close onClick={dismiss} role="button" />
         </Container>
         {children}
         <Container justify="flex-end" align="center" pt={1}>
