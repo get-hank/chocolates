@@ -15,6 +15,7 @@ const Template: Story<ComponentProps<typeof Table>> = (args) => (
 
 export const Standard = Template.bind({});
 Standard.args = {
+  onRowClick: (event, row) => alert(`Clicked row ${JSON.stringify(row)}`),
   cols: [
     {
       Header: "Column A",

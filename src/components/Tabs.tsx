@@ -29,7 +29,7 @@ const LabelWrapper = styled(Item)`
 
 const TabLabel = styled.button<ButtonProps>`
   cursor: pointer;
-  ${fontSize(0.875)}
+  ${fontSize(1)}
   padding: 0;
   border: none;
   padding-bottom: ${space(1.5)};

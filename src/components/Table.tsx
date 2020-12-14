@@ -1,4 +1,4 @@
-import React from "react";
+import React, { MouseEvent } from "react";
 import styled from "styled-components";
 import { useTable } from "react-table";
 import { space } from "../util/layout";
@@ -9,6 +9,7 @@ import { fontSize } from "./typography";
 type TableProps = {
   cols: any;
   data: any;
+  onRowClick?: (e: MouseEvent, row: any) => any;
 };
 
 const TableStyle = styled.table`
@@ -18,10 +19,12 @@ const TableStyle = styled.table`
   ${({ theme }) => passThroughRule("font-family", theme.typography.baseType)}
 
   thead tr th {
-    padding-bottom: ${space(2)};
+    padding-bottom: ${space(1)};
     border-bottom: 1px solid ${({ theme }) => theme.colors.grayBorder};
     text-align: left;
-    font-weight: 400;
+    font-weight: 700;
+    color: ${({ theme }) => theme.colors.gray};
+    text-transform: uppercase;
   }
 
   td {
@@ -33,7 +36,7 @@ const CellInner = styled(Item)`
   min-height: ${space(8)};
 `;
 
-const Table = ({ cols, data }: TableProps) => {
+const Table = ({ cols, data, onRowClick }: TableProps) => {
   const {
     getTableProps,
     getTableBodyProps,
@@ -60,7 +63,14 @@ const Table = ({ cols, data }: TableProps) => {
         {rows.map((row, i) => {
           prepareRow(row);
           return (
-            <tr {...row.getRowProps()}>
+            <tr
+              {...row.getRowProps()}
+              onClick={
+                onRowClick
+                  ? (e: MouseEvent) => onRowClick(e, row.original)
+                  : null
+              }
+            >
               {row.cells.map((cell) => (
                 <td {...cell.getCellProps()}>
                   <CellInner justify="flex-start" align="center">
