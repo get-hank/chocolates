@@ -1,6 +1,6 @@
-import React, { MouseEvent } from "react";
+import React, { MouseEvent, useMemo } from "react";
 import styled from "styled-components";
-import { useTable } from "react-table";
+import { useTable, useFlexLayout } from "react-table";
 import { space } from "../util/layout";
 import { passThroughRule } from "../util/helpers";
 import { Item } from "./grid";
@@ -10,15 +10,18 @@ type TableProps = {
   cols: any;
   data: any;
   onRowClick?: (e: MouseEvent, row: any) => any;
+  defaultColumn?: object;
 };
 
-const TableStyle = styled.table`
+type TableStyleProps = {
+  rowsClickable: boolean;
+};
+const TableStyle = styled.div<TableStyleProps>`
   width: 100%;
-  border-collapse: collapse;
   ${({ theme }) => fontSize(1, theme.typography.baseSize)}
   ${({ theme }) => passThroughRule("font-family", theme.typography.baseType)}
 
-  thead tr th {
+  .thead .tr .th {
     padding-bottom: ${space(1)};
     border-bottom: 1px solid ${({ theme }) => theme.colors.grayBorder};
     text-align: left;
@@ -27,61 +30,97 @@ const TableStyle = styled.table`
     text-transform: uppercase;
   }
 
-  td {
-    border-bottom: 1px solid ${({ theme }) => theme.colors.grayBorder};
+  .tbody .tr {
+    overflow: hidden;
+    ${({ rowsClickable }) => (rowsClickable ? "cursor: pointer;" : "")}
+
+    .td {
+      align-items: center;
+      justify-content: flex-start;
+      display: flex;
+      padding: ${space(1)} ${space(1)} ${space(1)} 0;
+      border-bottom: 1px solid ${({ theme }) => theme.colors.grayBorder};
+      min-height: ${space(8)};
+    }
   }
 `;
 
-const CellInner = styled(Item)`
-  min-height: ${space(8)};
+type CellContentsProps = {
+  wrapText: boolean;
+};
+
+const CellContents = styled.span<CellContentsProps>`
+  overflow: hidden;
+  text-overflow: ellipsis;
+  ${({ wrapText }) => (wrapText ? "" : "white-space: nowrap;")}
 `;
 
-const Table = ({ cols, data, onRowClick }: TableProps) => {
+const Table = ({ cols, data, onRowClick, defaultColumn = {} }: TableProps) => {
   const {
     getTableProps,
     getTableBodyProps,
     headerGroups,
     rows,
     prepareRow,
-  } = useTable({
-    columns: cols,
-    data,
-  });
+  } = useTable(
+    {
+      columns: cols,
+      data,
+      defaultColumn: useMemo(
+        () => ({
+          width: 50,
+          minWidth: 10,
+          maxWidth: 300,
+          wrap: true,
+          ...defaultColumn,
+        }),
+        []
+      ),
+    },
+    useFlexLayout
+  );
 
   return (
-    <TableStyle {...getTableProps()}>
-      <thead>
-        {headerGroups.map((headerGroup) => (
-          <tr {...headerGroup.getHeaderGroupProps()}>
-            {headerGroup.headers.map((column) => (
-              <th {...column.getHeaderProps()}>{column.render("Header")}</th>
-            ))}
-          </tr>
-        ))}
-      </thead>
-      <tbody {...getTableBodyProps()}>
-        {rows.map((row, i) => {
-          prepareRow(row);
-          return (
-            <tr
-              {...row.getRowProps()}
-              onClick={
-                onRowClick
-                  ? (e: MouseEvent) => onRowClick(e, row.original)
-                  : null
-              }
-            >
-              {row.cells.map((cell) => (
-                <td {...cell.getCellProps()}>
-                  <CellInner justify="flex-start" align="center">
-                    {cell.render("Cell")}
-                  </CellInner>
-                </td>
+    <TableStyle rowsClickable={!!onRowClick}>
+      <div {...getTableProps()} className="table">
+        <div className="thead">
+          {headerGroups.map((headerGroup) => (
+            <div className="tr" {...headerGroup.getHeaderGroupProps()}>
+              {headerGroup.headers.map((column: any) => (
+                <div className="th" {...column.getHeaderProps()}>
+                  <CellContents wrapText={column.wrap}>
+                    {column.render("Header")}
+                  </CellContents>
+                </div>
               ))}
-            </tr>
-          );
-        })}
-      </tbody>
+            </div>
+          ))}
+        </div>
+        <div className="tbody" {...getTableBodyProps()}>
+          {rows.map((row, i) => {
+            prepareRow(row);
+            return (
+              <div
+                className="tr"
+                {...row.getRowProps()}
+                onClick={
+                  onRowClick
+                    ? (e: MouseEvent) => onRowClick(e, row.original)
+                    : null
+                }
+              >
+                {row.cells.map((cell: any) => (
+                  <div className="td" {...cell.getCellProps()}>
+                    <CellContents wrapText={cell.column.wrap}>
+                      {cell.render("Cell")}
+                    </CellContents>
+                  </div>
+                ))}
+              </div>
+            );
+          })}
+        </div>
+      </div>
     </TableStyle>
   );
 };

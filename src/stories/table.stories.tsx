@@ -20,6 +20,7 @@ Standard.args = {
     {
       Header: "Column A",
       accessor: "a",
+      width: 80,
     },
     {
       Header: "Column B",
@@ -28,6 +29,8 @@ Standard.args = {
     {
       Header: "Column C",
       accessor: "c",
+      width: 250,
+      wrap: false,
     },
   ],
   data: [
@@ -39,7 +42,8 @@ Standard.args = {
     {
       a: "2A text",
       b: "2B text",
-      c: "2C text",
+      c:
+        "2C text 2C text 2C text 2C text 2C text 2C text 2C text 2C text 2C text 2C text 2C text 2C text 2C text 2C text 2C text 2C text 2C text 2C text 2C text 2C text 2C text 2C text 2C text 2C text 2C text 2C text 2C text 2C text 2C text 2C text 2C text 2C text 2C text 2C text 2C text 2C text 2C text 2C text 2C text 2C text 2C text 2C text 2C text 2C text 2C text 2C text 2C text 2C text 2C text 2C text 2C text 2C text 2C text 2C text",
     },
     {
       a: "3A text",
