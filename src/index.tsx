@@ -10,5 +10,6 @@ export { default as Tabs } from "./components/Tabs";
 export { default as Table } from "./components/Table";
 export { default as Modal } from "./components/Modal";
 export { default as Link } from "./components/Link";
+export { default as Pill } from "./components/Pill";
 import * as _Icons from "./icons";
 export const Icons = _Icons;

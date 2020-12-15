@@ -12,6 +12,7 @@ export type TextProps = SpacingProps & {
   center?: boolean;
   color?: string;
   weight?: 200 | 300 | 400 | 500 | 600 | 700;
+  fontSize?: number; // rem
   lineHeight?: number; // percentage
   theme: any;
 };
@@ -27,16 +28,19 @@ const rulesForTextProps = ({
   color,
   lineHeight,
   weight,
+  fontSize: size,
+  theme,
 }: TextProps) => `
   margin: 0;
   ${center ? "text-align: center;" : ""}
   ${colorRule(color)}
   ${lineHeightRule(lineHeight)}
   ${passThroughRule("font-weight", weight)}
+  ${size ? fontSize(size, theme.typography.baseSize) : ""};
 `;
 
 const tagMap: any = {};
-const nativeTags = ["h1", "h2", "h3", "h4", "h5", "h5", "p"];
+const nativeTags = ["h1", "h2", "h3", "h4", "h5", "h5", "p", "span"];
 const components = nativeTags.reduce((memo = {}, tag) => {
   // @ts-ignore
   memo[tag] = (props: SpacingProps) => <SpacingContainer {...props} as={tag} />;
@@ -107,6 +111,14 @@ export const H5 = styled(components.h5) <TextProps>`
 `;
 
 export const P = styled(components.p) <TextProps>`
+  color: ${({ theme }) => theme.colors.text};
+  ${({ theme }) => fontSize(1, theme.typography.baseSize)}
+  ${({ theme }) => passThroughRule("font-family", theme.typography.baseType)}
+
+  ${rulesForTextProps}
+`;
+
+export const Text = styled(components.span) <TextProps>`
   color: ${({ theme }) => theme.colors.text};
   ${({ theme }) => fontSize(1, theme.typography.baseSize)}
   ${({ theme }) => passThroughRule("font-family", theme.typography.baseType)}
