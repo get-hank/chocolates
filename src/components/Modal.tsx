@@ -24,6 +24,9 @@ const ModalWrapper = styled(SpacingContainer)`
   background-color: ${colors.white};
   box-shadow: 0px 16px 24px rgba(41, 40, 39, 0.1);
   border-radius: 4px;
+  overflow: auto;
+  max-height: 80vh;
+  max-width: 80vw;
 `;
 
 type ModalProps = {
@@ -33,6 +36,7 @@ type ModalProps = {
   cancelText?: string;
   onSubmit?: () => any;
   onCancel?: () => any;
+  submitDisabled?: boolean;
 };
 
 const Modal: React.FC<ModalProps> = ({
@@ -43,6 +47,7 @@ const Modal: React.FC<ModalProps> = ({
   onSubmit,
   onCancel,
   children,
+  submitDisabled = false,
 }) => {
   const rootElemRef = useRef(document.createElement("div"));
 
@@ -79,7 +84,11 @@ const Modal: React.FC<ModalProps> = ({
               </Link>
             </SpacingContainer>
           ) : null}
-          {onSubmit ? <Button onClick={onSubmit}>{submitText}</Button> : null}
+          {onSubmit ? (
+            <Button onClick={onSubmit} disabled={submitDisabled}>
+              {submitText}
+            </Button>
+          ) : null}
         </Container>
       </ModalWrapper>
     </Overlay>,

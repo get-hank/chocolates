@@ -34,7 +34,15 @@ const Template: Story<ComponentProps<typeof Modal>> = (args) => {
 
 export const Standard = Template.bind({});
 Standard.args = {
-  children: "Modal body",
+  children: (
+    <Container center direction="column">
+      {[...Array(30)].map((idx) => (
+        <P p={3} key={idx}>
+          Hello!!
+        </P>
+      ))}
+    </Container>
+  ),
   titleText: "Howdy pardner",
   submitText: "Submit",
   cancelText: "Cancel",
