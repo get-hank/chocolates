@@ -19,6 +19,9 @@ module.exports = {
     react: "react",
     "react-dom": "react-dom",
     "styled-components": "styled-components",
+    "react-relay": "react-relay",
+    "relay-runtime": "relay-runtime",
+    "@auth0/auth0-react": "@auth0/auth0-react",
   },
   output: {
     filename: "index.js",
