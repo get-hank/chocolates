@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useAuth0 } from "@auth0/auth0-react";
+import { breakPoint } from "./layout";
 
 export const useApiToken = (apiBase: string) => {
   const { user, getAccessTokenSilently } = useAuth0();
@@ -23,4 +24,31 @@ export const useApiToken = (apiBase: string) => {
   }, [user, getAccessTokenSilently, setApiToken]);
 
   return apiToken;
+};
+
+function getWindowDimensions() {
+  const { innerWidth: width, innerHeight: height } = window;
+  return {
+    width,
+    height,
+  };
+}
+
+export const useBreakpoint = (bp: string) => {
+  const [windowDimensions, setWindowDimensions] = useState(
+    getWindowDimensions()
+  );
+
+  useEffect(() => {
+    function handleResize() {
+      setWindowDimensions(getWindowDimensions());
+    }
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  const { width } = windowDimensions;
+
+  return width <= breakPoint(bp);
 };
