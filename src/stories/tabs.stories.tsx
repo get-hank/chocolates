@@ -20,6 +20,7 @@ Standard.args = {
     {
       label: "Tab 1",
       render: () => <Item py={2}>Tab 1 contents</Item>,
+      count: 3,
     },
     {
       label: "Tab 2",

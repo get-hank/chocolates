@@ -6,6 +6,7 @@ import { space } from "../util/layout";
 
 type TabProps = {
   label: string;
+  count?: number;
   render: any;
 };
 
@@ -32,7 +33,9 @@ const TabLabel = styled.button<ButtonProps>`
   ${fontSize(1)}
   padding: 0;
   border: none;
-  padding-bottom: ${space(1.5)};
+  padding-bottom: ${space(1)};
+
+  font-weight: ${({ active }) => (active ? 500 : 400)};
 
   background-color: ${({ theme }) => theme.colors.white};
   color: ${({ theme, active }) =>
@@ -43,15 +46,35 @@ const TabLabel = styled.button<ButtonProps>`
     active ? theme.colors.primaryMid : theme.colors.grayBorder};
 `;
 
+type ActiveProps = {
+  active: boolean;
+};
+
+const TabCount = styled.span<ActiveProps>`
+  ${fontSize(0.875)}
+  background-color: ${({ theme, active }) =>
+    active ? theme.colors.primary : theme.colors.gray};
+  color: ${({ theme }) => theme.colors.white};
+  padding: ${space(0.25)} ${space(0.75)};
+  margin-left: ${space(1)};
+  border-radius: 100px;
+  font-weight: 400;
+`;
+
 const Tabs = ({ tabs }: TabsProps) => {
   const [active, setActive] = useState(0);
   return (
     <div>
-      <LabelRow>
+      <LabelRow align="flex-end">
         {tabs.map((t, idx) => (
           <LabelWrapper key={`tab-${idx}`} px={1}>
             <TabLabel onClick={() => setActive(idx)} active={active === idx}>
-              {t.label}
+              <Container align="flex-end">
+                {t.label}
+                {t.count !== undefined ? (
+                  <TabCount active={active === idx}>{t.count}</TabCount>
+                ) : null}
+              </Container>
             </TabLabel>
           </LabelWrapper>
         ))}
