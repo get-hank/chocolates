@@ -21,7 +21,7 @@ type FlexProps = {
   | "space-around";
 };
 
-type ContainerProps = SpacingProps & FlexProps;
+export type ContainerProps = SpacingProps & FlexProps;
 
 type colCount = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12;
 

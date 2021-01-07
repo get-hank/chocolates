@@ -17,6 +17,11 @@ const Template: Story<ComponentProps<typeof Input>> = (args) => (
 
 export const Standard = Template.bind({});
 Standard.args = {
-  defaultValue: "Hi",
-  placeholder: "Type in something...",
+  nativeProps: {
+    defaultValue: "Hi",
+    placeholder: "Type in something...",
+  },
+  styledProps: {
+    error: true,
+  },
 };

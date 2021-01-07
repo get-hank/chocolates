@@ -14,7 +14,7 @@ export type TextProps = SpacingProps & {
   weight?: 200 | 300 | 400 | 500 | 600 | 700;
   fontSize?: number; // rem
   lineHeight?: number; // percentage
-  theme: any;
+  theme?: any;
 };
 
 const colorRule = (color: string | undefined) =>
@@ -23,7 +23,7 @@ const colorRule = (color: string | undefined) =>
 const lineHeightRule = (lineHeight: number | undefined) =>
   lineHeight ? `line-height: ${lineHeight}%;` : "";
 
-const rulesForTextProps = ({
+export const rulesForTextProps = ({
   center,
   color,
   lineHeight,
