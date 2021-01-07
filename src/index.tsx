@@ -5,6 +5,7 @@ export const Icons = _Icons;
 export { default as Button } from "./components/Button";
 export * from "./components/form";
 export * from "./components/grid";
+export { default as IconButton } from "./components/IconButton";
 export { default as InfiniteScroll } from "./components/InfiniteScroll";
 export { default as Link } from "./components/Link";
 export { default as Modal } from "./components/Modal";

@@ -3,12 +3,13 @@ import ReactDOM from "react-dom";
 import styled from "styled-components";
 import { rgba } from "polished";
 import { colors } from "../util/colors";
-import { Close } from "../icons";
+import { breakPoint } from "../util/layout";
 import { Container, Item } from "./grid";
-import { SpacingContainer } from "./spacing";
+import { Div } from "./spacing";
 import { H3 } from "./typography";
 import Button from "./Button";
 import Link from "./Link";
+import IconButton from "./IconButton";
 
 const Overlay = styled(Container)`
   position: fixed;
@@ -20,13 +21,30 @@ const Overlay = styled(Container)`
   background-color: ${rgba(colors.gray200, 0.5)};
 `;
 
-const ModalWrapper = styled(SpacingContainer)`
+const ModalWrapper = styled(Container)`
   background-color: ${colors.white};
   box-shadow: 0px 16px 24px rgba(41, 40, 39, 0.1);
   border-radius: 4px;
+  flex-wrap: nowrap;
+
+  @media (max-width: ${breakPoint("sm")}px) {
+    height: 100vh;
+    width: 100vw;
+  }
+
+  @media (min-width: ${breakPoint("sm")}px) {
+    max-height: 80vh;
+    max-width: 80vw;
+  }
+`;
+
+const Contents = styled(Div)`
   overflow: auto;
-  max-height: 80vh;
-  max-width: 80vw;
+`;
+
+const Footer = styled(Div)`
+  box-shadow: 0px 0px 8px rgba(41, 40, 39, 0.1);
+  background-color: ${colors.white};
 `;
 
 type ModalProps = {
@@ -66,30 +84,35 @@ const Modal: React.FC<ModalProps> = ({
 
   return ReactDOM.createPortal(
     <Overlay center onClick={dismiss}>
-      <ModalWrapper p={3} onClick={(e: any) => e.stopPropagation()}>
-        <Container pb={2} align="center" justify="space-between">
-          <H3 weight={600} pr={4}>
-            {titleText}
-          </H3>
-          <div onClick={dismiss} role="button" style={{ cursor: "pointer" }}>
-            <Close />
-          </div>
-        </Container>
-        {children}
-        <Container justify="flex-end" align="center" pt={1}>
-          {onCancel ? (
-            <SpacingContainer pr={5}>
-              <Link secondary onClick={dismiss}>
-                {cancelText}
-              </Link>
-            </SpacingContainer>
-          ) : null}
-          {onSubmit ? (
-            <Button onClick={onSubmit} disabled={submitDisabled}>
-              {submitText}
-            </Button>
-          ) : null}
-        </Container>
+      <ModalWrapper
+        direction="column"
+        onClick={(e: any) => e.stopPropagation()}
+      >
+        <Div p={2} pl={3}>
+          <Container align="center" justify="space-between">
+            <H3 weight={600} pr={4}>
+              {titleText}
+            </H3>
+            <IconButton name="close" onClick={dismiss} />
+          </Container>
+        </Div>
+        <Contents px={2}>{children}</Contents>
+        <Footer p={2}>
+          <Container justify="flex-end" align="center">
+            {onCancel ? (
+              <Div pr={2}>
+                <Button secondary onClick={dismiss}>
+                  {cancelText}
+                </Button>
+              </Div>
+            ) : null}
+            {onSubmit ? (
+              <Button onClick={onSubmit} disabled={submitDisabled}>
+                {submitText}
+              </Button>
+            ) : null}
+          </Container>
+        </Footer>
       </ModalWrapper>
     </Overlay>,
     rootElemRef.current

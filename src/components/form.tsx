@@ -140,6 +140,7 @@ export const FormField = ({
             styledProps={styleProps}
             nativeProps={{
               ...nativeProps,
+              defaultChecked: !!value,
               onChange: (e: any) =>
                 onChange({ field, value: e.target.checked }),
             }}

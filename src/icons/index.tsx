@@ -1,3 +1,4 @@
+export { default as ArrowBack } from "./ArrowBack";
 export { default as ArrowDown } from "./ArrowDown";
 export { default as Arrow } from "./Arrow";
 export { default as ArrowUp } from "./ArrowUp";
@@ -11,6 +12,7 @@ export { default as Dollar } from "./Dollar";
 export { default as Grid } from "./Grid";
 export { default as Info } from "./Info";
 export { default as List } from "./List";
+export { default as Menu } from "./Menu";
 export { default as Minus } from "./Minus";
 export { default as MobileClose } from "./MobileClose";
 export { default as MobileHamburger } from "./MobileHamburger";
