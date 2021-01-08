@@ -23,5 +23,6 @@ Standard.args = {
   placeholder: "Placeholder",
   inputType: "select",
   fillBg: false,
+  autoComplete: "email",
   options: [{ value: "Option 1" }, { value: "Option 2" }],
 };

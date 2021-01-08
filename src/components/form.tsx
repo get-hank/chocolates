@@ -83,6 +83,7 @@ type FieldProps = Omit<FormFieldWrapperProps, "onChange"> & {
   onChange: (edit: FieldEdit) => any;
   value?: any;
   placeholder?: string;
+  autoComplete?: string;
   help?: string;
   inputType?: "text" | "multiLineText" | "select" | "checkbox";
   fillBg?: boolean;
@@ -102,6 +103,7 @@ export const FormField = ({
   apiBase,
   options,
   error,
+  autoComplete,
   disabled = false,
   inputType = "text",
   ...wrapperProps
@@ -109,6 +111,7 @@ export const FormField = ({
   const nativeProps = {
     disabled,
     placeholder,
+    autoComplete,
     onChange: (e: any) => onChange({ field, value: e.target.value }),
     defaultValue: value,
     name: field,
