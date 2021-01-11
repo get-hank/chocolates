@@ -10,6 +10,7 @@ export const fontSize = (size = 1, base = 1) =>
 
 export type TextProps = SpacingProps & {
   center?: boolean;
+  error?: boolean;
   color?: string;
   weight?: 200 | 300 | 400 | 500 | 600 | 700;
   fontSize?: number; // rem
@@ -26,6 +27,7 @@ const lineHeightRule = (lineHeight: number | undefined) =>
 export const rulesForTextProps = ({
   center,
   color,
+  error,
   lineHeight,
   weight,
   fontSize: size,
@@ -33,6 +35,7 @@ export const rulesForTextProps = ({
 }: TextProps) => `
   margin: 0;
   ${center ? "text-align: center;" : ""}
+  ${error ? colorRule(theme.colors.error) : ""}
   ${colorRule(color)}
   ${lineHeightRule(lineHeight)}
   ${passThroughRule("font-weight", weight)}

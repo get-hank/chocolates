@@ -12,6 +12,7 @@ export { default as Dollar } from "./Dollar";
 export { default as Grid } from "./Grid";
 export { default as Info } from "./Info";
 export { default as List } from "./List";
+export { default as Lock } from "./Lock";
 export { default as Menu } from "./Menu";
 export { default as Minus } from "./Minus";
 export { default as MobileClose } from "./MobileClose";

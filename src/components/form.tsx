@@ -80,12 +80,12 @@ export type FieldEdit = { field: string; value: any };
 type FieldProps = Omit<FormFieldWrapperProps, "onChange"> & {
   label: string;
   field: string;
-  onChange: (edit: FieldEdit) => any;
+  onChange?: (edit: FieldEdit) => any;
   value?: any;
   placeholder?: string;
   autoComplete?: string;
   help?: string;
-  inputType?: "text" | "multiLineText" | "select" | "checkbox";
+  inputType?: "text" | "multiLineText" | "select" | "checkbox" | "none";
   fillBg?: boolean;
   error?: boolean | string | null;
   disabled?: boolean;
@@ -93,7 +93,7 @@ type FieldProps = Omit<FormFieldWrapperProps, "onChange"> & {
   options?: Option[];
 };
 
-export const FormField = ({
+export const FormField: React.FC<FieldProps> = ({
   label,
   field,
   value,
@@ -106,13 +106,15 @@ export const FormField = ({
   autoComplete,
   disabled = false,
   inputType = "text",
+  children,
   ...wrapperProps
-}: FieldProps) => {
+}) => {
   const nativeProps = {
     disabled,
     placeholder,
     autoComplete,
-    onChange: (e: any) => onChange({ field, value: e.target.value }),
+    onChange: (e: any) =>
+      onChange && onChange({ field, value: e.target.value }),
     defaultValue: value,
     name: field,
   };
@@ -124,6 +126,7 @@ export const FormField = ({
           <Label weight={500}>{label}</Label>
         </Div>
       ) : null}
+      {children ? children : null}
       {inputType === "text" ? (
         <Input styledProps={styleProps} nativeProps={nativeProps} />
       ) : null}
@@ -145,7 +148,7 @@ export const FormField = ({
               ...nativeProps,
               defaultChecked: !!value,
               onChange: (e: any) =>
-                onChange({ field, value: e.target.checked }),
+                onChange && onChange({ field, value: e.target.checked }),
             }}
           />
           <Div pl={1}>
@@ -159,7 +162,7 @@ export const FormField = ({
         </P>
       ) : null}
       {typeof error === "string" ? (
-        <P pt={1} color={colors.red600}>
+        <P pt={1} error>
           {error}
         </P>
       ) : null}

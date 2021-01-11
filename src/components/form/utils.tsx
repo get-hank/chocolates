@@ -1,16 +1,15 @@
 import { space } from "../../util/layout";
 import { colors } from "../../util/colors";
-import { Text, TextProps, rulesForTextProps } from "../typography";
+import { fontSize, Text, TextProps, rulesForTextProps } from "../typography";
 import { SpacingProps } from "../spacing";
 
-export type InputProps = SpacingProps &
-  TextProps & {
-    error?: boolean;
-  };
+export type InputProps = SpacingProps & TextProps;
 
 export const inputStyle = (props: InputProps) => `
+  box-sizing: border-box;
   width: 100%;
   font-family: ${props.theme.typography.baseType};
+  ${fontSize(1, props.theme.typography.baseSize)};
   ${rulesForTextProps(props)}
   border: 1px solid ${props.theme.colors.grayBorder};
   border-radius: 4px;

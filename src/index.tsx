@@ -12,6 +12,7 @@ export { default as Modal } from "./components/Modal";
 export { default as Pill } from "./components/Pill";
 export { default as QueryWrapper } from "./components/QueryWrapper";
 export * from "./components/spacing";
+export { default as StripeCardForm } from "./components/StripeCardForm";
 export { default as Table } from "./components/Table";
 export { default as Tabs } from "./components/Tabs";
 export * from "./components/theme";
