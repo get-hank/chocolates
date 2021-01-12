@@ -4,32 +4,19 @@ import React, {
   LabelHTMLAttributes,
 } from "react";
 import styled from "styled-components";
+import { Checkbox as CheckboxInput } from "./form/Checkbox";
 import { Select as SelectFormInput, Option } from "./form/Select";
+import { Input as FormInput } from "./form/Input";
+import { inputStyle, InputProps } from "./form/utils";
 import { Container, ContainerProps } from "./grid";
 import { Div } from "./spacing";
 import { P, TextProps, rulesForTextProps } from "./typography";
 import { space } from "../util/layout";
 import { colors } from "../util/colors";
-import { inputStyle, InputProps } from "./form/utils";
 
 export const Select = SelectFormInput;
-
-const InputStyle = styled(Div) <InputProps>`
-  input {
-    ${inputStyle}
-  }
-`;
-
-type _InputProps = {
-  styledProps?: InputProps;
-  nativeProps: InputHTMLAttributes<HTMLInputElement>;
-};
-
-export const Input = ({ styledProps = {}, nativeProps }: _InputProps) => (
-  <InputStyle {...styledProps}>
-    <input {...nativeProps} />
-  </InputStyle>
-);
+export const Input = FormInput;
+export const Checkbox = CheckboxInput;
 
 const TextAreaStyle = styled(Div) <InputProps>`
   textarea {
@@ -49,16 +36,6 @@ export const TextArea = ({
       <textarea {...nativeProps} />
     </TextAreaStyle>
   );
-
-export const Checkbox = ({ styledProps = {}, nativeProps }: _InputProps) => (
-  <InputStyle {...styledProps}>
-    <input
-      {...nativeProps}
-      type="checkbox"
-      style={{ width: space(2.5), height: space(2.5) }}
-    />
-  </InputStyle>
-);
 
 export const Label = styled.label<
   TextProps & LabelHTMLAttributes<HTMLLabelElement>
@@ -141,7 +118,7 @@ export const FormField: React.FC<FieldProps> = ({
         <TextArea styledProps={styleProps} nativeProps={nativeProps} />
       ) : null}
       {inputType === "checkbox" ? (
-        <Container p={2} align="center">
+        <Container p={wrapperProps.fillBg ? 2 : 0} align="center">
           <Checkbox
             styledProps={styleProps}
             nativeProps={{

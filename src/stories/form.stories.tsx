@@ -21,7 +21,7 @@ Standard.args = {
   label: "Label",
   field: "key",
   placeholder: "Placeholder",
-  inputType: "select",
+  inputType: "checkbox",
   fillBg: false,
   autoComplete: "email",
   options: [{ value: "Option 1" }, { value: "Option 2" }],
