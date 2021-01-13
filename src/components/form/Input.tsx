@@ -1,8 +1,4 @@
-import React, {
-  InputHTMLAttributes,
-  TextareaHTMLAttributes,
-  LabelHTMLAttributes,
-} from "react";
+import React, { InputHTMLAttributes } from "react";
 import styled from "styled-components";
 import { inputStyle, InputProps } from "./utils";
 import { Div } from "../spacing";

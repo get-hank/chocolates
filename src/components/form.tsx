@@ -7,6 +7,7 @@ import styled from "styled-components";
 import { Checkbox as CheckboxInput } from "./form/Checkbox";
 import { Select as SelectFormInput, Option } from "./form/Select";
 import { DatePicker as DatePickerInput } from "./form/DatePicker";
+import { TimePicker as TimePickerInput } from "./form/TimePicker";
 import { Input as FormInput } from "./form/Input";
 import { inputStyle, InputProps } from "./form/utils";
 import { Container, ContainerProps } from "./grid";
@@ -19,6 +20,7 @@ export const Select = SelectFormInput;
 export const Input = FormInput;
 export const Checkbox = CheckboxInput;
 export const DatePicker = DatePickerInput;
+export const TimePicker = TimePickerInput;
 
 const TextAreaStyle = styled(Div) <InputProps>`
   textarea {
@@ -70,6 +72,7 @@ type FieldProps = Omit<FormFieldWrapperProps, "onChange"> & {
   | "select"
   | "checkbox"
   | "date"
+  | "time"
   | "none";
   fillBg?: boolean;
   error?: boolean | string | null;
@@ -124,6 +127,9 @@ export const FormField: React.FC<FieldProps> = ({
       ) : null}
       {inputType === "multiLineText" ? (
         <TextArea styledProps={styleProps} nativeProps={nativeProps} />
+      ) : null}
+      {inputType === "time" ? (
+        <TimePicker styledProps={styleProps} nativeProps={nativeProps} />
       ) : null}
       {inputType === "date" ? (
         <DatePicker
