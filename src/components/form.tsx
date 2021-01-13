@@ -6,6 +6,7 @@ import React, {
 import styled from "styled-components";
 import { Checkbox as CheckboxInput } from "./form/Checkbox";
 import { Select as SelectFormInput, Option } from "./form/Select";
+import { DatePicker as DatePickerInput } from "./form/DatePicker";
 import { Input as FormInput } from "./form/Input";
 import { inputStyle, InputProps } from "./form/utils";
 import { Container, ContainerProps } from "./grid";
@@ -17,6 +18,7 @@ import { colors } from "../util/colors";
 export const Select = SelectFormInput;
 export const Input = FormInput;
 export const Checkbox = CheckboxInput;
+export const DatePicker = DatePickerInput;
 
 const TextAreaStyle = styled(Div) <InputProps>`
   textarea {
@@ -62,7 +64,13 @@ type FieldProps = Omit<FormFieldWrapperProps, "onChange"> & {
   placeholder?: string;
   autoComplete?: string;
   help?: string;
-  inputType?: "text" | "multiLineText" | "select" | "checkbox" | "none";
+  inputType?:
+  | "text"
+  | "multiLineText"
+  | "select"
+  | "checkbox"
+  | "date"
+  | "none";
   fillBg?: boolean;
   error?: boolean | string | null;
   disabled?: boolean;
@@ -116,6 +124,13 @@ export const FormField: React.FC<FieldProps> = ({
       ) : null}
       {inputType === "multiLineText" ? (
         <TextArea styledProps={styleProps} nativeProps={nativeProps} />
+      ) : null}
+      {inputType === "date" ? (
+        <DatePicker
+          styledProps={styleProps}
+          onDateChange={(value) => onChange && onChange({ field, value })}
+          nativeProps={nativeProps}
+        />
       ) : null}
       {inputType === "checkbox" ? (
         <Container p={wrapperProps.fillBg ? 2 : 0} align="center">

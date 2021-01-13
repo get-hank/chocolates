@@ -1,4 +1,4 @@
-import React, { SelectHTMLAttributes, useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 import styled from "styled-components";
 import { InputStyle, _InputProps } from "./Input";
 import { Text, TextProps, rulesForTextProps } from "../typography";

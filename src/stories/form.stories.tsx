@@ -19,10 +19,8 @@ const Template: Story<ComponentProps<typeof Input>> = (args) => (
 export const Standard = Template.bind({});
 Standard.args = {
   label: "Label",
-  field: "key",
+  field: "date",
   placeholder: "Placeholder",
-  inputType: "checkbox",
+  inputType: "date",
   fillBg: false,
-  autoComplete: "email",
-  options: [{ value: "Option 1" }, { value: "Option 2" }],
 };

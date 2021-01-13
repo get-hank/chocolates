@@ -6,7 +6,7 @@ import { Close, ArrowBack, Menu } from "../icons";
 import { space } from "../util/layout";
 
 type IconButtonProps = SpacingProps & {
-  name: "back" | "close" | "menu";
+  name?: "back" | "close" | "menu";
 };
 
 const components = {
@@ -19,6 +19,7 @@ const ClickTarget = styled(Container)`
   min-height: ${space(4)};
   min-width: ${space(4)};
   border-radius: 50%;
+  cursor: pointer;
 
   &:active,
   &:hover {
@@ -26,11 +27,11 @@ const ClickTarget = styled(Container)`
   }
 `;
 
-const IconButton = ({ name, ...rest }: IconButtonProps) => {
-  const Component = components[name];
+const IconButton: React.FC<IconButtonProps> = ({ name, children, ...rest }) => {
+  const Component = name ? components[name] : null;
   return (
     <ClickTarget {...rest} center>
-      <Component />
+      {Component ? <Component /> : children}
     </ClickTarget>
   );
 };
