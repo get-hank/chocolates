@@ -3,7 +3,7 @@ import styled from "styled-components";
 import Calendar from "react-calendar";
 import { DateTime } from "luxon";
 import { InputStyle, _InputProps } from "./Input";
-import { breakPoint, space } from "../../util/layout";
+import { isMobileViewport, space } from "../../util/layout";
 import IconButton from "../IconButton";
 
 const Overlay = styled.div`
@@ -18,6 +18,8 @@ const StyledCalendar = styled.div`
   position: relative;
 
   .react-calendar {
+    z-index: 1;
+    width: 300px;
     font-family: ${({ theme }) => theme.typography.baseType};
     padding: ${space(1)};
     position: absolute;
@@ -43,8 +45,10 @@ const StyledCalendar = styled.div`
 
     .react-calendar__month-view__weekdays {
       padding-top: ${space(1)};
+      padding-bottom: ${space(1)};
       font-size: ${space(1.5)};
       color: ${({ theme }) => theme.colors.gray};
+
       .react-calendar__month-view__weekdays__weekday {
         text-align: center;
       }
@@ -55,40 +59,37 @@ const StyledCalendar = styled.div`
     }
 
     .react-calendar__tile {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-
-      padding: ${space(1.5)} ${space(1)};
-
-      border-radius: 50%;
-      background-color: transparent;
-
       border: none;
       appearance: none;
+      background-color: transparent;
 
-      &:hover {
+      &:hover abbr {
         background-color: ${({ theme }) => theme.colors.primary};
         color: white;
       }
 
       abbr {
-        position: absolute;
+        border-radius: 50%;
+        width: ${space(3.5)};
+        height: ${space(3.5)};
+        display: flex;
+        justify-content: center;
+        align-items: center;
       }
     }
 
-    .react-calendar__tile--now {
+    .react-calendar__tile--now abbr {
       background-color: ${({ theme }) => theme.colors.grayBorder};
     }
 
-    .react-calendar__tile--active {
+    .react-calendar__tile--active abbr {
       background-color: ${({ theme }) => theme.colors.primary};
       color: white;
     }
   }
 `;
 
-type DatePickerProps = _InputProps & {
+export type DatePickerProps = _InputProps & {
   onDateChange: (d: DateTime) => any;
   pickerProps?: {
     minDate?: DateTime;
@@ -110,9 +111,7 @@ export const DatePicker = ({
     defaultValue ? DateTime.fromISO(defaultValue as string) : DateTime.local()
   );
   const [pickerVisible, setPickerVisible] = useState(false);
-  const mobileViewport = window.matchMedia(
-    `only screen and (max-width: ${breakPoint("sm")})`
-  ).matches;
+  const mobileViewport = isMobileViewport();
 
   const dateChanged = (newDate: Date[] | Date | string) => {
     const newDateLuxon =
@@ -134,15 +133,17 @@ export const DatePicker = ({
     <InputStyle {...styledProps}>
       <input
         onFocus={(_) => setPickerVisible(true)}
+        onClick={(_) => setPickerVisible(true)}
         onChange={(e) => dateChanged(e.target.value)}
         value={value.toFormat("yyyy-MM-dd")}
         {...rest}
-        type="date"
+        type={mobileViewport ? "date" : "text"}
       />
       {showPicker ? (
         <StyledCalendar>
           <Overlay onClick={(_) => setPickerVisible(false)} />
           <Calendar
+            locale="en-US"
             minDetail="month"
             defaultValue={new Date(value.valueOf())}
             minDate={minDate ? new Date(minDate.valueOf()) : null}

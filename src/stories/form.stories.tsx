@@ -13,6 +13,12 @@ export default {
 const Template: Story<ComponentProps<typeof Input>> = (args) => (
   <Container direction="column" center>
     <FormField onChange={(edit) => alert(JSON.stringify(edit))} {...args} />
+    <FormField
+      onChange={(edit) => alert(JSON.stringify(edit))}
+      {...args}
+      field="time"
+      inputType="time"
+    />
   </Container>
 );
 

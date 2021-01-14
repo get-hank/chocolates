@@ -25,3 +25,7 @@ export const layoutWidthMap: { [index: string]: number } = {
 
 export const breakPoint = (key: string) => breakPointMap[key];
 export const layoutWidth = (key: string) => layoutWidthMap[key];
+
+export const isMobileViewport = () =>
+  window.matchMedia(`only screen and (max-width: ${breakPoint("sm")}px)`)
+    .matches;
