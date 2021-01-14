@@ -21,6 +21,7 @@ const Template: Story<ComponentProps<typeof Div>> = (args) => (
 export const HideNarrow = Template.bind({});
 HideNarrow.args = {
   hideUnder: "sm",
+  bb: true,
 };
 
 export const HideWide = Template.bind({});

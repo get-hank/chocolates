@@ -23,6 +23,7 @@ export const defaultTheme = {
     text: colors.gray950,
     textDisabled: colors.gray200,
     grayBorder: colors.gray100,
+    border: colors.gray100,
   },
 };
 

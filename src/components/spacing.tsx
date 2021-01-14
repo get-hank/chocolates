@@ -16,6 +16,14 @@ export interface SpacingProps extends React.HTMLAttributes<HTMLDivElement> {
 
   hideUnder?: string;
   hideOver?: string;
+
+  b?: boolean;
+  by?: boolean;
+  bx?: boolean;
+  bt?: boolean;
+  bb?: boolean;
+  bl?: boolean;
+  br?: boolean;
 }
 
 export const padding = (rule: string, size: number) =>
@@ -32,6 +40,12 @@ export const hideAt = (bp: string, under: boolean) => `
     display: none !important;
   }
 `;
+
+export const borderRule: (
+  color: string,
+  direction?: "all" | "left" | "right" | "top" | "bottom"
+) => string = (color, direction = "all") =>
+    `border${direction === "all" ? "" : `-${direction}`}: 1px solid ${color};`;
 
 export const SpacingContainer = styled.div<SpacingProps>`
   ${({ p }) => (p ? padding("padding", p) : "")};
@@ -55,6 +69,22 @@ export const SpacingContainer = styled.div<SpacingProps>`
 
   ${({ hideUnder }) => (hideUnder ? hideAt(hideUnder, true) : "")}
   ${({ hideOver }) => (hideOver ? hideAt(hideOver, false) : "")}
+
+  ${({ b, theme }) => (b ? borderRule(theme.colors.border) : "")}
+  ${({ bt, theme }) => (bt ? borderRule(theme.colors.border, "top") : "")}
+  ${({ bb, theme }) => (bb ? borderRule(theme.colors.border, "bottom") : "")}
+  ${({ bl, theme }) => (bl ? borderRule(theme.colors.border, "left") : "")}
+  ${({ br, theme }) => (br ? borderRule(theme.colors.border, "right") : "")}
+  ${({ by, theme }) =>
+    by
+      ? borderRule(theme.colors.border, "bottom") +
+      borderRule(theme.colors.border, "top")
+      : ""}
+  ${({ bx, theme }) =>
+    bx
+      ? borderRule(theme.colors.border, "left") +
+      borderRule(theme.colors.border, "right")
+      : ""}
 `;
 
 export const Div = SpacingContainer;
