@@ -54,6 +54,7 @@ type ModalProps = {
   cancelText?: string;
   onSubmit?: () => any;
   onCancel?: () => any;
+  onDismiss?: () => any;
   submitDisabled?: boolean;
 };
 
@@ -64,6 +65,7 @@ const Modal: React.FC<ModalProps> = ({
   cancelText,
   onSubmit,
   onCancel,
+  onDismiss,
   children,
   submitDisabled = false,
 }) => {
@@ -79,11 +81,18 @@ const Modal: React.FC<ModalProps> = ({
   if (!open) return null;
 
   const dismiss = () => {
+    onDismiss && onDismiss();
     onCancel && onCancel();
   };
 
   return ReactDOM.createPortal(
-    <Overlay center onClick={dismiss}>
+    <Overlay
+      center
+      onClick={(e) => {
+        e.stopPropagation();
+        dismiss();
+      }}
+    >
       <ModalWrapper
         direction="column"
         onClick={(e: any) => e.stopPropagation()}
@@ -97,22 +106,24 @@ const Modal: React.FC<ModalProps> = ({
           </Container>
         </Div>
         <Contents px={2}>{children}</Contents>
-        <Footer p={2}>
-          <Container justify="flex-end" align="center">
-            {onCancel ? (
-              <Div pr={2}>
-                <Button secondary onClick={dismiss}>
-                  {cancelText}
+        {onCancel || onSubmit ? (
+          <Footer p={2}>
+            <Container justify="flex-end" align="center">
+              {onCancel ? (
+                <Div pr={2}>
+                  <Button secondary onClick={dismiss}>
+                    {cancelText}
+                  </Button>
+                </Div>
+              ) : null}
+              {onSubmit ? (
+                <Button onClick={onSubmit} disabled={submitDisabled}>
+                  {submitText}
                 </Button>
-              </Div>
-            ) : null}
-            {onSubmit ? (
-              <Button onClick={onSubmit} disabled={submitDisabled}>
-                {submitText}
-              </Button>
-            ) : null}
-          </Container>
-        </Footer>
+              ) : null}
+            </Container>
+          </Footer>
+        ) : null}
       </ModalWrapper>
     </Overlay>,
     rootElemRef.current
