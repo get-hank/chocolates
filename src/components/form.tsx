@@ -6,8 +6,14 @@ import React, {
 import styled from "styled-components";
 import { Checkbox as CheckboxInput } from "./form/Checkbox";
 import { Select as SelectFormInput, Option } from "./form/Select";
-import { DatePicker as DatePickerInput } from "./form/DatePicker";
-import { TimePicker as TimePickerInput } from "./form/TimePicker";
+import {
+  DatePicker as DatePickerInput,
+  DatePickerProps,
+} from "./form/DatePicker";
+import {
+  TimePicker as TimePickerInput,
+  TimePickerProps,
+} from "./form/TimePicker";
 import { Input as FormInput } from "./form/Input";
 import { inputStyle, InputProps } from "./form/utils";
 import { Container, ContainerProps } from "./grid";
@@ -79,6 +85,7 @@ type FieldProps = Omit<FormFieldWrapperProps, "onChange"> & {
   disabled?: boolean;
   apiBase?: string;
   options?: Option[];
+  pickerProps?: DatePickerProps["pickerProps"];
 };
 
 export const FormField: React.FC<FieldProps> = ({
@@ -95,6 +102,7 @@ export const FormField: React.FC<FieldProps> = ({
   disabled = false,
   inputType = "text",
   children,
+  pickerProps,
   ...wrapperProps
 }) => {
   const nativeProps = {
@@ -129,13 +137,18 @@ export const FormField: React.FC<FieldProps> = ({
         <TextArea styledProps={styleProps} nativeProps={nativeProps} />
       ) : null}
       {inputType === "time" ? (
-        <TimePicker styledProps={styleProps} nativeProps={nativeProps} />
+        <TimePicker
+          onTimeChange={(value) => onChange && onChange({ field, value })}
+          styledProps={styleProps}
+          nativeProps={nativeProps}
+        />
       ) : null}
       {inputType === "date" ? (
         <DatePicker
           styledProps={styleProps}
           onDateChange={(value) => onChange && onChange({ field, value })}
           nativeProps={nativeProps}
+          pickerProps={pickerProps}
         />
       ) : null}
       {inputType === "checkbox" ? (
