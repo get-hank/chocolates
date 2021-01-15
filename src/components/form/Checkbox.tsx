@@ -1,14 +1,17 @@
 import React, { useRef, useState } from "react";
 import styled from "styled-components";
-import { InputStyle, _InputProps } from "./Input";
+import { inputStyle, InputProps } from "./utils";
+import { _InputProps } from "./Input";
 import { Text, TextProps, rulesForTextProps } from "../typography";
 import { Div } from "../spacing";
+import { Container } from "../grid";
 import { space } from "../../util/layout";
 
-const CheckboxStyle = styled(InputStyle)`
+const CheckboxStyle = styled(Div) <InputProps>`
   position: relative;
 
   input[type="checkbox"] {
+    ${inputStyle}
     appearance: none;
     height: 20px;
     width: 20px;
@@ -26,12 +29,16 @@ const CheckboxStyle = styled(InputStyle)`
   }
 `;
 
-export const Checkbox = ({ styledProps = {}, nativeProps }: _InputProps) => {
+export const Checkbox: React.FC<_InputProps> = ({
+  styledProps = {},
+  nativeProps,
+  children,
+}) => {
   const { defaultChecked, onChange, ...rest } = nativeProps;
   const [checked, setChecked] = useState<boolean>(defaultChecked || false);
   const checkbox = useRef(null);
 
-  return (
+  const input = (
     <CheckboxStyle {...styledProps}>
       {checked ? (
         <svg
@@ -39,7 +46,10 @@ export const Checkbox = ({ styledProps = {}, nativeProps }: _InputProps) => {
           height="9"
           fill="none"
           xmlns="http://www.w3.org/2000/svg"
-          onClick={() => checkbox.current.click()}
+          onClick={(e) => {
+            checkbox.current.click();
+            e.stopPropagation();
+          }}
         >
           <path
             fillRule="evenodd"
@@ -53,13 +63,24 @@ export const Checkbox = ({ styledProps = {}, nativeProps }: _InputProps) => {
         {...rest}
         ref={checkbox}
         defaultChecked={checked}
+        onClick={(e) => e.stopPropagation()}
         onChange={(e) => {
           setChecked(e.target.checked);
           onChange && onChange(e);
         }}
         type="checkbox"
-        style={{ width: space(2.5), height: space(2.5) }}
       />
     </CheckboxStyle>
   );
+
+  if (children) {
+    return (
+      <Container align="center" onClick={() => checkbox.current.click()} grow>
+        <Div pr={1}>{input}</Div>
+        {children}
+      </Container>
+    );
+  }
+
+  return input;
 };

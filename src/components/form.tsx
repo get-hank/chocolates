@@ -5,6 +5,7 @@ import React, {
 } from "react";
 import styled from "styled-components";
 import { Checkbox as CheckboxInput } from "./form/Checkbox";
+import { Radio as RadioInput } from "./form/Radio";
 import { Select as SelectFormInput, Option } from "./form/Select";
 import {
   DatePicker as DatePickerInput,
@@ -25,6 +26,7 @@ import { colors } from "../util/colors";
 export const Select = SelectFormInput;
 export const Input = FormInput;
 export const Checkbox = CheckboxInput;
+export const Radio = RadioInput;
 export const DatePicker = DatePickerInput;
 export const TimePicker = TimePickerInput;
 
@@ -69,6 +71,7 @@ type FieldProps = Omit<FormFieldWrapperProps, "onChange"> & {
   field: string;
   onChange?: (edit: FieldEdit) => any;
   value?: any;
+  checked?: boolean;
   placeholder?: string;
   autoComplete?: string;
   help?: string;
@@ -77,6 +80,7 @@ type FieldProps = Omit<FormFieldWrapperProps, "onChange"> & {
   | "multiLineText"
   | "select"
   | "checkbox"
+  | "radio"
   | "date"
   | "time"
   | "none";
@@ -92,6 +96,7 @@ export const FormField: React.FC<FieldProps> = ({
   label,
   field,
   value,
+  checked,
   onChange,
   help,
   placeholder,
@@ -105,24 +110,30 @@ export const FormField: React.FC<FieldProps> = ({
   pickerProps,
   ...wrapperProps
 }) => {
-  const nativeProps = {
+  const baseNativeProps = {
     disabled,
     placeholder,
     autoComplete,
     onChange: (e: any) =>
       onChange && onChange({ field, value: e.target.value }),
-    defaultValue: value,
     name: field,
   };
+  const nativeProps = {
+    ...baseNativeProps,
+    defaultValue: value,
+  };
+
   const styleProps = { error: !!error };
+  const selectable = ["radio", "checkbox"].includes(inputType);
+
   return (
-    <FieldWrapper direction="column" {...wrapperProps}>
-      {inputType !== "checkbox" ? (
+    <FieldWrapper direction="column" {...wrapperProps} grow>
+      {!selectable ? (
         <Div pb={1}>
           <Label weight={500}>{label}</Label>
         </Div>
       ) : null}
-      {children ? children : null}
+      {children && !selectable ? children : null}
       {inputType === "text" ? (
         <Input styledProps={styleProps} nativeProps={nativeProps} />
       ) : null}
@@ -152,19 +163,33 @@ export const FormField: React.FC<FieldProps> = ({
         />
       ) : null}
       {inputType === "checkbox" ? (
-        <Container p={wrapperProps.fillBg ? 2 : 0} align="center">
+        <Container p={wrapperProps.fillBg ? 2 : 0} align="center" grow>
           <Checkbox
             styledProps={styleProps}
             nativeProps={{
-              ...nativeProps,
-              defaultChecked: !!value,
+              ...baseNativeProps,
+              defaultChecked: checked !== undefined ? checked : !!value,
               onChange: (e: any) =>
                 onChange && onChange({ field, value: e.target.checked }),
             }}
-          />
-          <Div pl={1}>
-            <Label>{label}</Label>
-          </Div>
+          >
+            {children ? children : <Label>{label}</Label>}
+          </Checkbox>
+        </Container>
+      ) : null}
+      {inputType === "radio" ? (
+        <Container p={wrapperProps.fillBg ? 2 : 0} align="center" grow>
+          <Radio
+            styledProps={styleProps}
+            nativeProps={{
+              ...baseNativeProps,
+              value,
+              defaultChecked: checked,
+              onChange: (e: any) => onChange && onChange({ field, value }),
+            }}
+          >
+            {children ? children : <Label>{label}</Label>}
+          </Radio>
         </Container>
       ) : null}
       {help ? (
