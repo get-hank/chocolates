@@ -19,7 +19,6 @@ type FlexProps = {
   | "space-between"
   | "stretch"
   | "space-around";
-  grow?: boolean;
 };
 
 export type ContainerProps = SpacingProps & FlexProps;
@@ -46,13 +45,7 @@ const genMediaSizeRule = (breakPoint: number, cols: colCount | undefined) => {
 `;
 };
 
-const genFlexRules = ({
-  center,
-  direction,
-  align,
-  justify,
-  grow,
-}: FlexProps) => {
+const genFlexRules = ({ center, direction, align, justify }: FlexProps) => {
   let rules = "";
   if (center)
     rules += `
@@ -64,7 +57,6 @@ const genFlexRules = ({
 
   if (align) rules += `align-items: ${align};`;
   if (justify) rules += `justify-content: ${justify};`;
-  if (grow) rules += "flex-grow: 1";
 
   return rules;
 };
@@ -79,7 +71,6 @@ const genItemRules = ({
   direction,
   align,
   justify,
-  grow,
 }: ItemProps) => {
   let rules = genSizeRule(cols);
   const colCounts: { [index: string]: colCount | undefined } = {
@@ -97,7 +88,7 @@ const genItemRules = ({
 
   if (center || direction || align || justify) rules += "display: flex;";
 
-  rules += genFlexRules({ center, direction, align, justify, grow });
+  rules += genFlexRules({ center, direction, align, justify });
 
   return rules;
 };
@@ -117,8 +108,8 @@ export const Item = styled(SpacingContainer) <ItemProps>`
 export const Container = styled(SpacingContainer) <ContainerProps>`
   display: flex;
   flex-wrap: wrap;
-  ${({ center, direction, align, justify, grow }) =>
-    genFlexRules({ center, direction, align, justify, grow })}
+  ${({ center, direction, align, justify }) =>
+    genFlexRules({ center, direction, align, justify })}
 `;
 
 export const LayoutWrapper = styled(SpacingContainer)`

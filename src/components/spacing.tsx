@@ -24,6 +24,8 @@ export interface SpacingProps extends React.HTMLAttributes<HTMLDivElement> {
   bb?: boolean;
   bl?: boolean;
   br?: boolean;
+
+  grow?: boolean;
 }
 
 export const padding = (rule: string, size: number) =>
@@ -85,6 +87,8 @@ export const SpacingContainer = styled.div<SpacingProps>`
       ? borderRule(theme.colors.border, "left") +
       borderRule(theme.colors.border, "right")
       : ""}
+
+${({ grow }) => (grow ? "flex-grow: 1;" : "")}
 `;
 
 export const Div = SpacingContainer;
