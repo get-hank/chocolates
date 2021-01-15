@@ -11,7 +11,7 @@ export default {
 } as Meta;
 
 const Template: Story<ComponentProps<typeof Radio>> = (args) => (
-  <Container direction="column" center>
+  <Container direction="column">
     <Radio {...args} value="inline">
       Inline content
     </Radio>
@@ -26,6 +26,7 @@ const Template: Story<ComponentProps<typeof Radio>> = (args) => (
       label="as a form field"
       inputType="radio"
       field="field"
+      name="field"
       value="formField"
     />
 
@@ -33,11 +34,27 @@ const Template: Story<ComponentProps<typeof Radio>> = (args) => (
       label="as a form field"
       inputType="radio"
       field="field"
-      value="formField"
+      name="field"
+      value="formField2"
     >
       <div>
         <P>Woo block content</P>
         <P>So much block content</P>
+      </div>
+    </FormField>
+
+    <FormField
+      label="as a form field"
+      inputType="radio"
+      field="field"
+      name="field"
+      value="formField3"
+      containerProps={{ align: "flex-start" }}
+    >
+      <div>
+        <P>Woo block content</P>
+        <P>So much block content</P>
+        <P>See how the input is at the top on this one? See???</P>
       </div>
     </FormField>
   </Container>

@@ -89,6 +89,7 @@ type FieldProps = Omit<FormFieldWrapperProps, "onChange"> & {
   disabled?: boolean;
   apiBase?: string;
   options?: Option[];
+  containerProps?: typeof Container;
   pickerProps?: DatePickerProps["pickerProps"];
 };
 
@@ -108,6 +109,7 @@ export const FormField: React.FC<FieldProps> = ({
   inputType = "text",
   children,
   pickerProps,
+  containerProps,
   ...wrapperProps
 }) => {
   const baseNativeProps = {
@@ -172,6 +174,7 @@ export const FormField: React.FC<FieldProps> = ({
               onChange: (e: any) =>
                 onChange && onChange({ field, value: e.target.checked }),
             }}
+            containerProps={containerProps}
           >
             {children ? children : <Label>{label}</Label>}
           </Checkbox>
@@ -187,6 +190,7 @@ export const FormField: React.FC<FieldProps> = ({
               defaultChecked: checked,
               onChange: (e: any) => onChange && onChange({ field, value }),
             }}
+            containerProps={containerProps}
           >
             {children ? children : <Label>{label}</Label>}
           </Radio>

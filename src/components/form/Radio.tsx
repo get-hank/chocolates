@@ -7,7 +7,23 @@ import { Div } from "../spacing";
 import { Container } from "../grid";
 import { space } from "../../util/layout";
 
+const HoverContainer = styled(Container)`
+  &:hover {
+    cursor: pointer;
+  }
+
+  * {
+    &:hover {
+      cursor: pointer;
+    }
+  }
+`;
+
 const RadioStyle = styled(Div) <InputProps>`
+  &:hover {
+    cursor: pointer;
+  }
+
   input[type="radio"] {
     ${inputStyle}
 
@@ -39,9 +55,14 @@ const RadioStyle = styled(Div) <InputProps>`
   }
 `;
 
-export const Radio: React.FC<_InputProps> = ({
+type RadioProps = _InputProps & {
+  containerProps?: typeof Container | null;
+};
+
+export const Radio: React.FC<RadioProps> = ({
   styledProps = {},
   nativeProps,
+  containerProps = {},
   children,
 }) => {
   const radio = useRef(null);
@@ -59,10 +80,15 @@ export const Radio: React.FC<_InputProps> = ({
 
   if (children) {
     return (
-      <Container align="center" onClick={() => radio.current.click()} grow>
+      <HoverContainer
+        align="center"
+        onClick={() => radio.current.click()}
+        grow
+        {...containerProps}
+      >
         <Div pr={1}>{input}</Div>
         {children}
-      </Container>
+      </HoverContainer>
     );
   }
 

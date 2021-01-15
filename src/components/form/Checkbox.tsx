@@ -7,6 +7,18 @@ import { Div } from "../spacing";
 import { Container } from "../grid";
 import { space } from "../../util/layout";
 
+const HoverContainer = styled(Container)`
+  &:hover {
+    cursor: pointer;
+  }
+
+  * {
+    &:hover {
+      cursor: pointer;
+    }
+  }
+`;
+
 const CheckboxStyle = styled(Div) <InputProps>`
   position: relative;
 
@@ -29,9 +41,14 @@ const CheckboxStyle = styled(Div) <InputProps>`
   }
 `;
 
-export const Checkbox: React.FC<_InputProps> = ({
+type CheckboxProps = _InputProps & {
+  containerProps?: typeof Container | null;
+};
+
+export const Checkbox: React.FC<CheckboxProps> = ({
   styledProps = {},
   nativeProps,
+  containerProps = {},
   children,
 }) => {
   const { defaultChecked, onChange, ...rest } = nativeProps;
@@ -75,10 +92,15 @@ export const Checkbox: React.FC<_InputProps> = ({
 
   if (children) {
     return (
-      <Container align="center" onClick={() => checkbox.current.click()} grow>
+      <HoverContainer
+        align="center"
+        onClick={() => checkbox.current.click()}
+        grow
+        {...containerProps}
+      >
         <Div pr={1}>{input}</Div>
         {children}
-      </Container>
+      </HoverContainer>
     );
   }
 
