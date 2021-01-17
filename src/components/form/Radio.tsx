@@ -4,7 +4,7 @@ import { inputStyle, InputProps } from "./utils";
 import { _InputProps } from "./Input";
 import { Text, TextProps, rulesForTextProps } from "../typography";
 import { Div } from "../spacing";
-import { Container } from "../grid";
+import { Container, ContainerProps } from "../grid";
 import { space } from "../../util/layout";
 
 const HoverContainer = styled(Container)`
@@ -56,7 +56,7 @@ const RadioStyle = styled(Div) <InputProps>`
 `;
 
 type RadioProps = _InputProps & {
-  containerProps?: typeof Container | null;
+  containerProps?: ContainerProps | null;
 };
 
 export const Radio: React.FC<RadioProps> = ({

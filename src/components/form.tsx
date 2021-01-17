@@ -89,7 +89,7 @@ type FieldProps = Omit<FormFieldWrapperProps, "onChange"> & {
   disabled?: boolean;
   apiBase?: string;
   options?: Option[];
-  containerProps?: typeof Container;
+  containerProps?: ContainerProps;
   pickerProps?: DatePickerProps["pickerProps"];
 };
 
