@@ -100,7 +100,8 @@ export const SpacingContainer = ({
 }: SpacingProps) => (
     <TheSpacingContainer
       {...rest}
-      className={`${hideFromFullStory ? "__fullstory_hidden" : ""} ${className}`}
+      className={`${hideFromFullStory ? "__fullstory_hidden " : ""}${className ? className : ""
+        }`}
     />
   );
 
