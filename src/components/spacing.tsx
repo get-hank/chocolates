@@ -26,6 +26,8 @@ export interface SpacingProps extends React.HTMLAttributes<HTMLDivElement> {
   br?: boolean;
 
   grow?: boolean;
+
+  hideFromFullStory?: boolean;
 }
 
 export const padding = (rule: string, size: number) =>
@@ -49,7 +51,7 @@ export const borderRule: (
 ) => string = (color, direction = "all") =>
     `border${direction === "all" ? "" : `-${direction}`}: 1px solid ${color};`;
 
-export const SpacingContainer = styled.div<SpacingProps>`
+const TheSpacingContainer = styled.div<SpacingProps>`
   ${({ p }) => (p ? padding("padding", p) : "")};
 
   ${({ py }) =>
@@ -88,7 +90,18 @@ export const SpacingContainer = styled.div<SpacingProps>`
       borderRule(theme.colors.border, "right")
       : ""}
 
-${({ grow }) => (grow ? "flex-grow: 1;" : "")}
+  ${({ grow }) => (grow ? "flex-grow: 1;" : "")}
 `;
+
+export const SpacingContainer = ({
+  hideFromFullStory,
+  className,
+  ...rest
+}: SpacingProps) => (
+    <TheSpacingContainer
+      {...rest}
+      className={`${hideFromFullStory ? "__fullstory_hidden" : ""} ${className}`}
+    />
+  );
 
 export const Div = SpacingContainer;
