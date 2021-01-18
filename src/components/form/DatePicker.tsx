@@ -135,7 +135,11 @@ export const DatePicker = ({
         onFocus={(_) => setPickerVisible(true)}
         onClick={(_) => setPickerVisible(true)}
         onChange={(e) => dateChanged(e.target.value)}
-        value={value.toFormat("yyyy-MM-dd")}
+        value={
+          mobileViewport
+            ? value.toFormat("yyyy-MM-dd")
+            : value.toFormat("MM / dd / yyyy")
+        }
         {...rest}
         type={mobileViewport ? "date" : "text"}
       />

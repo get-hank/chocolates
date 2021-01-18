@@ -19,7 +19,7 @@ export const TimePicker = ({
   const [value, setValue] = useState<DateTime>(
     defaultValue
       ? DateTime.fromISO(defaultValue as string)
-      : DateTime.local().set({ minute: 0 })
+      : DateTime.local().set({ minute: 0, second: 0 })
   );
   const [pickerVisible, setPickerVisible] = useState(false);
   const isMobile = isMobileViewport();
@@ -49,6 +49,10 @@ export const TimePicker = ({
     }
   };
 
+  let uiHour = value.hour;
+  if (uiHour > 11) uiHour = uiHour - 12;
+  if (uiHour === 0) uiHour = 12;
+
   return (
     <InputStyle {...styledProps}>
       {isMobile ? (
@@ -64,7 +68,7 @@ export const TimePicker = ({
               key="hour"
               nativeProps={{
                 onChange: (e) => hourChanged(parseInt(e.target.value)),
-                defaultValue: value.hour,
+                value: uiHour,
               }}
               options={[...Array(12)].map((_, idx) => ({
                 value: (idx + 1).toString(),
@@ -76,7 +80,7 @@ export const TimePicker = ({
               nativeProps={{
                 onChange: (e) =>
                   dateChanged(value.set({ minute: parseInt(e.target.value) })),
-                defaultValue: value.minute,
+                value: value.minute,
               }}
               options={["00", "15", "30", "45"].map((value) => ({ value }))}
             />
