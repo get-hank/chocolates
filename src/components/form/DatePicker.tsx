@@ -106,7 +106,7 @@ export const DatePicker = ({
   nativeProps,
   pickerProps = {},
 }: DatePickerProps) => {
-  const { defaultValue, ...rest } = nativeProps;
+  const { defaultValue, onChange, ...rest } = nativeProps;
   const [value, setValue] = useState<DateTime>(
     defaultValue ? DateTime.fromISO(defaultValue as string) : DateTime.local()
   );
