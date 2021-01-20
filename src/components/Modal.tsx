@@ -102,7 +102,7 @@ const Modal: React.FC<ModalProps> = ({
             <H3 weight={600} pr={4}>
               {titleText}
             </H3>
-            <IconButton name="close" onClick={dismiss} />
+            <IconButton icon="close" name="Close" onClick={dismiss} />
           </Container>
         </Div>
         <Contents px={2}>{children}</Contents>
@@ -111,13 +111,17 @@ const Modal: React.FC<ModalProps> = ({
             <Container justify="flex-end" align="center">
               {onCancel ? (
                 <Div pr={2}>
-                  <Button secondary onClick={dismiss}>
+                  <Button secondary onClick={dismiss} name="Cancel">
                     {cancelText}
                   </Button>
                 </Div>
               ) : null}
               {onSubmit ? (
-                <Button onClick={onSubmit} disabled={submitDisabled}>
+                <Button
+                  onClick={onSubmit}
+                  disabled={submitDisabled}
+                  name="Submit"
+                >
                   {submitText}
                 </Button>
               ) : null}
