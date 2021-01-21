@@ -1,6 +1,5 @@
-// @ts-nocheck
-
 import React, { ComponentProps } from "react";
+import { lighten } from "polished";
 import { Story, Meta } from "@storybook/react/types-6-0";
 import { Container } from "../components/grid";
 import Button from "../components/Button";
@@ -23,4 +22,5 @@ Standard.args = {
   size: "small",
   secondary: false,
   wide: false,
+  color: "#2A69F2",
 };

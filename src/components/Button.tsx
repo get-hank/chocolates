@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import { darken, lighten } from "polished";
 import { fontSize } from "./typography";
 import { passThroughRule } from "../util/helpers";
 import { breakPoint, space } from "../util/layout";
@@ -11,6 +12,7 @@ export interface ButtonProps extends React.HTMLAttributes<HTMLButtonElement> {
   secondary?: boolean;
   wide?: boolean;
   disabled?: boolean;
+  color?: string;
 }
 
 const sizeRules = (size: SizeType, wide: boolean | null) => {
@@ -55,35 +57,56 @@ const Button = styled.button<ButtonProps>`
   color: ${({ secondary, theme }) =>
     secondary ? theme.colors.text : theme.colors.white};
 
-  background-color: ${({ secondary, theme }) =>
-    secondary ? theme.colors.white : theme.colors.primary};
-  border-color: ${({ secondary, theme }) =>
-    secondary ? theme.colors.grayBorder : theme.colors.primary};
+  background-color: ${({ secondary, theme, color }) =>
+    secondary ? theme.colors.white : color ? color : theme.colors.primary};
+  border-color: ${({ secondary, theme, color }) =>
+    secondary ? theme.colors.grayBorder : color ? color : theme.colors.primary};
 
   &:hover,
   &:active {
     cursor: pointer;
-    color: ${({ secondary, theme }) =>
-    secondary ? theme.colors.primary : theme.colors.white};
-    background-color: ${({ secondary, theme }) =>
-    secondary ? theme.colors.white : theme.colors.primaryDark};
-    border-color: ${({ secondary, theme }) =>
-    secondary ? theme.colors.primary : theme.colors.primaryDark};
+    color: ${({ secondary, theme, color }) =>
+    secondary ? (color ? color : theme.colors.primary) : theme.colors.white};
+    background-color: ${({ secondary, theme, color }) =>
+    secondary
+      ? theme.colors.white
+      : color
+        ? darken(0.1, color)
+        : theme.colors.primaryDark};
+    border-color: ${({ secondary, theme, color }) =>
+    secondary
+      ? color
+        ? color
+        : theme.colors.primary
+      : color
+        ? darken(0.1, color)
+        : theme.colors.primaryDark};
   }
 
   &:active {
-    border-color: ${({ theme }) => theme.colors.primaryLight};
-    box-shadow: 0 0 1px 3px ${({ theme }) => theme.colors.primaryLight};
+    border-color: ${({ theme, color }) =>
+    color ? lighten(0.1, color) : theme.colors.primaryLight};
+    box-shadow: 0 0 1px 3px
+      ${({ theme, color }) =>
+    color ? lighten(0.1, color) : theme.colors.primaryLight};
   }
 
   &:disabled {
     cursor: initial;
     color: ${({ secondary, theme }) =>
     secondary ? theme.colors.textDisabled : theme.colors.white};
-    background-color: ${({ secondary, theme }) =>
-    secondary ? theme.colors.grayLight : theme.colors.primaryLightest};
-    border-color: ${({ secondary, theme }) =>
-    secondary ? theme.colors.grayLight : theme.colors.primaryLightest};
+    background-color: ${({ secondary, theme, color }) =>
+    secondary
+      ? theme.colors.grayLight
+      : color
+        ? lighten(0.2, color)
+        : theme.colors.primaryLightest};
+    border-color: ${({ secondary, theme, color }) =>
+    secondary
+      ? theme.colors.grayLight
+      : color
+        ? lighten(0.2, color)
+        : theme.colors.primaryLightest};
   }
 
   ${({ size, wide }) => sizeRules(size, wide)}

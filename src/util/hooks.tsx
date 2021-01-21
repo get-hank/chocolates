@@ -1,4 +1,5 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
 import { useAuth0 } from "@auth0/auth0-react";
 import { breakPoint } from "./layout";
 
@@ -51,4 +52,22 @@ export const useBreakpoint = (bp: string) => {
   const { width } = windowDimensions;
 
   return width <= breakPoint(bp);
+};
+
+export const useHashRoute = (name: string) => {
+  const { hash } = useLocation();
+  const [scrolled, setScrolled] = useState(false);
+  const ref = useCallback(
+    (node) => {
+      if (!scrolled && node && node.offsetTop) {
+        setScrolled(true);
+        if (hash === `#${name}`) {
+          setTimeout(() => {
+            window.scrollTo(0, node.offsetTop - headerHeight);
+          });
+        }
+      }
+    },
+    [hash, scrolled, setScrolled, name]
+  );
 };
