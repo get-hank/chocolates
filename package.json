@@ -1,10 +1,15 @@
 {
   "name": "@hank-technology/chocolates",
-  "version": "1.5.4",
-  "main": "dist/index.js",
+  "version": "1.5.5",
+  "module": "dist/index.js",
   "files": [
     "dist",
-    "README.md"
+    "README.md",
+    "api",
+    "icons",
+    "payment",
+    "table",
+    "ui"
   ],
   "repository": {
     "type": "git",
@@ -16,6 +21,7 @@
     "@stripe/stripe-js": "^1.11.0",
     "@types/luxon": "^1.25.0",
     "@types/react-calendar": "^3.1.2",
+    "@types/react-router-dom": "^5.1.7",
     "actioncable": "^5.2.4-4",
     "luxon": "^1.25.0",
     "polished": "^4.0.5",
@@ -25,6 +31,7 @@
     "react-dom": "^17.0.1",
     "react-infinite-scroller": "^1.2.4",
     "react-relay": "^10.1.0",
+    "react-router-dom": "^5.2.0",
     "react-table": "^7.6.2",
     "styled-components": "^5.2.1",
     "svgo": "^1.3.2",

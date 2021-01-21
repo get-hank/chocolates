@@ -1,7 +1,13 @@
 const path = require("path");
 
 module.exports = {
-  entry: "./src/index.tsx",
+  entry: {
+    icons: "./src/icons/index.tsx",
+    ui: "./src/ui.tsx",
+    table: "./src/table.tsx",
+    payment: "./src/payment.tsx",
+    api: "./src/api.tsx",
+  },
   devtool: "source-map",
   module: {
     rules: [
@@ -18,16 +24,22 @@ module.exports = {
   externals: {
     react: "react",
     "react-dom": "react-dom",
+    "react-router-dom": "react-router-dom",
     "styled-components": "styled-components",
     "react-relay": "react-relay",
     "relay-runtime": "relay-runtime",
     "@auth0/auth0-react": "@auth0/auth0-react",
   },
   output: {
-    filename: "index.js",
+    filename: "[name].bundle.js",
     path: path.resolve(__dirname, "dist"),
-    library: "chocolates",
+    library: ["chocolates", "[name]"],
     libraryTarget: "umd",
-    umdNamedDefine: true,
+    // umdNamedDefine: true,
   },
+  // optimization: {
+  // splitChunks: {
+  // chunks: "all",
+  // },
+  // },
 };

@@ -1,0 +1,6 @@
+{
+  "internal": true,
+  "main": "../dist/api.bundle.js",
+  "module": "../dist/api.bundle.js",
+  "types": "../dist/api.d.ts"
+}

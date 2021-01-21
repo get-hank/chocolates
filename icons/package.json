@@ -1,0 +1,6 @@
+{
+  "internal": true,
+  "main": "../dist/icons.bundle.js",
+  "module": "../dist/icons.bundle.js",
+  "types": "../dist/icons.d.ts"
+}

@@ -1,0 +1,6 @@
+{
+  "internal": true,
+  "main": "../dist/table.bundle.js",
+  "module": "../dist/table.bundle.js",
+  "types": "../dist/table.d.ts"
+}

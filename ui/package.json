@@ -1,0 +1,6 @@
+{
+  "internal": true,
+  "main": "../dist/ui.bundle.js",
+  "module": "../dist/ui.bundle.js",
+  "types": "../dist/ui.d.ts"
+}

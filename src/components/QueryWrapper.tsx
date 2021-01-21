@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { QueryRenderer } from "react-relay";
-import { useApiToken } from "../util/hooks";
+import { useApiToken } from "../util/api";
 import {
   createEnvironment,
   RelayEnvironmentContext,

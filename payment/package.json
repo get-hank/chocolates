@@ -1,0 +1,6 @@
+{
+  "internal": true,
+  "main": "../dist/payment.bundle.js",
+  "module": "../dist/payment.bundle.js",
+  "types": "../dist/payment.d.ts"
+}
