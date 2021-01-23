@@ -5,6 +5,8 @@ import { fontSize } from "./typography";
 import { passThroughRule } from "../util/helpers";
 import { breakPoint, space } from "../util/layout";
 
+const animationDuration = 200;
+
 type SizeType = "small" | "medium" | "large" | "x-large" | "mobile";
 
 export interface ButtonProps extends React.HTMLAttributes<HTMLButtonElement> {
@@ -54,13 +56,17 @@ const Button = styled.button<ButtonProps>`
 
   ${({ theme }) => passThroughRule("font-family", theme.typography.baseType)}
 
-  color: ${({ secondary, theme }) =>
-    secondary ? theme.colors.text : theme.colors.white};
+  color: ${({ secondary, theme, color }) =>
+    secondary ? (color ? color : theme.colors.text) : theme.colors.white};
 
   background-color: ${({ secondary, theme, color }) =>
     secondary ? theme.colors.white : color ? color : theme.colors.primary};
   border-color: ${({ secondary, theme, color }) =>
-    secondary ? theme.colors.grayBorder : color ? color : theme.colors.primary};
+    color ? color : secondary ? theme.colors.grayBorder : theme.colors.primary};
+
+  transition: color ${animationDuration}ms ease,
+    border-color ${animationDuration}ms ease,
+    background-color ${animationDuration}ms ease;
 
   &:hover,
   &:active {
