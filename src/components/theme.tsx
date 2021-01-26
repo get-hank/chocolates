@@ -19,7 +19,8 @@ export const defaultTheme = {
     white: colors.white,
     black: colors.black,
     gray: colors.gray400,
-    grayLight: colors.gray10,
+    grayLight: colors.gray50,
+    grayLightest: colors.gray10,
     text: colors.gray950,
     textDisabled: colors.gray200,
     grayBorder: colors.gray100,
@@ -34,6 +35,7 @@ type ThemeProps = {
 const Wrapper = styled.div`
   * {
     box-sizing: border-box;
+    font-family: ${({ theme }) => theme.typography.baseType};
   }
 `;
 

@@ -1,7 +1,10 @@
+export { default as Arrow } from "./Arrow";
 export { default as ArrowBack } from "./ArrowBack";
 export { default as ArrowDown } from "./ArrowDown";
-export { default as Arrow } from "./Arrow";
+export { default as ArrowLeft } from "./ArrowLeft";
+export { default as ArrowRight } from "./ArrowRight";
 export { default as ArrowUp } from "./ArrowUp";
+export { default as ArrowDownLegacy } from "./ArrowDownLegacy";
 export { default as Bell } from "./Bell";
 export { default as Calendar } from "./Calendar";
 export { default as Checkmark } from "./Checkmark";

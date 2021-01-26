@@ -1,37 +1,55 @@
 import React from "react";
 import styled from "styled-components";
-import { Container } from "./grid";
-import { Div, SpacingProps } from "./spacing";
-import { Close, ArrowBack, Menu } from "../icons";
+import { darken } from "polished";
+import { Container, ContainerProps } from "./grid";
+import { Div } from "./spacing";
+import { ArrowBack, ArrowLeft, ArrowRight, Close, Menu } from "../icons";
 import { space } from "../util/layout";
 
-type IconButtonProps = SpacingProps & {
-  name?: "back" | "close" | "menu";
-};
+interface IconButtonProps extends React.ComponentPropsWithoutRef<"button"> {
+  icon?: "back" | "close" | "menu" | "left" | "right";
+  bgColor?: string;
+  noButton?: boolean;
+}
 
 const components = {
   back: ArrowBack,
+  left: ArrowLeft,
+  right: ArrowRight,
   close: Close,
   menu: Menu,
 };
 
-const ClickTarget = styled(Container)`
+const ClickTarget = styled.button<Omit<IconButtonProps, "icon" | "noButton">>`
+  appearance: none;
+  border: none;
+  margin: 0;
+  padding: 0;
+
   min-height: ${space(4)};
   min-width: ${space(4)};
   border-radius: 50%;
   cursor: pointer;
+  background-color: ${({ theme, bgColor }) =>
+    bgColor ? bgColor : theme.colors.white};
 
   &:active,
   &:hover {
-    background-color: ${({ theme }) => theme.colors.grayBorder};
+    background-color: ${({ theme, bgColor }) =>
+    bgColor ? darken(0.1, bgColor) : theme.colors.grayBorder};
   }
 `;
 
-const IconButton: React.FC<IconButtonProps> = ({ name, children, ...rest }) => {
-  const Component = name ? components[name] : null;
+const IconButton: React.FC<IconButtonProps> = ({
+  noButton,
+  icon,
+  children,
+  ...rest
+}) => {
+  const Component = icon ? components[icon] : null;
   return (
-    <ClickTarget {...rest} center>
-      {Component ? <Component /> : children}
+    <ClickTarget {...rest} {...(noButton && { as: "span" })}>
+      <Container center>{Component ? <Component /> : children}</Container>
     </ClickTarget>
   );
 };

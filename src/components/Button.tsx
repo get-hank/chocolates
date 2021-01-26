@@ -9,7 +9,7 @@ const animationDuration = 200;
 
 type SizeType = "small" | "medium" | "large" | "x-large" | "mobile";
 
-export interface ButtonProps extends React.HTMLAttributes<HTMLButtonElement> {
+export interface ButtonProps extends React.ComponentPropsWithoutRef<"button"> {
   size?: SizeType;
   secondary?: boolean;
   wide?: boolean;
@@ -103,13 +103,13 @@ const Button = styled.button<ButtonProps>`
     secondary ? theme.colors.textDisabled : theme.colors.white};
     background-color: ${({ secondary, theme, color }) =>
     secondary
-      ? theme.colors.grayLight
+      ? theme.colors.grayLightest
       : color
         ? lighten(0.2, color)
         : theme.colors.primaryLightest};
     border-color: ${({ secondary, theme, color }) =>
     secondary
-      ? theme.colors.grayLight
+      ? theme.colors.grayLightest
       : color
         ? lighten(0.2, color)
         : theme.colors.primaryLightest};
