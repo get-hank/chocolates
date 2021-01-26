@@ -281,12 +281,14 @@ type CalendarProps = {
   onViewChange?: (v: View) => any;
   onDateChange?: (d: Date) => any;
   onDateRangeChange?: (r: DateRange) => any;
+  onClickEvent?: (e: Event) => any;
 };
 
 const Calendar = ({
   onViewChange,
   onDateChange,
   onDateRangeChange,
+  onClickEvent,
   defaultView = "month",
   ...rest
 }: CalendarProps) => {
@@ -311,6 +313,7 @@ const Calendar = ({
           ...(onDateChange && { onNavigate: onDateChange }),
           ...(onViewChange && { onView: onViewChange }),
           ...(onDateRangeChange && { onRangeChange }),
+          ...(onClickEvent && { onSelectEvent: (e, _) => onClickEvent(e) }),
           ...rest,
         }}
         resizable
