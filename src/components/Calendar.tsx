@@ -32,6 +32,10 @@ const Wrapper = styled(Container)`
   .rbc-month-view {
     border: none;
     border-bottom: 1px solid ${({ theme }) => theme.colors.grayBorder};
+
+    .rbc-row-content {
+      z-index: 0;
+    }
   }
 
   .rbc-header {
