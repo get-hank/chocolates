@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { QueryRenderer } from "react-relay";
+import { QueryRenderer, FetchPolicy } from "react-relay";
 import { useApiToken } from "../util/api";
 import {
   createEnvironment,
@@ -12,6 +12,7 @@ type QueryWrapperProps = {
   variables?: any;
   render: any;
   apiBase: string;
+  fetchPolicy?: FetchPolicy;
 };
 
 const QueryWrapper: React.FC<QueryWrapperProps> = ({
@@ -19,6 +20,7 @@ const QueryWrapper: React.FC<QueryWrapperProps> = ({
   variables = {},
   render,
   apiBase,
+  fetchPolicy = "network-only",
 }) => {
   const apiToken = useApiToken(apiBase);
   const [relayEnv, setRelayEnv] = useState<any>(null);
@@ -37,6 +39,7 @@ const QueryWrapper: React.FC<QueryWrapperProps> = ({
         query={query}
         variables={variables}
         render={render}
+        fetchPolicy={fetchPolicy}
       />
     </RelayEnvironmentContext.Provider>
   );
