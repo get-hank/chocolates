@@ -48,9 +48,10 @@
   },
   "scripts": {
     "build": "rm -rf dist/ && webpack",
-    "publish": "npm publish --access public",
     "storybook": "start-storybook -p 6006 --no-dll",
-    "build-storybook": "build-storybook --no-dll"
+    "build-storybook": "build-storybook --no-dll",
+    "alpha": "yarn build && deploy/publish.sh alpha",
+    "release": "yarn build && deploy/publish.sh"
   },
   "browserslist": {
     "production": [
