@@ -115,17 +115,11 @@ before running publish.
 
 1. Commit all changes with a meaningful commit.
 1. Rebase and push to alpha branch (or make a PR to alpha and merge it)
-1. Get the new short SHA with `git rev-parse --short=8 HEAD`
-1. Tag the commit in github `git tag -a <version>` where version is the new version string
-1. Push tags `git push --tags`
-1. Update the version post-fix in package.json to include alpha and the SHA
-1. Build and publish: `yarn build && yarn publish`
-1. Clear any changes to package.json, no need to add a commit for the alpha version.
+1. Run `yarn alpha`
 
 #### Stable deployment
 
-1. Bump the version number in `package.json` according to semver standards
-1. Commit all changes with a meaningful commit
-1. Tag the commit in github `git tag -a <version>` where version is the new version string
-1. Push tags `git push --tags`
-1. Build and publish: `yarn build && yarn publish`
+1. Ensure you're on the alpha (main) branch
+1. Ensure you've verified any changes in client apps using the Alpha deployment workflow
+1. Run `yarn release < bump >`, where bump is one of `major`, `minor`, or `patch`
+1. Push to remote alpha branch and tags with `git push && git push --tags`
