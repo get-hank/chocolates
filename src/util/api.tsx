@@ -1,9 +1,77 @@
 import { useCallback, useEffect, useState } from "react";
+import { DateTime } from "luxon";
 import { useAuth0 } from "@auth0/auth0-react";
 import { clearCookie, getCookie, setCookie } from "./cookies";
+import { clearSessionKey, getSessionKey, setSessionKey } from "./session";
+
+export type impersonateStorage = "session" | "cookie";
+type storageOpts = {
+  apiBase?: string;
+  storage?: impersonateStorage;
+};
+const impersonateKey = "impersonate_id";
+
+const getHostInfo = (uri: string) => {
+  const url = new URL(uri);
+  return {
+    secure: url.protocol === "https:",
+    ...(url.hostname !== "localhost" && {
+      domain: url.hostname.split(".").slice(-2).join("."),
+    }),
+  };
+};
+
+export const impersonate = (
+  userId: string,
+  { apiBase, storage }: storageOpts
+) => {
+  if (storage === "session") {
+    setSessionKey({
+      name: impersonateKey,
+      value: userId,
+      expireAt: DateTime.local().plus({ minutes: 10 }),
+    });
+  } else {
+    setCookie({
+      name: impersonateKey,
+      value: userId,
+      expiresInSeconds: 600,
+      ...getHostInfo(apiBase),
+    });
+  }
+};
+
+export const stopImpersonating = ({ apiBase, storage }: storageOpts) => {
+  if (storage === "session") {
+    clearSessionKey(impersonateKey);
+  } else {
+    clearCookie({ name: impersonateKey, ...getHostInfo(apiBase) });
+  }
+};
+
+export const isImpersonating = () => !!impersonatingId();
+
+export const impersonatingId = () => {
+  const val = getSessionKey(impersonateKey) || getCookie(impersonateKey);
+  return val;
+};
+
+export const impersonateStorageType: () => impersonateStorage | null = () => {
+  if (getSessionKey(impersonateKey)) return "session";
+  if (getCookie(impersonateKey)) return "cookie";
+  return null;
+};
+
+type requestArgs = {
+  apiBase: string;
+  apiToken: string;
+  path: string;
+  method?: string;
+  body?: object;
+};
 
 export const defaultHeaders = (apiToken: string) => {
-  const impersonateId = getCookie("impersonate_id");
+  const impersonateId = impersonatingId();
 
   return {
     Authorization: `Bearer ${apiToken}`,
@@ -36,38 +104,6 @@ export const useApiToken = (apiBase: string) => {
   return apiToken;
 };
 
-const getHostInfo = (uri: string) => {
-  const url = new URL(uri);
-  return {
-    secure: url.protocol === "https:",
-    ...(url.hostname !== "localhost" && {
-      domain: url.hostname.split(".").slice(-2).join("."),
-    }),
-  };
-};
-
-export const impersonate = (userId: string, apiBase: string) => {
-  setCookie({
-    name: "impersonate_id",
-    value: userId,
-    expiresInSeconds: 600,
-    ...getHostInfo(apiBase),
-  });
-};
-
-export const stopImpersonating = (apiBase: string) =>
-  clearCookie({ name: "impersonate_id", ...getHostInfo(apiBase) });
-
-export const isImpersonating = () => !!getCookie("impersonate_id");
-
-type requestArgs = {
-  apiBase: string;
-  apiToken: string;
-  path: string;
-  method?: string;
-  body?: object;
-};
-
 export const request: (
   r: requestArgs
 ) => Promise<{ error?: Error; body?: any }> = async ({
@@ -77,7 +113,7 @@ export const request: (
   method,
   body,
 }) => {
-    const impersonateId = getCookie("impersonate_id");
+    const impersonateId = impersonatingId();
     try {
       const res = await fetch(`${apiBase}/${path}`, {
         method: method ? method : "get",
@@ -106,7 +142,11 @@ export const request: (
       }
 
       // reset expiration on impersonation cookie upon successful API request
-      if (impersonateId) impersonate(impersonateId, apiBase);
+      if (impersonateId)
+        impersonate(impersonateId, {
+          apiBase,
+          storage: impersonateStorageType(),
+        });
 
       return { body: responseBody };
     } catch (err) {

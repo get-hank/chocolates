@@ -1,7 +1,23 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { Button, colors, Container, Div, H2, IconButton } from "../ui";
-import { isImpersonating, stopImpersonating } from "../util/api";
+import { isImpersonating, stopImpersonating, impersonate } from "../util/api";
+import type { impersonateStorage } from "../util/api";
+
+export const ImpersonationTrigger: React.FC<{
+  storage: impersonateStorage;
+}> = ({ storage }) => {
+  const query = new URLSearchParams(window.location.search);
+  const impersonateId = query.get("impersonate_id");
+
+  useEffect(() => {
+    if (!impersonateId) return;
+    impersonate(impersonateId, { storage });
+    window.location.replace(window.location.origin);
+  }, [impersonateId]);
+
+  return null;
+};
 
 const Footer = styled.footer`
   position: fixed;
@@ -18,19 +34,21 @@ const Dismiss = styled.div`
   top: 2rem;
 `;
 
-const ImpersonationModule = ({
+export const ImpersonationModule = ({
   userName,
   apiBase,
+  storage,
 }: {
   userName: string;
   apiBase: string;
+  storage: "session" | "cookie";
 }) => {
   const [hidden, setHidden] = useState(false);
 
   if (hidden || !isImpersonating()) return null;
 
   const stop = () => {
-    stopImpersonating(apiBase);
+    stopImpersonating({ storage, apiBase });
     window.location.replace(window.location.origin);
   };
 
@@ -56,5 +74,3 @@ const ImpersonationModule = ({
     </Footer>
   );
 };
-
-export default ImpersonationModule;

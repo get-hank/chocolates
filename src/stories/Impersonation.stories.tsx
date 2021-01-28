@@ -3,7 +3,7 @@ import { Story, Meta } from "@storybook/react/types-6-0";
 import Button from "../components/Button";
 import { Container } from "../components/grid";
 import { Div } from "../components/spacing";
-import ImpersonationModule from "../components/ImpersonationModule";
+import { ImpersonationModule } from "../components/impersonation";
 import { impersonate } from "../util/api";
 
 export default {
@@ -16,14 +16,21 @@ const Template: Story<ComponentProps<typeof ImpersonationModule>> = () => (
     <Div py={4}>
       <Button
         onClick={() => {
-          impersonate("blah", window.location.href);
+          impersonate("blah", {
+            storage: "session",
+            apiBase: window.location.href,
+          });
           window.location.replace(window.location.href);
         }}
       >
         Impersonate
       </Button>
     </Div>
-    <ImpersonationModule userName="Fake User" apiBase={window.location.href} />
+    <ImpersonationModule
+      userName="Fake User"
+      apiBase={window.location.href}
+      storage="session"
+    />
   </Container>
 );
 
