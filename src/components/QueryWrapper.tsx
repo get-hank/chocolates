@@ -16,6 +16,22 @@ type QueryWrapperProps = {
 };
 
 type renderType = React.ComponentProps<typeof QueryRenderer>["render"];
+type RenderedQueryContainerProps = Parameters<renderType>[0] & {
+  render: renderType;
+};
+const RenderedQueryContainer = ({
+  render,
+  props,
+  ...rest
+}: RenderedQueryContainerProps) => {
+  const [priorResponse, setPriorResponse] = useState<unknown | null>(null);
+
+  useEffect(() => {
+    if (props && priorResponse !== props) setPriorResponse(props);
+  }, [props, priorResponse, setPriorResponse]);
+
+  return <>{render({ ...rest, props: props || priorResponse })}</>;
+};
 
 const QueryWrapper: React.FC<QueryWrapperProps> = ({
   query,
@@ -26,7 +42,6 @@ const QueryWrapper: React.FC<QueryWrapperProps> = ({
 }) => {
   const apiToken = useApiToken(apiBase);
   const [relayEnv, setRelayEnv] = useState<any>(null);
-  const [priorResponse, setPriorResponse] = useState<unknown | null>(null);
 
   useEffect(() => {
     if (!apiToken || relayEnv) return;
@@ -35,18 +50,13 @@ const QueryWrapper: React.FC<QueryWrapperProps> = ({
 
   if (!relayEnv) return null;
 
-  const renderWithPrior: renderType = ({ props, ...rest }) => {
-    if (props && priorResponse !== props) setPriorResponse(props);
-    return render({ ...rest, props: props || priorResponse });
-  };
-
   return (
     <RelayEnvironmentContext.Provider value={relayEnv}>
       <QueryRenderer
         environment={relayEnv}
         query={query}
         variables={variables}
-        render={renderWithPrior}
+        render={(args) => <RenderedQueryContainer {...args} render={render} />}
         fetchPolicy={fetchPolicy}
       />
     </RelayEnvironmentContext.Provider>
