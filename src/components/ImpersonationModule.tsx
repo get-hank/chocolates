@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { useHistory } from "react-router-dom";
 import styled from "styled-components";
 import { Button, colors, Container, Div, H2, IconButton } from "../ui";
 import { isImpersonating, stopImpersonating } from "../util/api";
@@ -27,17 +26,12 @@ const ImpersonationModule = ({
   apiBase: string;
 }) => {
   const [hidden, setHidden] = useState(false);
-  const history = useHistory();
 
   if (hidden || !isImpersonating()) return null;
 
   const stop = () => {
     stopImpersonating(apiBase);
-    if (history) {
-      history.go(0);
-    } else {
-      window.location.replace(window.location.href);
-    }
+    window.location.replace(window.location.origin);
   };
 
   return (
