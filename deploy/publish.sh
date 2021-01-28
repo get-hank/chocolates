@@ -5,6 +5,7 @@ set -eo pipefail
 yarn build
 
 if [ "$1" = "alpha" ]; then
+  VERSION=$(node deploy/version.js)
   ALPHA_VERSION="$VERSION-alpha-$(git rev-parse --short=8 HEAD)"
   yarn publish --non-interactive --new-version "$ALPHA_VERSION" --no-git-tag-version --no-commit-hooks
   # reset value in package.json

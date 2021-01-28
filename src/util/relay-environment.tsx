@@ -7,18 +7,17 @@ import {
   Store,
   SubscribeFunction,
 } from "relay-runtime";
+import { defaultHeaders } from "./api";
 
 // cannot use destructured import because of https://github.com/rails/rails/issues/35501
 import { createSubscriptionHandler } from "./relay-environment/subscription-handler";
 
 export const createEnvironment = (apiBase: string, apiToken: string) => {
+  const headers = defaultHeaders(apiToken);
   const fetchQuery = (operation: any, variables: any) => {
     return fetch(`${apiBase}/graphql`, {
+      headers,
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${apiToken}`,
-      },
       body: JSON.stringify({
         query: operation.text,
         variables,
@@ -28,13 +27,14 @@ export const createEnvironment = (apiBase: string, apiToken: string) => {
     });
   };
 
+  let subUrl = `${apiBase}/cable?auth_token=${apiToken}`;
+  const impersonateId = headers["X-Impersonate-Id"];
+  if (impersonateId) subUrl = `${subUrl}&impersonate_id=${impersonateId}`;
   return new Environment({
     // @ts-ignore
     network: Network.create(
       fetchQuery,
-      (createSubscriptionHandler(
-        `${apiBase}/cable?auth_token=${apiToken}`
-      ) as unknown) as SubscribeFunction
+      (createSubscriptionHandler(subUrl) as unknown) as SubscribeFunction
     ),
     store: new Store(new RecordSource()),
   });
