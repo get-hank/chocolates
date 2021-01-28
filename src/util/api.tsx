@@ -36,21 +36,29 @@ export const useApiToken = (apiBase: string) => {
   return apiToken;
 };
 
-export const impersonate = (userId: string, apiBase: string) => {
-  const url = new URL(apiBase);
-
-  setCookie({
-    name: "impersonate_id",
-    value: userId,
-    expiresInSeconds: 600,
+const getHostInfo = (uri: string) => {
+  const url = new URL(uri);
+  return {
     secure: url.protocol === "https:",
     ...(url.hostname !== "localhost" && {
       domain: url.hostname.split(".").slice(-2).join("."),
     }),
+  };
+};
+
+export const impersonate = (userId: string, apiBase: string) => {
+  setCookie({
+    name: "impersonate_id",
+    value: userId,
+    expiresInSeconds: 600,
+    ...getHostInfo(apiBase),
   });
 };
 
-export const stopImpersonating = () => clearCookie("impersonate_id");
+export const stopImpersonating = (apiBase: string) =>
+  clearCookie({ name: "impersonate_id", ...getHostInfo(apiBase) });
+
+export const isImpersonating = () => !!getCookie("impersonate_id");
 
 type requestArgs = {
   apiBase: string;

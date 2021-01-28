@@ -32,6 +32,13 @@ export const getCookie = (name: string) => {
   return cookie.split("=")[1];
 };
 
-export const clearCookie = (name: string) => {
-  document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 GMT`;
+export const clearCookie = ({
+  name,
+  domain,
+  secure,
+}: Omit<cookieArgs, "value" | "expiresInSeconds">) => {
+  let cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 GMT`;
+  if (domain) cookie = `${cookie};domain=${domain}`;
+  if (secure) cookie = `${cookie};secure`;
+  document.cookie = cookie;
 };
