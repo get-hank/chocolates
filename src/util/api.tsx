@@ -41,20 +41,15 @@ export const impersonate = (
   }
 };
 
-export const stopImpersonating = ({ apiBase, storage }: storageOpts) => {
-  if (storage === "session") {
-    clearSessionKey(impersonateKey);
-  } else {
-    clearCookie({ name: impersonateKey, ...getHostInfo(apiBase) });
-  }
+export const stopImpersonating = (apiBase: string) => {
+  clearSessionKey(impersonateKey);
+  clearCookie({ name: impersonateKey, ...getHostInfo(apiBase) });
 };
 
 export const isImpersonating = () => !!impersonatingId();
 
-export const impersonatingId = () => {
-  const val = getSessionKey(impersonateKey) || getCookie(impersonateKey);
-  return val;
-};
+export const impersonatingId = () =>
+  getSessionKey(impersonateKey) || getCookie(impersonateKey);
 
 export const impersonateStorageType: () => impersonateStorage | null = () => {
   if (getSessionKey(impersonateKey)) return "session";

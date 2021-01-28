@@ -4,15 +4,13 @@ import { Button, colors, Container, Div, H2, IconButton } from "../ui";
 import { isImpersonating, stopImpersonating, impersonate } from "../util/api";
 import type { impersonateStorage } from "../util/api";
 
-export const ImpersonationTrigger: React.FC<{
-  storage: impersonateStorage;
-}> = ({ storage }) => {
+export const ImpersonationTrigger: React.FC = () => {
   const query = new URLSearchParams(window.location.search);
   const impersonateId = query.get("impersonate_id");
 
   useEffect(() => {
     if (!impersonateId) return;
-    impersonate(impersonateId, { storage });
+    impersonate(impersonateId, { storage: "session" });
     window.location.replace(window.location.origin);
   }, [impersonateId]);
 
@@ -37,18 +35,16 @@ const Dismiss = styled.div`
 export const ImpersonationModule = ({
   userName,
   apiBase,
-  storage,
 }: {
   userName: string;
   apiBase: string;
-  storage: "session" | "cookie";
 }) => {
   const [hidden, setHidden] = useState(false);
 
   if (hidden || !isImpersonating()) return null;
 
   const stop = () => {
-    stopImpersonating({ storage, apiBase });
+    stopImpersonating(apiBase);
     window.location.replace(window.location.origin);
   };
 

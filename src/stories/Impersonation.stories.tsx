@@ -26,11 +26,7 @@ const Template: Story<ComponentProps<typeof ImpersonationModule>> = () => (
         Impersonate
       </Button>
     </Div>
-    <ImpersonationModule
-      userName="Fake User"
-      apiBase={window.location.href}
-      storage="session"
-    />
+    <ImpersonationModule userName="Fake User" apiBase={window.location.href} />
   </Container>
 );
 
