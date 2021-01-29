@@ -4,7 +4,7 @@ export * from "./components/form";
 export * from "./components/grid";
 export { default as IconButton } from "./components/IconButton";
 export { default as InfiniteScroll } from "./components/InfiniteScroll";
-export { default as Link } from "./components/Link";
+export * from "./components/Link";
 export { default as Modal } from "./components/Modal";
 export { default as Pill } from "./components/Pill";
 export * from "./components/spacing";

@@ -8,7 +8,7 @@ import { Container, Item } from "./grid";
 import { Div } from "./spacing";
 import { H3 } from "./typography";
 import Button from "./Button";
-import Link from "./Link";
+import { Link } from "./Link";
 import IconButton from "./IconButton";
 
 const Overlay = styled(Container)`
