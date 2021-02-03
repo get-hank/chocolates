@@ -6,7 +6,7 @@ import { colors } from "../util/colors";
 import { breakPoint } from "../util/layout";
 import { Container, Item } from "./grid";
 import { Div } from "./spacing";
-import { H3 } from "./typography";
+import { H3, P } from "./typography";
 import Button from "./Button";
 import { Link } from "./Link";
 import IconButton from "./IconButton";
@@ -49,6 +49,7 @@ const Footer = styled(Div)`
 
 type ModalProps = {
   open: boolean;
+  back?: boolean;
   titleText: string;
   submitText?: string;
   cancelText?: string;
@@ -60,6 +61,7 @@ type ModalProps = {
 
 const Modal: React.FC<ModalProps> = ({
   open,
+  back,
   titleText,
   submitText,
   cancelText,
@@ -97,12 +99,23 @@ const Modal: React.FC<ModalProps> = ({
         direction="column"
         onClick={(e: any) => e.stopPropagation()}
       >
+        <Container px={3} pt={3} align="center">
+          <IconButton
+            icon={back ? "back" : "close"}
+            name="Close"
+            onClick={dismiss}
+          />
+          {back && (
+            <Div onClick={dismiss} style={{ cursor: "pointer" }} pl={1}>
+              <P>Back</P>
+            </Div>
+          )}
+        </Container>
         <Div p={2} pl={3}>
           <Container align="center" justify="space-between">
             <H3 weight={600} pr={4}>
               {titleText}
             </H3>
-            <IconButton icon="close" name="Close" onClick={dismiss} />
           </Container>
         </Div>
         <Contents px={2}>{children}</Contents>
