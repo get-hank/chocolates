@@ -57,6 +57,7 @@ type ModalProps = {
   onCancel?: () => any;
   onDismiss?: () => any;
   submitDisabled?: boolean;
+  renderFooter?: () => React.ReactNode;
 };
 
 const Modal: React.FC<ModalProps> = ({
@@ -69,6 +70,7 @@ const Modal: React.FC<ModalProps> = ({
   onCancel,
   onDismiss,
   children,
+  renderFooter,
   submitDisabled = false,
 }) => {
   const rootElemRef = useRef(document.createElement("div"));
@@ -119,7 +121,9 @@ const Modal: React.FC<ModalProps> = ({
           </Container>
         </Div>
         <Contents px={2}>{children}</Contents>
-        {onCancel || onSubmit ? (
+        {renderFooter ? (
+          <Footer p={2}>{renderFooter()}</Footer>
+        ) : onCancel || onSubmit ? (
           <Footer p={2}>
             <Container justify="flex-end" align="center">
               {onCancel ? (
