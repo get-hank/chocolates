@@ -1,6 +1,0 @@
-{
-  "internal": true,
-  "main": "../dist/calendar.bundle.js",
-  "module": "../dist/calendar.bundle.js",
-  "types": "../dist/calendar.d.ts"
-}

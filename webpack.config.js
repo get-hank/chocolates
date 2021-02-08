@@ -2,7 +2,6 @@ const path = require("path");
 
 module.exports = {
   entry: {
-    calendar: "./src/calendar.tsx",
     icons: "./src/icons/index.tsx",
     ui: "./src/ui.tsx",
     table: "./src/table.tsx",
