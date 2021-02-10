@@ -21,25 +21,52 @@ const Overlay = styled(Container)`
   background-color: ${rgba(colors.gray200, 0.5)};
 `;
 
-const ModalWrapper = styled(Container)`
-  background-color: ${colors.white};
-  box-shadow: 0px 16px 24px rgba(41, 40, 39, 0.1);
-  border-radius: 4px;
-  flex-wrap: nowrap;
+type WrapperProps = React.ComponentProps<typeof Container> & {
+  size: "big" | "small";
+};
 
-  @media (max-width: ${breakPoint("sm")}px) {
-    height: 100vh;
+const bigWidth = "576px";
+const lilWidth = "320px";
+
+const sizeRules = ({ size }: WrapperProps) =>
+  size === "big"
+    ? `
+  @media (max-width: ${bigWidth}) {
+    height: 100%;
     width: 100vw;
   }
 
-  @media (min-width: ${breakPoint("sm")}px) {
-    max-height: 80vh;
-    max-width: 80vw;
+  @media (min-width: ${bigWidth}) {
+    max-height: calc(100% - 2rem);
+    width: ${bigWidth};
   }
+`
+    : `
+  max-height: calc(100% - 2rem);
+
+  @media (max-width: ${lilWidth}) {
+    width: 100vw;
+  }
+
+  @media (min-width: ${lilWidth}) {
+    width: ${lilWidth};
+  }
+
+`;
+
+const ModalWrapper = styled(Container) <WrapperProps>`
+  background-color: ${colors.white};
+  box-shadow: 0px 16px 24px rgba(41, 40, 39, 0.1);
+  border-radius: 8px;
+  flex-wrap: nowrap;
+  overflow: hidden;
+
+  ${sizeRules}
 `;
 
 const Contents = styled(Div)`
   overflow: auto;
+  flex-grow: 1;
 `;
 
 const Footer = styled(Div)`
@@ -50,7 +77,9 @@ const Footer = styled(Div)`
 type ModalProps = {
   open: boolean;
   back?: boolean;
+  size?: "small" | "big";
   titleText: string;
+  submitColor?: string;
   submitText?: string;
   cancelText?: string;
   onSubmit?: () => any;
@@ -65,6 +94,7 @@ const Modal: React.FC<ModalProps> = ({
   back,
   titleText,
   submitText,
+  submitColor,
   cancelText,
   onSubmit,
   onCancel,
@@ -72,6 +102,7 @@ const Modal: React.FC<ModalProps> = ({
   children,
   renderFooter,
   submitDisabled = false,
+  size = "big",
 }) => {
   const rootElemRef = useRef(document.createElement("div"));
 
@@ -89,6 +120,57 @@ const Modal: React.FC<ModalProps> = ({
     onCancel && onCancel();
   };
 
+  let footer = null;
+  let inlineFooterContents = null;
+  if (renderFooter) {
+    const inner = renderFooter();
+    footer = inner ? <Footer p={2}>{inner}</Footer> : null;
+  } else if (onCancel || onSubmit) {
+    const big = size === "big";
+    const cancelButton = onCancel ? (
+      <Button
+        secondary
+        onClick={dismiss}
+        name="Cancel"
+        style={big ? {} : { minWidth: "110px" }}
+      >
+        {cancelText}
+      </Button>
+    ) : null;
+    const submitButton = onSubmit ? (
+      <Div pl={cancelButton && big ? 2 : 0}>
+        <Button
+          onClick={onSubmit}
+          disabled={submitDisabled}
+          name="Submit"
+          {...{
+            ...(submitColor && { color: submitColor }),
+          }}
+          style={big ? {} : { minWidth: "110px" }}
+        >
+          {submitText}
+        </Button>
+      </Div>
+    ) : null;
+    if (big) {
+      footer = (
+        <Footer p={2}>
+          <Container justify="flex-end" align="center">
+            {cancelButton}
+            {submitButton}
+          </Container>
+        </Footer>
+      );
+    } else {
+      inlineFooterContents = (
+        <Container py={3} justify="space-around">
+          {cancelButton}
+          {submitButton}
+        </Container>
+      );
+    }
+  }
+
   return ReactDOM.createPortal(
     <Overlay
       center
@@ -98,53 +180,32 @@ const Modal: React.FC<ModalProps> = ({
       }}
     >
       <ModalWrapper
+        size={size}
         direction="column"
         onClick={(e: any) => e.stopPropagation()}
       >
-        <Container px={3} pt={3} align="center">
-          <IconButton
-            icon={back ? "back" : "close"}
-            name="Close"
-            onClick={dismiss}
-          />
-          {back && (
-            <Div onClick={dismiss} style={{ cursor: "pointer" }} pl={1}>
-              <P>Back</P>
-            </Div>
-          )}
-        </Container>
-        <Div p={2} pl={3}>
-          <Container align="center" justify="space-between">
-            <H3 weight={600} pr={4}>
-              {titleText}
-            </H3>
+        {size === "big" && (
+          <Container px={3} pt={3} align="center">
+            <IconButton
+              icon={back ? "back" : "close"}
+              name="Close"
+              onClick={dismiss}
+            />
+            {back && (
+              <Div onClick={dismiss} style={{ cursor: "pointer" }} pl={1}>
+                <P>Back</P>
+              </Div>
+            )}
           </Container>
-        </Div>
-        <Contents px={2}>{children}</Contents>
-        {renderFooter ? (
-          <Footer p={2}>{renderFooter()}</Footer>
-        ) : onCancel || onSubmit ? (
-          <Footer p={2}>
-            <Container justify="flex-end" align="center">
-              {onCancel ? (
-                <Div pr={2}>
-                  <Button secondary onClick={dismiss} name="Cancel">
-                    {cancelText}
-                  </Button>
-                </Div>
-              ) : null}
-              {onSubmit ? (
-                <Button
-                  onClick={onSubmit}
-                  disabled={submitDisabled}
-                  name="Submit"
-                >
-                  {submitText}
-                </Button>
-              ) : null}
-            </Container>
-          </Footer>
-        ) : null}
+        )}
+        <Contents px={3}>
+          <H3 weight={600} py={3}>
+            {titleText}
+          </H3>
+          {children}
+          {inlineFooterContents}
+        </Contents>
+        {footer}
       </ModalWrapper>
     </Overlay>,
     rootElemRef.current
