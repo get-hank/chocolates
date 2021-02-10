@@ -33,9 +33,10 @@ type ThemeProps = {
 };
 
 const Wrapper = styled.div`
+  font-family: ${({ theme }) => theme.typography.baseType};
+
   * {
     box-sizing: border-box;
-    font-family: ${({ theme }) => theme.typography.baseType};
   }
 `;
 
