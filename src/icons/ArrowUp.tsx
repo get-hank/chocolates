@@ -1,12 +1,12 @@
 import React from "react";
 
 const Component = () => (
-  <svg width="6" height="4" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <svg width="12" height="6" fill="none" xmlns="http://www.w3.org/2000/svg">
     <path
-      fillRule="evenodd"
-      clipRule="evenodd"
-      d="M3 0l3 4H0l3-4z"
-      fill="#303030"
+      d="M11.4 5.4L6 .6.6 5.4"
+      stroke="#1F1F1F"
+      strokeLinecap="round"
+      strokeLinejoin="round"
     />
   </svg>
 );
