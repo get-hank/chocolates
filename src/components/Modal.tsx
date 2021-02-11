@@ -266,7 +266,7 @@ const Modal: React.FC<ModalProps> = ({
           </Container>
         )}
         <Contents px={3} ref={scrollRegionRef}>
-          {titleText && (
+          {titleText ? (
             <H3
               weight={600}
               pt={size === "small" || headerBorder ? 3 : 0}
@@ -275,7 +275,9 @@ const Modal: React.FC<ModalProps> = ({
             >
               {titleText}
             </H3>
-          )}
+          ) : (
+              (size === "small" || headerBorder) && <Div pb={3} />
+            )}
           {children}
           {inlineFooterContents}
         </Contents>

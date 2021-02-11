@@ -4,7 +4,7 @@ import { darken } from "polished";
 import { Container, ContainerProps } from "./grid";
 import { Div } from "./spacing";
 import { ArrowBack, ArrowLeft, ArrowRight, Close, Menu } from "../icons";
-import { space } from "../util/layout";
+import { breakPoint, space } from "../util/layout";
 
 interface IconButtonProps extends React.ComponentPropsWithoutRef<"button"> {
   icon?: "back" | "close" | "menu" | "left" | "right";
@@ -33,10 +33,17 @@ const ClickTarget = styled.button<Omit<IconButtonProps, "icon" | "noButton">>`
   background-color: ${({ theme, bgColor }) =>
     bgColor ? bgColor : theme.colors.white};
 
-  &:active,
-  &:hover {
+  &:active {
     background-color: ${({ theme, bgColor }) =>
     bgColor ? darken(0.1, bgColor) : theme.colors.grayBorder};
+  }
+
+  // hack: only apply hover rule on non-mobile viewport
+  @media (min-width: ${breakPoint("md")}px) {
+    &:hover {
+      background - color: ${({ theme, bgColor }) =>
+    bgColor ? darken(0.1, bgColor) : theme.colors.grayBorder};
+    }
   }
 `;
 
