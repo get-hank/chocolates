@@ -8,6 +8,8 @@ import { Container, ContainerProps } from "../grid";
 import { space } from "../../util/layout";
 
 const HoverContainer = styled(Container)`
+  flex-wrap: nowrap;
+
   &:hover {
     cursor: pointer;
   }
