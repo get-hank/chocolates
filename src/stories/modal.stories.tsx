@@ -53,7 +53,8 @@ Long.args = {
       ))}
     </Container>
   ),
-  titleText: "Long ol modal",
+  titleText:
+    "Long ol modal with a very long title to show how it adds ellipsis when scrolling off of view. See how it adds ellipsis? Neato!",
   submitText: "Submit",
   cancelText: "Cancel",
 };

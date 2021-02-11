@@ -28,6 +28,7 @@ export interface SpacingProps extends React.HTMLAttributes<HTMLDivElement> {
   grow?: boolean;
 
   hideFromFullStory?: boolean;
+  as?: Parameters<ReturnType<typeof styled.div>>[0]["as"];
 }
 
 export const padding = (rule: string, size: number) =>
@@ -93,16 +94,15 @@ const TheSpacingContainer = styled.div<SpacingProps>`
   ${({ grow }) => (grow ? "flex-grow: 1;" : "")}
 `;
 
-export const SpacingContainer = ({
-  hideFromFullStory,
-  className,
-  ...rest
-}: SpacingProps) => (
+export const SpacingContainer = React.forwardRef(
+  ({ hideFromFullStory, className, ...rest }: SpacingProps, ref) => (
     <TheSpacingContainer
+      ref={ref as React.RefObject<HTMLDivElement>}
       {...rest}
       className={`${hideFromFullStory ? "__fullstory_hidden " : ""}${className ? className : ""
         }`}
     />
-  );
+  )
+);
 
 export const Div = SpacingContainer;

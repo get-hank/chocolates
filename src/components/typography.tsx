@@ -46,7 +46,9 @@ const tagMap: any = {};
 const nativeTags = ["h1", "h2", "h3", "h4", "h5", "h5", "p", "span"];
 const components = nativeTags.reduce((memo = {}, tag) => {
   // @ts-ignore
-  memo[tag] = (props: SpacingProps) => <SpacingContainer {...props} as={tag} />;
+  memo[tag] = React.forwardRef((props: SpacingProps, ref) => (
+    <SpacingContainer ref={ref} {...props} as={tag} />
+  ));
   return memo;
 }, tagMap);
 

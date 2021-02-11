@@ -1,9 +1,10 @@
-import React, { useRef, useEffect } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import ReactDOM from "react-dom";
 import styled from "styled-components";
 import { rgba } from "polished";
 import { colors } from "../util/colors";
 import { breakPoint } from "../util/layout";
+import { useScrollPosition } from "../util/scroll";
 import { Container, Item } from "./grid";
 import { Div } from "./spacing";
 import { H3, P } from "./typography";
@@ -64,6 +65,13 @@ const ModalWrapper = styled(Container) <WrapperProps>`
   ${sizeRules}
 `;
 
+const AnimateH3 = styled(H3)`
+  transition: opacity ease 250ms;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+`;
+
 const Contents = styled(Div)`
   overflow: auto;
   flex-grow: 1;
@@ -104,6 +112,7 @@ const Modal: React.FC<ModalProps> = ({
   submitDisabled = false,
   size = "big",
 }) => {
+  const [titleVisible, setTitleVisible] = useState(false);
   const rootElemRef = useRef(document.createElement("div"));
 
   useEffect(function setupElement() {
@@ -112,6 +121,17 @@ const Modal: React.FC<ModalProps> = ({
     parentElem.appendChild(rootElemRef.current);
     return () => rootElemRef.current.remove();
   }, []);
+
+  const { scrollRegionRef, watchElementRef: titleRef } = useScrollPosition(
+    (pos) => {
+      if (!pos.visible && !titleVisible) {
+        setTitleVisible(true);
+      } else if (pos.visible && titleVisible) {
+        setTitleVisible(false);
+      }
+    },
+    [titleVisible, setTitleVisible]
+  );
 
   if (!open) return null;
 
@@ -174,7 +194,7 @@ const Modal: React.FC<ModalProps> = ({
   return ReactDOM.createPortal(
     <Overlay
       center
-      onClick={(e) => {
+      onClick={(e: any) => {
         e.stopPropagation();
         dismiss();
       }}
@@ -182,10 +202,15 @@ const Modal: React.FC<ModalProps> = ({
       <ModalWrapper
         size={size}
         direction="column"
-        onClick={(e: any) => e.stopPropagation()}
+        onClick={(e: MouseEvent) => e.stopPropagation()}
       >
         {size === "big" && (
-          <Container px={3} pt={3} align="center">
+          <Container
+            px={3}
+            pt={3}
+            align="center"
+            style={{ flexWrap: "nowrap" }}
+          >
             <IconButton
               icon={back ? "back" : "close"}
               name="Close"
@@ -196,10 +221,18 @@ const Modal: React.FC<ModalProps> = ({
                 <P>Back</P>
               </Div>
             )}
+
+            <AnimateH3
+              weight={600}
+              pl={3}
+              style={{ opacity: titleVisible ? 1 : 0 }}
+            >
+              {titleText}
+            </AnimateH3>
           </Container>
         )}
-        <Contents px={3}>
-          <H3 weight={600} py={3}>
+        <Contents px={3} ref={scrollRegionRef}>
+          <H3 weight={600} py={3} ref={titleRef}>
             {titleText}
           </H3>
           {children}
