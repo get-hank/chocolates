@@ -69,3 +69,9 @@ Dialog.args = {
   submitText: "Do it",
   cancelText: "Nevermind",
 };
+
+export const FullScreen = Template.bind({});
+FullScreen.args = {
+  ...Wide.args,
+  size: "full",
+};

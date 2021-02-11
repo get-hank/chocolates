@@ -4,6 +4,7 @@ import styled from "styled-components";
 import { rgba } from "polished";
 import { colors } from "../util/colors";
 import { breakPoint } from "../util/layout";
+import { useBreakpoint } from "../util/hooks";
 import { useScrollPosition } from "../util/scroll";
 import { Container, Item } from "./grid";
 import { Div } from "./spacing";
@@ -14,7 +15,7 @@ import IconButton from "./IconButton";
 
 const Overlay = styled(Container)`
   position: fixed;
-  z-index: 1;
+  z-index: 1000;
   top: 0;
   left: 0;
   right: 0;
@@ -23,15 +24,16 @@ const Overlay = styled(Container)`
 `;
 
 type WrapperProps = React.ComponentProps<typeof Container> & {
-  size: "big" | "small";
+  size: "big" | "small" | "full";
 };
 
 const bigWidth = "576px";
 const lilWidth = "320px";
 
-const sizeRules = ({ size }: WrapperProps) =>
-  size === "big"
-    ? `
+const sizeRules = ({ size }: WrapperProps) => {
+  switch (size) {
+    case "big":
+      return `
   @media (max-width: ${bigWidth}) {
     height: 100%;
     width: 100vw;
@@ -40,10 +42,13 @@ const sizeRules = ({ size }: WrapperProps) =>
   @media (min-width: ${bigWidth}) {
     max-height: calc(100% - 2rem);
     width: ${bigWidth};
+    border-radius: 8px;
   }
-`
-    : `
+`;
+    case "small":
+      return `
   max-height: calc(100% - 2rem);
+  border-radius: 8px;
 
   @media (max-width: ${lilWidth}) {
     width: 100vw;
@@ -54,11 +59,18 @@ const sizeRules = ({ size }: WrapperProps) =>
   }
 
 `;
+    case "full":
+      return `
+  height: 100%;
+  width: 100vw;
+`;
+  }
+};
 
 const ModalWrapper = styled(Container) <WrapperProps>`
   background-color: ${colors.white};
   box-shadow: 0px 16px 24px rgba(41, 40, 39, 0.1);
-  border-radius: 8px;
+
   flex-wrap: nowrap;
   overflow: hidden;
 
@@ -85,8 +97,8 @@ const Footer = styled(Div)`
 type ModalProps = {
   open: boolean;
   back?: boolean;
-  size?: "small" | "big";
-  titleText: string;
+  size?: "small" | "big" | "full";
+  titleText?: string;
   submitColor?: string;
   submitText?: string;
   cancelText?: string;
@@ -115,12 +127,24 @@ const Modal: React.FC<ModalProps> = ({
   const [titleVisible, setTitleVisible] = useState(false);
   const rootElemRef = useRef(document.createElement("div"));
 
+  const isMobileViewport = useBreakpoint("sm");
+
   useEffect(function setupElement() {
     const parentElem = document.querySelector("body");
 
     parentElem.appendChild(rootElemRef.current);
     return () => rootElemRef.current.remove();
   }, []);
+
+  useEffect(() => {
+    if (!open) return;
+
+    const body = document.querySelector("body");
+    const oldOverflow = body.style.overflow;
+    body.style.overflow = "hidden";
+
+    return () => (document.querySelector("body").style.overflow = oldOverflow);
+  }, [open]);
 
   const { scrollRegionRef, watchElementRef: titleRef } = useScrollPosition(
     (pos) => {
@@ -146,7 +170,7 @@ const Modal: React.FC<ModalProps> = ({
     const inner = renderFooter();
     footer = inner ? <Footer p={2}>{inner}</Footer> : null;
   } else if (onCancel || onSubmit) {
-    const big = size === "big";
+    const big = size !== "small";
     const cancelButton = onCancel ? (
       <Button
         secondary
@@ -191,6 +215,8 @@ const Modal: React.FC<ModalProps> = ({
     }
   }
 
+  const headerBorder = size === "full" && !isMobileViewport;
+
   return ReactDOM.createPortal(
     <Overlay
       center
@@ -204,37 +230,52 @@ const Modal: React.FC<ModalProps> = ({
         direction="column"
         onClick={(e: MouseEvent) => e.stopPropagation()}
       >
-        {size === "big" && (
+        {size !== "small" && (
           <Container
             px={3}
-            pt={3}
+            py={3}
             align="center"
             style={{ flexWrap: "nowrap" }}
+            bb={headerBorder}
           >
             <IconButton
               icon={back ? "back" : "close"}
               name="Close"
               onClick={dismiss}
             />
+            {!back && size === "full" && !isMobileViewport && (
+              <Div onClick={dismiss} style={{ cursor: "pointer" }} pl={1}>
+                <P>Close</P>
+              </Div>
+            )}
             {back && (
               <Div onClick={dismiss} style={{ cursor: "pointer" }} pl={1}>
                 <P>Back</P>
               </Div>
             )}
 
-            <AnimateH3
-              weight={600}
-              pl={3}
-              style={{ opacity: titleVisible ? 1 : 0 }}
-            >
-              {titleText}
-            </AnimateH3>
+            {titleText && (
+              <AnimateH3
+                weight={600}
+                pl={3}
+                style={{ opacity: titleVisible ? 1 : 0 }}
+              >
+                {titleText}
+              </AnimateH3>
+            )}
           </Container>
         )}
         <Contents px={3} ref={scrollRegionRef}>
-          <H3 weight={600} py={3} ref={titleRef}>
-            {titleText}
-          </H3>
+          {titleText && (
+            <H3
+              weight={600}
+              pt={size === "small" || headerBorder ? 3 : 0}
+              pb={3}
+              ref={titleRef}
+            >
+              {titleText}
+            </H3>
+          )}
           {children}
           {inlineFooterContents}
         </Contents>
