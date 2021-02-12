@@ -68,6 +68,7 @@ const StyledCalendar = styled.div`
         align-items: center;
 
         abbr {
+          margin: 0 auto;
           width: ${space(4)};
           height: ${space(4)};
         }
@@ -80,6 +81,7 @@ const StyledCalendar = styled.div`
       background-color: transparent;
 
       abbr {
+        margin: 0 auto;
         border-radius: 50%;
         width: ${space(3.5)};
         height: ${space(3.5)};
@@ -118,10 +120,14 @@ type CalendarPickerProps = {
   minDate?: Date | null;
   maxDate?: Date | null;
   onDismiss?: () => any;
+  pickerClassName?: string | null;
+  overlayClassName?: string | null;
 };
 
 const CalendarPicker = ({
   onDismiss,
+  pickerClassName,
+  overlayClassName,
   ...calendarProps
 }: CalendarPickerProps) => (
     <StyledCalendar>
@@ -130,6 +136,7 @@ const CalendarPicker = ({
           e.stopPropagation();
           onDismiss && onDismiss();
         }}
+        {...(overlayClassName && { className: overlayClassName })}
       />
       <Calendar
         locale="en-US"
@@ -139,6 +146,7 @@ const CalendarPicker = ({
         nextLabel={<IconButton noButton icon="right" />}
         formatShortWeekday={(locale, date) => toDow(date)}
         formatMonth={(locale, date) => format(date, "MMM")}
+        {...(pickerClassName && { className: pickerClassName })}
         {...calendarProps}
       />
     </StyledCalendar>
