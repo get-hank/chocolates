@@ -20,3 +20,4 @@ export * from "./util/helpers";
 export * from "./util/routes";
 export * from "./util/scroll";
 export * from "./util/strings";
+export * from "./util/swipe";
