@@ -24,6 +24,7 @@ type StripeCardFormProps = {
   onCancel: () => any;
   loading?: boolean;
   error?: string | null;
+  modalProps?: Partial<React.ComponentProps<typeof Modal>>;
 };
 
 const StripeInputWrapper = styled.div`
@@ -40,6 +41,7 @@ const StripeCardForm = ({
   onSuccess,
   onCancel,
   loading,
+  modalProps,
   error: parentError,
 }: Omit<StripeCardFormProps, "publishableKey">) => {
   const theme = useContext(ThemeContext);
@@ -128,6 +130,7 @@ const StripeCardForm = ({
       titleText="Add new card"
       submitText="Save card"
       cancelText="Cancel"
+      {...modalProps}
       onSubmit={submit}
       onCancel={onCancel}
       submitDisabled={!canSubmit}

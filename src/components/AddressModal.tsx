@@ -19,6 +19,7 @@ type AddressModalProps = {
   address?: Address;
   userId?: string;
   dismiss: () => any;
+  modalProps?: Partial<React.ComponentProps<typeof Modal>>;
   states: {
     code: string;
     name: string;
@@ -31,6 +32,7 @@ const AddressModal = ({
   address,
   dismiss,
   states,
+  modalProps,
 }: AddressModalProps) => {
   const apiToken = useApiToken(apiBase);
 
@@ -93,6 +95,7 @@ const AddressModal = ({
       onCancel={dismiss}
       cancelText="Cancel"
       submitText="Save address"
+      {...modalProps}
       onSubmit={submit}
       submitDisabled={submitting || !hasEdits}
     >
