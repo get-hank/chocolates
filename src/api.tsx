@@ -5,4 +5,3 @@ export * from "./components/impersonation";
 export { default as AddressModal } from "./components/AddressModal";
 export * from "./util/relay-environment";
 export * from "./util/infinite-load";
-export * from "./util/cookies";
