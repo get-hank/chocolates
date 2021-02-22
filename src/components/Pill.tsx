@@ -11,8 +11,13 @@ export type PillProps = TextProps & {
 const Wrapper = styled.span<PillProps>`
   background-color: ${({ pillColor }) =>
     pillColor ? pillColor : colors.gray50};
-  padding: ${space(0.5)} ${space(1)};
+  padding: 0 ${space(1)};
   border-radius: 1rem;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  height: ${space(3)};
 `;
 
 const Pill: React.FC<PillProps> = ({ pillColor, children, ...rest }) => (
