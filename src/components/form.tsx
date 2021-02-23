@@ -132,7 +132,7 @@ export const FormField: React.FC<FieldProps> = ({
     <FieldWrapper direction="column" {...wrapperProps} grow>
       {!selectable ? (
         <Div pb={1}>
-          <Label weight={500}>{label}</Label>
+          <Label weight={600}>{label}</Label>
         </Div>
       ) : null}
       {children && !selectable ? children : null}
