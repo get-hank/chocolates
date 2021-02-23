@@ -26,7 +26,7 @@ type ParamSetter = (p?: MaybeString) => any;
 type URLGetter = (p?: MaybeString) => string;
 export const useQueryParam = (
   paramName: string,
-  render: (renderProps: {
+  render?: (renderProps: {
     paramValue: MaybeString;
     setParam: ParamSetter;
   }) => React.ReactNode
@@ -47,6 +47,6 @@ export const useQueryParam = (
   return {
     setParam,
     getUrl,
-    rendered: render({ paramValue, setParam }),
+    ...(render && { rendered: render({ paramValue, setParam }) }),
   };
 };
