@@ -47,6 +47,7 @@ export const useQueryParam = (
   return {
     setParam,
     getUrl,
+    paramValue,
     ...(render && { rendered: render({ paramValue, setParam }) }),
   };
 };
