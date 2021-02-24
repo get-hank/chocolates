@@ -18,24 +18,4 @@ export const inputStyle = (props: InputProps) => `
   };
   border-color: ${props.error ? props.theme.colors.error : props.theme.colors.grayBorder
   };
-
-  &::-webkit-input-placeholder { /* Chrome/Opera/Safari */
-    font-weight: 300;
-  }
-
-  &::-moz-placeholder { /* Firefox 19+ */
-    font-weight: 300;
-  }
-
-  &:-ms-input-placeholder { /* IE 10+ */
-    font-weight: 300;
-  }
-
-  &:-moz-placeholder { /* Firefox 18- */
-    font-weight: 300;
-  }
-
-  &::placeholder {
-    font-weight: 300;
-  }
 `;
