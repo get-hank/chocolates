@@ -26,6 +26,9 @@ const RadioStyle = styled(Div) <InputProps>`
     cursor: pointer;
   }
 
+  height: 20px;
+  width: 20px;
+
   input[type="radio"] {
     ${inputStyle}
 

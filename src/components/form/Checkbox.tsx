@@ -23,6 +23,8 @@ const HoverContainer = styled(Container)`
 
 const CheckboxStyle = styled(Div) <InputProps>`
   position: relative;
+  height: 20px;
+  width: 20px;
 
   input[type="checkbox"] {
     ${inputStyle}
