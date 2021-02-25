@@ -55,10 +55,15 @@ const TabCount = styled.span<ActiveProps>`
   background-color: ${({ theme, active }) =>
     active ? theme.colors.primary : theme.colors.gray};
   color: ${({ theme }) => theme.colors.white};
-  padding: ${space(0.25)} ${space(0.75)};
   margin-left: ${space(1)};
-  border-radius: 100px;
+  border-radius: 100%;
   font-weight: 400;
+  width: 1.25rem;
+  height: 1.25rem;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;
 
 const Tabs = ({ tabs }: TabsProps) => {
@@ -69,7 +74,7 @@ const Tabs = ({ tabs }: TabsProps) => {
         {tabs.map((t, idx) => (
           <LabelWrapper key={`tab-${idx}`} px={1}>
             <TabLabel onClick={() => setActive(idx)} active={active === idx}>
-              <Container align="flex-end">
+              <Container align="flex-end" justify="center">
                 {t.label}
                 {t.count !== undefined ? (
                   <TabCount active={active === idx}>{t.count}</TabCount>
