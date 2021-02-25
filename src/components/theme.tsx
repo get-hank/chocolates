@@ -6,7 +6,8 @@ export const defaultTheme = {
   typography: {
     baseSize: 1, // rem
     headingType: '"Poppins", sans-serif',
-    baseType: '"Lato", sans-serif',
+    baseType:
+      '"DM Sans", -apple-system, system-ui, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif',
   },
   colors: {
     primary: colors.primary700,
@@ -33,10 +34,13 @@ type ThemeProps = {
 };
 
 const Wrapper = styled.div`
-  font-family: ${({ theme }) => theme.typography.baseType};
-
   * {
     box-sizing: border-box;
+  }
+
+  *:not(h1):not(h2):not(h3):not(h4):not(h5):not(h6) {
+    font-family: ${({ theme }) => theme.typography.baseType};
+    letter-spacing: -0.01rem;
   }
 `;
 

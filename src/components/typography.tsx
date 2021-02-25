@@ -118,7 +118,6 @@ export const H5 = styled(components.h5) <TextProps>`
 export const P = styled(components.p) <TextProps>`
   color: ${({ theme }) => theme.colors.text};
   ${({ theme }) => fontSize(1, theme.typography.baseSize)}
-  ${({ theme }) => passThroughRule("font-family", theme.typography.baseType)}
 
   ${rulesForTextProps}
 `;
@@ -126,7 +125,6 @@ export const P = styled(components.p) <TextProps>`
 export const Text = styled(components.span) <TextProps>`
   color: ${({ theme }) => theme.colors.text};
   ${({ theme }) => fontSize(1, theme.typography.baseSize)}
-  ${({ theme }) => passThroughRule("font-family", theme.typography.baseType)}
 
   ${rulesForTextProps}
 `;
