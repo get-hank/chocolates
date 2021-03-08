@@ -96,7 +96,7 @@ export const useApiToken = (apiBase: string) => {
     getToken();
   }, [user, getAccessTokenSilently, setApiToken]);
 
-  return apiToken;
+  return apiToken || getCookie("anonymous_user_token");
 };
 
 export const request: (
