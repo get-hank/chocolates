@@ -1,6 +1,7 @@
 import React, { useMemo, useReducer, useState } from "react";
 import { Container, Div, FormField, FieldEdit, Item, Modal } from "../ui";
-import { request, useApiToken } from "../util/api";
+import { request } from "../util/api";
+import { useApiToken } from "../util/api-token";
 
 type Address = {
   resourceId: string;

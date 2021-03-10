@@ -1,6 +1,5 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback } from "react";
 import { DateTime } from "luxon";
-import { useAuth0 } from "@auth0/auth0-react";
 import { clearCookie, getCookie, setCookie } from "./cookies";
 import { clearSessionKey, getSessionKey, setSessionKey } from "./session";
 
@@ -73,30 +72,6 @@ export const defaultHeaders = (apiToken: string) => {
     "Content-Type": "application/json",
     ...(impersonateId && { "X-Impersonate-Id": impersonateId }),
   };
-};
-
-export const useApiToken = (apiBase: string) => {
-  const { user, getAccessTokenSilently } = useAuth0();
-  const [apiToken, setApiToken] = useState<string | undefined>();
-
-  useEffect(() => {
-    if (!user) return;
-
-    const getToken = async () => {
-      try {
-        const accessToken = await getAccessTokenSilently({
-          audience: apiBase,
-        });
-        setApiToken(accessToken);
-      } catch (e) {
-        console.error(e.message, e);
-      }
-    };
-
-    getToken();
-  }, [user, getAccessTokenSilently, setApiToken]);
-
-  return apiToken || getCookie("anonymous_user_token");
 };
 
 export const request: (
