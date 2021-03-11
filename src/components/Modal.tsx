@@ -6,9 +6,9 @@ import { colors } from "../util/colors";
 import { breakPoint } from "../util/layout";
 import { useBreakpoint } from "../util/hooks";
 import { useScrollPosition } from "../util/scroll";
-import { Container, Item } from "./grid";
+import { Container, Item, LayoutWrapper } from "./grid";
 import { Div } from "./spacing";
-import { H3, P } from "./typography";
+import { H2, H3, P } from "./typography";
 import Button from "./Button";
 import { Link } from "./Link";
 import IconButton from "./IconButton";
@@ -218,6 +218,26 @@ const Modal: React.FC<ModalProps> = ({
   }
 
   const headerBorder = size === "full" && !isMobileViewport;
+  const TitleComponent = size === "full" ? H2 : H3;
+
+  const inner = (
+    <>
+      {titleText ? (
+        <TitleComponent
+          weight={size === "full" ? 700 : 600}
+          pt={size === "small" || headerBorder ? 3 : 0}
+          pb={3}
+          ref={titleRef}
+        >
+          {titleText}
+        </TitleComponent>
+      ) : (
+          (size === "small" || headerBorder) && <Div pb={3} />
+        )}
+      {children}
+      {inlineFooterContents}
+    </>
+  );
 
   return ReactDOM.createPortal(
     <Overlay
@@ -269,22 +289,11 @@ const Modal: React.FC<ModalProps> = ({
         )}
         <Contents ref={scrollRegionRef}>
           {banner ? banner : null}
-          <Div px={3}>
-            {titleText ? (
-              <H3
-                weight={600}
-                pt={size === "small" || headerBorder ? 3 : 0}
-                pb={3}
-                ref={titleRef}
-              >
-                {titleText}
-              </H3>
-            ) : (
-                (size === "small" || headerBorder) && <Div pb={3} />
-              )}
-            {children}
-            {inlineFooterContents}
-          </Div>
+          {size === "full" ? (
+            <LayoutWrapper>{inner}</LayoutWrapper>
+          ) : (
+              <Div px={3}>{inner}</Div>
+            )}
         </Contents>
         {footer}
       </ModalWrapper>
