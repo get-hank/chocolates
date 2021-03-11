@@ -98,6 +98,7 @@ type ModalProps = {
   open: boolean;
   back?: boolean;
   size?: "small" | "big" | "full";
+  banner?: React.ReactNode;
   titleText?: string;
   submitColor?: string;
   submitText?: string;
@@ -121,6 +122,7 @@ const Modal: React.FC<ModalProps> = ({
   onDismiss,
   children,
   renderFooter,
+  banner,
   submitDisabled = false,
   size = "big",
 }) => {
@@ -265,21 +267,24 @@ const Modal: React.FC<ModalProps> = ({
             )}
           </Container>
         )}
-        <Contents px={3} ref={scrollRegionRef}>
-          {titleText ? (
-            <H3
-              weight={600}
-              pt={size === "small" || headerBorder ? 3 : 0}
-              pb={3}
-              ref={titleRef}
-            >
-              {titleText}
-            </H3>
-          ) : (
-              (size === "small" || headerBorder) && <Div pb={3} />
-            )}
-          {children}
-          {inlineFooterContents}
+        <Contents ref={scrollRegionRef}>
+          {banner ? banner : null}
+          <Div px={3}>
+            {titleText ? (
+              <H3
+                weight={600}
+                pt={size === "small" || headerBorder ? 3 : 0}
+                pb={3}
+                ref={titleRef}
+              >
+                {titleText}
+              </H3>
+            ) : (
+                (size === "small" || headerBorder) && <Div pb={3} />
+              )}
+            {children}
+            {inlineFooterContents}
+          </Div>
         </Contents>
         {footer}
       </ModalWrapper>
