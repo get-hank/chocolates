@@ -1,5 +1,6 @@
 import { useCallback } from "react";
 import { DateTime } from "luxon";
+import { clearAnonToken, useApiToken } from "./api-token";
 import { clearCookie, getCookie, setCookie } from "./cookies";
 import { clearSessionKey, getSessionKey, setSessionKey } from "./session";
 
@@ -80,6 +81,7 @@ export const request: (
   error?: Error;
   fieldErrors?: { [field: string]: string };
   body?: any;
+  isAuthError?: boolean;
 }> = async ({ apiBase, apiToken, path, method, body }) => {
   const impersonateId = impersonatingId();
   try {
@@ -101,6 +103,15 @@ export const request: (
     }
 
     if (!res.ok) {
+      if (res.status === 401) {
+        clearAnonToken();
+        return {
+          error: new Error("Need to authenticate"),
+          isAuthError: true,
+          body: responseBody,
+        };
+      }
+
       if (responseBody.errors && responseBody.errors.length) {
         return { error: new Error(responseBody.errors[0]), body: responseBody };
       } else if (responseBody.errors) {
@@ -136,4 +147,13 @@ export const request: (
   } catch (err) {
     return { error: err };
   }
+};
+
+export const useRequest = (apiBase: string) => {
+  const apiToken = useApiToken(apiBase);
+  return useCallback(
+    (args: Omit<requestArgs, "apiToken" | "apiBase">) =>
+      request({ ...args, apiToken, apiBase }),
+    [apiToken, apiBase]
+  );
 };
