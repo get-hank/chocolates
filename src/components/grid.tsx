@@ -19,6 +19,7 @@ type FlexProps = {
   | "space-between"
   | "stretch"
   | "space-around";
+  wrap?: boolean;
 };
 
 export type ContainerProps = SpacingProps & FlexProps;
@@ -107,7 +108,7 @@ export const Item = styled(SpacingContainer) <ItemProps>`
 
 export const Container = styled(SpacingContainer) <ContainerProps>`
   display: flex;
-  flex-wrap: wrap;
+  flex-wrap: ${({ wrap = true }) => (wrap ? "wrap" : "nowrap")};
   ${({ center, direction, align, justify }) =>
     genFlexRules({ center, direction, align, justify })}
 `;
