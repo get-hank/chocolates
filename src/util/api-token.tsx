@@ -3,10 +3,17 @@ import { useAuth0 } from "@auth0/auth0-react";
 import { clearCookie, getCookie, setCookie } from "./cookies";
 
 export const setAnonToken = (token: string) =>
-  setCookie({ name: "anonymous_user_token", value: token, secure: true });
+  setCookie({
+    name: "anonymous_user_token",
+    value: token,
+    secure: !!window.location.host.match("gethank.com"),
+  });
 
 export const clearAnonToken = () =>
-  clearCookie({ name: "anonymous_user_token", secure: true });
+  clearCookie({
+    name: "anonymous_user_token",
+    secure: !!window.location.host.match("gethank.com"),
+  });
 
 export const useApiTokenWithReady = (apiBase: string) => {
   const { isLoading, user, getAccessTokenSilently } = useAuth0();
