@@ -25,6 +25,8 @@ export { default as MobileHamburger } from "./MobileHamburger";
 export { default as No } from "./No";
 export { default as Overflow } from "./Overflow";
 export { default as Percent } from "./Percent";
+export { default as Phone } from "./Phone";
+export { default as PhoneCall } from "./PhoneCall";
 export { default as Plus } from "./Plus";
 export { default as Rearrange } from "./Rearrange";
 export { default as Resize } from "./Resize";
