@@ -1,16 +1,15 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import ReactDOM from "react-dom";
-import styled from "styled-components";
+import styled, { ThemeContext } from "styled-components";
 import { rgba } from "polished";
+import { DefaultThemeProvider } from './theme'
 import { colors } from "../util/colors";
-import { breakPoint } from "../util/layout";
 import { useBreakpoint } from "../util/hooks";
 import { useScrollPosition } from "../util/scroll";
 import { Container, Item, LayoutWrapper } from "./grid";
 import { Div } from "./spacing";
 import { H2, H3, P } from "./typography";
 import Button from "./Button";
-import { Link } from "./Link";
 import IconButton from "./IconButton";
 
 const Overlay = styled(Container)`
@@ -128,6 +127,7 @@ const Modal: React.FC<ModalProps> = ({
 }) => {
   const [titleVisible, setTitleVisible] = useState(false);
   const rootElemRef = useRef(document.createElement("div"));
+  const theme = useContext(ThemeContext)
 
   const isMobileViewport = useBreakpoint("sm");
 
@@ -240,64 +240,66 @@ const Modal: React.FC<ModalProps> = ({
   );
 
   return ReactDOM.createPortal(
-    <Overlay
-      center
-      onClick={(e: any) => {
-        e.stopPropagation();
-        dismiss();
-      }}
-    >
-      <ModalWrapper
-        size={size}
-        direction="column"
-        onClick={(e: MouseEvent) => e.stopPropagation()}
+    <DefaultThemeProvider theme={theme}>
+      <Overlay
+        center
+        onClick={(e: any) => {
+          e.stopPropagation();
+          dismiss();
+        }}
       >
-        {size !== "small" && (
-          <Container
-            px={3}
-            py={3}
-            align="center"
-            style={{ flexWrap: "nowrap" }}
-            bb={headerBorder}
-          >
-            <IconButton
-              icon={back ? "back" : "close"}
-              name="Close"
-              onClick={dismiss}
-            />
-            {!back && size === "full" && !isMobileViewport && (
-              <Div onClick={dismiss} style={{ cursor: "pointer" }} pl={1}>
-                <P>Close</P>
-              </Div>
-            )}
-            {back && (
-              <Div onClick={dismiss} style={{ cursor: "pointer" }} pl={1}>
-                <P>Back</P>
-              </Div>
-            )}
+        <ModalWrapper
+          size={size}
+          direction="column"
+          onClick={(e: MouseEvent) => e.stopPropagation()}
+        >
+          {size !== "small" && (
+            <Container
+              px={3}
+              py={3}
+              align="center"
+              style={{ flexWrap: "nowrap" }}
+              bb={headerBorder}
+            >
+              <IconButton
+                icon={back ? "back" : "close"}
+                name="Close"
+                onClick={dismiss}
+              />
+              {!back && size === "full" && !isMobileViewport && (
+                <Div onClick={dismiss} style={{ cursor: "pointer" }} pl={1}>
+                  <P>Close</P>
+                </Div>
+              )}
+              {back && (
+                <Div onClick={dismiss} style={{ cursor: "pointer" }} pl={1}>
+                  <P>Back</P>
+                </Div>
+              )}
 
-            {titleText && (
-              <AnimateH3
-                weight={600}
-                pl={3}
-                style={{ opacity: titleVisible ? 1 : 0 }}
-              >
-                {titleText}
-              </AnimateH3>
-            )}
-          </Container>
-        )}
-        <Contents ref={scrollRegionRef}>
-          {banner ? banner : null}
-          {size === "full" ? (
-            <LayoutWrapper>{inner}</LayoutWrapper>
-          ) : (
-              <Div px={3}>{inner}</Div>
-            )}
-        </Contents>
-        {footer}
-      </ModalWrapper>
-    </Overlay>,
+              {titleText && (
+                <AnimateH3
+                  weight={600}
+                  pl={3}
+                  style={{ opacity: titleVisible ? 1 : 0 }}
+                >
+                  {titleText}
+                </AnimateH3>
+              )}
+            </Container>
+          )}
+          <Contents ref={scrollRegionRef}>
+            {banner ? banner : null}
+            {size === "full" ? (
+              <LayoutWrapper>{inner}</LayoutWrapper>
+            ) : (
+                <Div px={3}>{inner}</Div>
+              )}
+          </Contents>
+          {footer}
+        </ModalWrapper>
+      </Overlay>
+    </DefaultThemeProvider>,
     rootElemRef.current
   );
 };
