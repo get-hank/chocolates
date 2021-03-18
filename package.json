@@ -2,15 +2,7 @@
   "name": "@hank-technology/chocolates",
   "version": "1.12.8",
   "module": "dist/index.js",
-  "files": [
-    "dist",
-    "README.md",
-    "api",
-    "icons",
-    "payment",
-    "table",
-    "ui"
-  ],
+  "files": ["dist", "README.md", "api", "icons", "payment", "table", "ui"],
   "repository": {
     "type": "git",
     "url": "https://github.com/get-hank/chocolates"
@@ -51,11 +43,7 @@
     "release": "deploy/publish.sh"
   },
   "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
+    "production": [">0.2%", "not dead", "not op_mini all"],
     "development": [
       "last 1 chrome version",
       "last 1 firefox version",
@@ -81,5 +69,10 @@
     "react-is": "^17.0.1",
     "sass-loader": "^10.1.1",
     "style-loader": "^2.0.0"
+  },
+  "prettier": {
+    "tabWidth": 2,
+    "semi": false,
+    "singleQuote": true
   }
 }
