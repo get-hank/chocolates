@@ -1,97 +1,90 @@
-import React, {
-  InputHTMLAttributes,
-  TextareaHTMLAttributes,
-  LabelHTMLAttributes,
-} from "react";
-import styled from "styled-components";
-import { Checkbox as CheckboxInput } from "./form/Checkbox";
-import { Radio as RadioInput } from "./form/Radio";
-import { Select as SelectFormInput, Option } from "./form/Select";
+import React, { TextareaHTMLAttributes, LabelHTMLAttributes } from 'react'
+import styled from 'styled-components'
+import { Checkbox as CheckboxInput } from './form/Checkbox'
+import { Radio as RadioInput } from './form/Radio'
+import { Select as SelectFormInput, Option } from './form/Select'
 import {
   DatePicker as DatePickerInput,
   DatePickerProps,
-} from "./form/DatePicker";
-import {
-  TimePicker as TimePickerInput,
-  TimePickerProps,
-} from "./form/TimePicker";
-import { Input as FormInput } from "./form/Input";
-import { inputStyle, InputProps } from "./form/utils";
-import { Container, ContainerProps } from "./grid";
-import { Div } from "./spacing";
-import { P, TextProps, rulesForTextProps } from "./typography";
-import { space } from "../util/layout";
-import { colors } from "../util/colors";
+} from './form/DatePicker'
+import { TimePicker as TimePickerInput } from './form/TimePicker'
+import { Input as FormInput } from './form/Input'
+import { inputStyle, InputProps } from './form/utils'
+import { Container, ContainerProps } from './grid'
+import { Div } from './spacing'
+import { P, Text, TextProps, rulesForTextProps } from './typography'
+import { colors } from '../util/colors'
 
-export const Select = SelectFormInput;
-export const Input = FormInput;
-export const Checkbox = CheckboxInput;
-export const Radio = RadioInput;
-export const DatePicker = DatePickerInput;
-export const TimePicker = TimePickerInput;
+export const Select = SelectFormInput
+export const Input = FormInput
+export const Checkbox = CheckboxInput
+export const Radio = RadioInput
+export const DatePicker = DatePickerInput
+export const TimePicker = TimePickerInput
 
 const TextAreaStyle = styled(Div) <InputProps>`
   textarea {
     ${inputStyle}
     line-height: 150%;
   }
-`;
+`
 
 export const TextArea = ({
   styledProps = {},
   nativeProps,
 }: {
-  styledProps?: InputProps;
-  nativeProps: TextareaHTMLAttributes<HTMLTextAreaElement>;
+  styledProps?: InputProps
+  nativeProps: TextareaHTMLAttributes<HTMLTextAreaElement>
 }) => (
     <TextAreaStyle {...styledProps}>
       <textarea {...nativeProps} />
     </TextAreaStyle>
-  );
+  )
 
 export const Label = styled.label<
   TextProps & LabelHTMLAttributes<HTMLLabelElement>
   >`
   font-family: ${({ theme }) => theme.typography.baseType};
   ${rulesForTextProps}
-`;
+`
 
 type FormFieldWrapperProps = ContainerProps & {
-  fillBg?: boolean;
-};
+  fillBg?: boolean
+}
 const FieldWrapper = styled(Container) <FormFieldWrapperProps>`
-  ${({ fillBg }) => (fillBg ? `background-color: ${colors.gray50};` : "")}
+  ${({ fillBg }) => (fillBg ? `background-color: ${colors.gray50};` : '')}
   border-radius: 8px;
-`;
+`
 
-export type FieldEdit = { field: string; value: any };
+export type FieldEdit = { field: string; value: any }
 
-type FieldProps = Omit<FormFieldWrapperProps, "onChange"> & {
-  label: string;
-  field: string;
-  onChange?: (edit: FieldEdit) => any;
-  value?: any;
-  checked?: boolean;
-  placeholder?: string;
-  autoComplete?: string;
-  help?: string;
+type FieldProps = Omit<FormFieldWrapperProps, 'onChange'> & {
+  label: string
+  field: string
+  onChange?: (edit: FieldEdit) => any
+  value?: any
+  checked?: boolean
+  placeholder?: string
+  autoComplete?: string
+  help?: string
   inputType?:
-  | "text"
-  | "multiLineText"
-  | "select"
-  | "checkbox"
-  | "radio"
-  | "date"
-  | "time"
-  | "none";
-  fillBg?: boolean;
-  error?: boolean | string | null;
-  disabled?: boolean;
-  apiBase?: string;
-  options?: Option[];
-  containerProps?: ContainerProps;
-  pickerProps?: DatePickerProps["pickerProps"];
-};
+  | 'text'
+  | 'multiLineText'
+  | 'select'
+  | 'checkbox'
+  | 'radio'
+  | 'date'
+  | 'time'
+  | 'none'
+  fillBg?: boolean
+  error?: boolean | string | null
+  disabled?: boolean
+  apiBase?: string
+  required?: boolean
+  options?: Option[]
+  containerProps?: ContainerProps
+  pickerProps?: DatePickerProps['pickerProps']
+}
 
 export const FormField: React.FC<FieldProps> = ({
   label,
@@ -106,10 +99,11 @@ export const FormField: React.FC<FieldProps> = ({
   error,
   autoComplete,
   disabled = false,
-  inputType = "text",
+  inputType = 'text',
   children,
   pickerProps,
   containerProps,
+  required = false,
   ...wrapperProps
 }) => {
   const baseNativeProps = {
@@ -119,44 +113,48 @@ export const FormField: React.FC<FieldProps> = ({
     onChange: (e: any) =>
       onChange && onChange({ field, value: e.target.value }),
     name: field,
-  };
+  }
   const nativeProps = {
     ...baseNativeProps,
     defaultValue: value,
-  };
+  }
 
-  const styleProps = { error: !!error };
-  const selectable = ["radio", "checkbox"].includes(inputType);
+  const styleProps = { error: !!error }
+  const selectable = ['radio', 'checkbox'].includes(inputType)
+  const requiredPrefix = required && <Text color={colors.red600}>* </Text>
 
   return (
     <FieldWrapper direction="column" {...wrapperProps} grow>
       {!selectable ? (
         <Div pb={1}>
-          <Label weight={600}>{label}</Label>
+          <Label weight={600}>
+            {requiredPrefix}
+            {label}
+          </Label>
         </Div>
       ) : null}
       {children && !selectable ? children : null}
-      {inputType === "text" ? (
+      {inputType === 'text' ? (
         <Input styledProps={styleProps} nativeProps={nativeProps} />
       ) : null}
-      {inputType === "select" ? (
+      {inputType === 'select' ? (
         <SelectFormInput
           options={options}
           styledProps={styleProps}
           nativeProps={nativeProps}
         />
       ) : null}
-      {inputType === "multiLineText" ? (
+      {inputType === 'multiLineText' ? (
         <TextArea styledProps={styleProps} nativeProps={nativeProps} />
       ) : null}
-      {inputType === "time" ? (
+      {inputType === 'time' ? (
         <TimePicker
           onTimeChange={(value) => onChange && onChange({ field, value })}
           styledProps={styleProps}
           nativeProps={nativeProps}
         />
       ) : null}
-      {inputType === "date" ? (
+      {inputType === 'date' ? (
         <DatePicker
           styledProps={styleProps}
           onDateChange={(value) => onChange && onChange({ field, value })}
@@ -164,7 +162,7 @@ export const FormField: React.FC<FieldProps> = ({
           pickerProps={pickerProps}
         />
       ) : null}
-      {inputType === "checkbox" ? (
+      {inputType === 'checkbox' ? (
         <Container p={wrapperProps.fillBg ? 2 : 0} align="center" grow>
           <Checkbox
             styledProps={styleProps}
@@ -176,11 +174,18 @@ export const FormField: React.FC<FieldProps> = ({
             }}
             containerProps={containerProps}
           >
-            {children ? children : <Label>{label}</Label>}
+            {children ? (
+              children
+            ) : (
+                <Label>
+                  {requiredPrefix}
+                  {label}
+                </Label>
+              )}
           </Checkbox>
         </Container>
       ) : null}
-      {inputType === "radio" ? (
+      {inputType === 'radio' ? (
         <Container p={wrapperProps.fillBg ? 2 : 0} align="center" grow>
           <Radio
             styledProps={styleProps}
@@ -192,7 +197,14 @@ export const FormField: React.FC<FieldProps> = ({
             }}
             containerProps={containerProps}
           >
-            {children ? children : <Label>{label}</Label>}
+            {children ? (
+              children
+            ) : (
+                <Label>
+                  {requiredPrefix}
+                  {label}
+                </Label>
+              )}
           </Radio>
         </Container>
       ) : null}
@@ -201,11 +213,11 @@ export const FormField: React.FC<FieldProps> = ({
           {help}
         </P>
       ) : null}
-      {typeof error === "string" ? (
+      {typeof error === 'string' ? (
         <P pt={1} error>
           {error}
         </P>
       ) : null}
     </FieldWrapper>
-  );
-};
+  )
+}
