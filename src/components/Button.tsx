@@ -1,51 +1,51 @@
-import React from "react";
-import styled from "styled-components";
-import { darken, lighten } from "polished";
-import { fontSize } from "./typography";
-import { passThroughRule } from "../util/helpers";
-import { breakPoint, space } from "../util/layout";
+import React from 'react'
+import styled from 'styled-components'
+import { darken, lighten } from 'polished'
+import { fontSize } from './typography'
+import { passThroughRule } from '../util/helpers'
+import { breakPoint, space } from '../util/layout'
 
-const animationDuration = 200;
+const animationDuration = 200
 
-type SizeType = "small" | "medium" | "large" | "x-large" | "mobile";
+type SizeType = 'small' | 'medium' | 'large' | 'x-large' | 'mobile'
 
-export interface ButtonProps extends React.ComponentPropsWithoutRef<"button"> {
-  size?: SizeType;
-  secondary?: boolean;
-  wide?: boolean;
-  disabled?: boolean;
-  color?: string;
+export interface ButtonProps extends React.ComponentPropsWithoutRef<'button'> {
+  size?: SizeType
+  secondary?: boolean
+  wide?: boolean
+  disabled?: boolean
+  color?: string
 }
 
 const sizeRules = (size: SizeType, wide: boolean | null) => {
   switch (size) {
-    case "small":
+    case 'small':
       return `
         ${fontSize(0.875)}
         padding: ${space(1)} ${space(wide ? 4 : 1.5)};
-      `;
-    case "medium":
+      `
+    case 'medium':
       return `
         ${fontSize(0.875)}
         padding: ${space(1)} ${space(wide ? 4 : 2)};
-      `;
-    case "mobile":
+      `
+    case 'mobile':
       return `
         ${fontSize(0.875)}
         padding: ${space(1.5)} ${space(wide ? 4 : 2.5)};
-      `;
-    case "large":
+      `
+    case 'large':
       return `
         ${fontSize(1)}
         padding: ${space(2)} ${space(wide ? 5 : 3)};
-      `;
-    case "x-large":
+      `
+    case 'x-large':
       return `
         ${fontSize(1.25)}
         padding: ${space(3)} ${space(wide ? 8 : 4)};
-      `;
+      `
   }
-};
+}
 
 const Button = styled.button<ButtonProps>`
   font-weight: 500;
@@ -54,13 +54,13 @@ const Button = styled.button<ButtonProps>`
   border-radius: 3px;
   border-style: solid;
 
-  ${({ theme }) => passThroughRule("font-family", theme.typography.baseType)}
+  ${({ theme }) => passThroughRule('font-family', theme.typography.baseType)}
 
   color: ${({ secondary, theme, color }) =>
     secondary ? (color ? color : theme.colors.text) : theme.colors.white};
 
   background-color: ${({ secondary, theme, color }) =>
-    secondary ? theme.colors.white : color ? color : theme.colors.primary};
+    secondary ? 'transparent' : color ? color : theme.colors.primary};
   border-color: ${({ secondary, theme, color }) =>
     color ? color : secondary ? theme.colors.grayBorder : theme.colors.primary};
 
@@ -72,7 +72,7 @@ const Button = styled.button<ButtonProps>`
   &:active {
     cursor: pointer;
     color: ${({ secondary, theme, color }) =>
-    secondary ? (color ? color : theme.colors.primary) : theme.colors.white};
+    secondary ? theme.colors.primary : theme.colors.white};
     background-color: ${({ secondary, theme, color }) =>
     secondary
       ? theme.colors.white
@@ -117,14 +117,14 @@ const Button = styled.button<ButtonProps>`
 
   ${({ size, wide }) => sizeRules(size, wide)}
 
-  @media (max-width: ${breakPoint("sm")}px) {
-    ${({ wide }) => sizeRules("mobile", wide)}
+  @media (max-width: ${breakPoint('sm')}px) {
+    ${({ wide }) => sizeRules('mobile', wide)}
   }
-`;
+`
 
 const Component: React.FC<ButtonProps> = ({
   children,
-  size = "small",
+  size = 'small',
   secondary = false,
   wide = false,
   ...rest
@@ -133,7 +133,7 @@ const Component: React.FC<ButtonProps> = ({
     <Button size={size} secondary={secondary} wide={wide} {...rest}>
       {children}
     </Button>
-  );
-};
+  )
+}
 
-export default Component;
+export default Component
