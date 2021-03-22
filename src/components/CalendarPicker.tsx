@@ -1,10 +1,10 @@
-import React, { useCallback, useState } from "react";
-import styled from "styled-components";
-import Calendar from "react-calendar";
-import type { CalendarProps } from "react-calendar";
-import format from "date-fns/format";
-import { space } from "../util/layout";
-import IconButton from "./IconButton";
+import React, { useCallback, useState } from 'react'
+import styled from 'styled-components'
+import Calendar from 'react-calendar'
+import type { CalendarProps } from 'react-calendar'
+import format from 'date-fns/format'
+import { space } from '../util/layout'
+import IconButton from './IconButton'
 
 const Overlay = styled.div`
   position: fixed;
@@ -13,7 +13,7 @@ const Overlay = styled.div`
   left: 0;
   right: 0;
   z-index: 1;
-`;
+`
 
 const StyledCalendar = styled.div`
   position: relative;
@@ -75,6 +75,11 @@ const StyledCalendar = styled.div`
       }
     }
 
+    .react-calendar__month-view__days button {
+      padding: 0;
+      margin: 0;
+    }
+
     .react-calendar__tile {
       border: none;
       appearance: none;
@@ -106,23 +111,23 @@ const StyledCalendar = styled.div`
       color: white;
     }
   }
-`;
+`
 
 const toDow = (date: Date) =>
-  ["Su", "M", "T", "W", "Th", "F", "S"][date.getDay()];
+  ['Su', 'M', 'T', 'W', 'Th', 'F', 'S'][date.getDay()]
 
 type CalendarPickerProps = {
-  value?: Date;
-  defaultValue?: Date;
-  onChange: CalendarProps["onChange"];
-  minDetail: "month" | "year";
-  maxDetail?: "month" | "year";
-  minDate?: Date | null;
-  maxDate?: Date | null;
-  onDismiss?: () => any;
-  pickerClassName?: string | null;
-  overlayClassName?: string | null;
-};
+  value?: Date
+  defaultValue?: Date
+  onChange: CalendarProps['onChange']
+  minDetail: 'month' | 'year'
+  maxDetail?: 'month' | 'year'
+  minDate?: Date | null
+  maxDate?: Date | null
+  onDismiss?: () => any
+  pickerClassName?: string | null
+  overlayClassName?: string | null
+}
 
 const CalendarPicker = ({
   onDismiss,
@@ -133,8 +138,8 @@ const CalendarPicker = ({
     <StyledCalendar>
       <Overlay
         onClick={(e) => {
-          e.stopPropagation();
-          onDismiss && onDismiss();
+          e.stopPropagation()
+          onDismiss && onDismiss()
         }}
         {...(overlayClassName && { className: overlayClassName })}
       />
@@ -145,11 +150,11 @@ const CalendarPicker = ({
         prevLabel={<IconButton noButton icon="left" />}
         nextLabel={<IconButton noButton icon="right" />}
         formatShortWeekday={(locale, date) => toDow(date)}
-        formatMonth={(locale, date) => format(date, "MMM")}
+        formatMonth={(locale, date) => format(date, 'MMM')}
         {...(pickerClassName && { className: pickerClassName })}
         {...calendarProps}
       />
     </StyledCalendar>
-  );
+  )
 
-export default CalendarPicker;
+export default CalendarPicker
