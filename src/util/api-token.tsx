@@ -69,7 +69,10 @@ export const useApiTokensWithReady = (apiBase: string) => {
   return {
     auth0Token,
     anonymousToken,
-    ready: auth0Token || anonymousToken || hasNoTokens,
+    // auth0Token is priority, so can return early if we have one, otherwise wait until we've checked for both tokens
+    ready:
+      auth0Token ||
+      (auth0Token === null && (anonymousToken || anonymousToken === null)),
   }
 }
 
@@ -78,7 +81,7 @@ export const useApiTokens: (
 ) => { auth0Token?: string | null; anonymousToken?: string | null } = (
   apiBase: string
 ) => {
-    const { ready, ...tokens } = useApiTokensWithReady(apiBase)
-    if (!ready) return {}
-    return tokens
-  }
+  const { ready, ...tokens } = useApiTokensWithReady(apiBase)
+  if (!ready) return {}
+  return tokens
+}
