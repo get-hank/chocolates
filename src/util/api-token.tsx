@@ -1,48 +1,52 @@
-import { useEffect, useState } from "react";
-import { useAuth0 } from "@auth0/auth0-react";
-import { clearCookie, getCookie, setCookie } from "./cookies";
+import { useEffect, useState } from 'react'
+import { useAuth0 } from '@auth0/auth0-react'
+import { clearCookie, getCookie, setCookie } from './cookies'
 
 export const setAnonToken = (token: string) =>
   setCookie({
-    name: "anonymous_user_token",
+    name: 'anonymous_user_token',
     value: token,
-    secure: !!window.location.host.match("gethank.com"),
-  });
+    secure: !!window.location.host.match('gethank.com'),
+  })
 
 export const clearAnonToken = () =>
   clearCookie({
-    name: "anonymous_user_token",
-    secure: !!window.location.host.match("gethank.com"),
-  });
+    name: 'anonymous_user_token',
+    secure: !!window.location.host.match('gethank.com'),
+  })
 
-export const useApiTokenWithReady = (apiBase: string) => {
-  const { isLoading, user, getAccessTokenSilently } = useAuth0();
-  const [auth0Token, setAuth0Token] = useState<string | undefined>();
+export const useApiTokensWithReady = (apiBase: string) => {
+  const { isLoading, user, getAccessTokenSilently } = useAuth0()
+  const [auth0Token, setAuth0Token] = useState<string | null | undefined>()
   const [anonymousToken, setAnonymousToken] = useState<
     string | null | undefined
-  >();
+  >()
 
   useEffect(() => {
-    if (isLoading || auth0Token) return;
+    if (isLoading || auth0Token) return
 
     if (anonymousToken === undefined) {
-      setAnonymousToken(getCookie("anonymous_user_token") || null);
+      setAnonymousToken(getCookie('anonymous_user_token') || null)
     }
 
-    if (!user) return;
+    if (!user) {
+      setAuth0Token(null)
+      return
+    }
 
     const getToken = async () => {
       try {
         const accessToken = await getAccessTokenSilently({
           audience: apiBase,
-        });
-        setAuth0Token(accessToken);
+        })
+        setAuth0Token(accessToken)
       } catch (e) {
-        console.error(e.message, e);
+        console.error(e.message, e)
+        setAuth0Token(null)
       }
-    };
+    }
 
-    getToken();
+    getToken()
   }, [
     isLoading,
     user,
@@ -51,27 +55,30 @@ export const useApiTokenWithReady = (apiBase: string) => {
     setAuth0Token,
     anonymousToken,
     setAnonymousToken,
-  ]);
+  ])
 
   // Clear anon cookie once we have an authenticated token
   useEffect(() => {
-    if (!(auth0Token && anonymousToken)) return;
+    if (!(auth0Token && anonymousToken)) return
 
-    clearAnonToken();
-    setAnonymousToken(null);
-  }, [auth0Token, anonymousToken, setAnonymousToken]);
+    clearAnonToken()
+    setAnonymousToken(null)
+  }, [auth0Token, anonymousToken, setAnonymousToken])
 
-  const token = auth0Token || anonymousToken;
-
+  const hasNoTokens = auth0Token === null && anonymousToken === null
   return {
-    token,
-    // have a token, or there's no auth0 login nor an anonymous user token
-    ready: token || (!user && anonymousToken === null),
-  };
-};
+    auth0Token,
+    anonymousToken,
+    ready: auth0Token || anonymousToken || hasNoTokens,
+  }
+}
 
-export const useApiToken = (apiBase: string) => {
-  const { token, ready } = useApiTokenWithReady(apiBase);
-  if (!ready) return null;
-  return token;
-};
+export const useApiTokens: (
+  apiBase: string
+) => { auth0Token?: string | null; anonymousToken?: string | null } = (
+  apiBase: string
+) => {
+    const { ready, ...tokens } = useApiTokensWithReady(apiBase)
+    if (!ready) return {}
+    return tokens
+  }

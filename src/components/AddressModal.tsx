@@ -1,31 +1,30 @@
-import React, { useMemo, useReducer, useState } from "react";
-import { Container, Div, FormField, FieldEdit, Item, Modal } from "../ui";
-import { request } from "../util/api";
-import { useApiToken } from "../util/api-token";
+import React, { useMemo, useReducer, useState } from 'react'
+import { Container, Div, FormField, FieldEdit, Item, Modal } from '../ui'
+import { useRequest } from '../util/api'
 
 type Address = {
-  resourceId: string;
-  userId?: string | null;
-  line1: string;
-  line2?: string | null;
-  city: string;
-  state: string;
-  zipcode: string;
-  notes?: string | null;
-  default: boolean;
-};
+  resourceId: string
+  userId?: string | null
+  line1: string
+  line2?: string | null
+  city: string
+  state: string
+  zipcode: string
+  notes?: string | null
+  default: boolean
+}
 
 type AddressModalProps = {
-  apiBase: string;
-  address?: Address;
-  userId?: string;
-  dismiss: () => any;
-  modalProps?: Partial<React.ComponentProps<typeof Modal>>;
+  apiBase: string
+  address?: Address
+  userId?: string
+  dismiss: () => any
+  modalProps?: Partial<React.ComponentProps<typeof Modal>>
   states: {
-    code: string;
-    name: string;
-  }[];
-};
+    code: string
+    name: string
+  }[]
+}
 
 const AddressModal = ({
   apiBase,
@@ -35,64 +34,62 @@ const AddressModal = ({
   states,
   modalProps,
 }: AddressModalProps) => {
-  const apiToken = useApiToken(apiBase);
+  const request = useRequest(apiBase)
 
-  const [submitting, setSubmitting] = useState(false);
-  const [errors, setErrors] = useState<{ [field: string]: string }>({});
+  const [submitting, setSubmitting] = useState(false)
+  const [errors, setErrors] = useState<{ [field: string]: string }>({})
   const [addressEdits, updateField] = useReducer(
     (prevUserEdits: object, { field, value }: FieldEdit) => ({
       ...prevUserEdits,
       [field]: value,
     }),
     {}
-  );
+  )
 
   const stateOptions = useMemo(
     () => [
-      { value: "", label: "Select one" },
+      { value: '', label: 'Select one' },
       ...states.map((s) => ({ value: s.code, label: s.name })),
     ],
     [states]
-  );
+  )
 
-  const hasEdits = Object.keys(addressEdits).length > 0;
+  const hasEdits = Object.keys(addressEdits).length > 0
 
   const submit = async () => {
-    if (submitting || !hasEdits) return;
-    setSubmitting(true);
+    if (submitting || !hasEdits) return
+    setSubmitting(true)
 
     const path = `/users/${address && address.userId ? address.userId : userId
-      }/addresses`;
+      }/addresses`
 
     const { body, error } = await request({
-      apiBase,
-      apiToken,
       path: address ? `${path}/${address.resourceId}` : path,
-      method: address ? "put" : "post",
+      method: address ? 'put' : 'post',
       body: addressEdits,
-    });
+    })
 
     if (!error) {
-      dismiss();
+      dismiss()
     } else {
       if (body && body.errors) {
-        setErrors(body.errors as { [field: string]: string });
+        setErrors(body.errors as { [field: string]: string })
       } else {
         console.error(
-          "Unexpected response updating address",
+          'Unexpected response updating address',
           body,
           error.message
-        );
+        )
       }
     }
 
-    setSubmitting(false);
-  };
+    setSubmitting(false)
+  }
 
   return (
     <Modal
       open
-      titleText={address ? "Edit address" : "Add address"}
+      titleText={address ? 'Edit address' : 'Add address'}
       onCancel={dismiss}
       cancelText="Cancel"
       submitText="Save address"
@@ -111,7 +108,7 @@ const AddressModal = ({
               label="Street address"
               onChange={updateField}
               autoComplete="address-line1"
-              error={errors["line1"]}
+              error={errors['line1']}
             />
           </Item>
           <Item cols={12} pr={1}>
@@ -123,7 +120,7 @@ const AddressModal = ({
               label="Apt, suite. (optional)"
               onChange={updateField}
               autoComplete="address-line2"
-              error={errors["line2"]}
+              error={errors['line2']}
             />
           </Item>
         </Container>
@@ -137,7 +134,7 @@ const AddressModal = ({
               label="City"
               autoComplete="address-level2"
               onChange={updateField}
-              error={errors["city"]}
+              error={errors['city']}
             />
           </Item>
           <Item cols={6} mdCols={12} pr={1}>
@@ -151,7 +148,7 @@ const AddressModal = ({
               inputType="select"
               autoComplete="address-level1"
               options={stateOptions}
-              error={errors["state"]}
+              error={errors['state']}
             />
           </Item>
         </Container>
@@ -165,7 +162,7 @@ const AddressModal = ({
               placeholder="Ex: 12345"
               autoComplete="postal-code"
               onChange={updateField}
-              error={errors["zipcode"]}
+              error={errors['zipcode']}
             />
           </Item>
           <Item cols={12} pr={1}>
@@ -176,7 +173,7 @@ const AddressModal = ({
               label="Delivery instructions"
               placeholder="Ex: Ring the bell after dropoff, leave next to the porch, etc."
               onChange={updateField}
-              error={errors["notes"]}
+              error={errors['notes']}
               inputType="multiLineText"
             />
           </Item>
@@ -188,13 +185,13 @@ const AddressModal = ({
               onChange={updateField}
               inputType="checkbox"
               fillBg={true}
-              error={errors["default"]}
+              error={errors['default']}
             />
           </Item>
         </Container>
       </Div>
     </Modal>
-  );
-};
+  )
+}
 
-export default AddressModal;
+export default AddressModal

@@ -1,29 +1,28 @@
-import React, { createContext, useEffect, useState } from "react";
-import { QueryRenderer, FetchPolicy } from "react-relay";
-import { useApiToken } from "../util/api-token";
+import React, { createContext, useEffect, useState } from 'react'
+import { QueryRenderer, FetchPolicy } from 'react-relay'
 import {
-  createEnvironment,
+  useRelayEnvironment,
   RelayEnvironmentContext,
-} from "../util/relay-environment";
+} from '../util/relay-environment'
 
 type QueryWrapperProps = {
   // todo: graphql query type?
-  query: any;
-  variables?: any;
-  render: any;
-  apiBase: string;
-  fetchPolicy?: FetchPolicy;
-};
+  query: any
+  variables?: any
+  render: any
+  apiBase: string
+  fetchPolicy?: FetchPolicy
+}
 
-type renderType = React.ComponentProps<typeof QueryRenderer>["render"];
+type renderType = React.ComponentProps<typeof QueryRenderer>['render']
 type RenderedQueryContainerProps = Parameters<renderType>[0] & {
-  render: renderType;
-};
+  render: renderType
+}
 
-type QueryContextType = { reload: () => void };
+type QueryContextType = { reload: () => void }
 export const RelayQueryContext = createContext<QueryContextType>({
   reload: () => { },
-});
+})
 
 const RenderedQueryContainer = ({
   render,
@@ -31,11 +30,11 @@ const RenderedQueryContainer = ({
   retry,
   ...rest
 }: RenderedQueryContainerProps) => {
-  const [priorResponse, setPriorResponse] = useState<unknown | null>(null);
+  const [priorResponse, setPriorResponse] = useState<unknown | null>(null)
 
   useEffect(() => {
-    if (props && priorResponse !== props) setPriorResponse(props);
-  }, [props, priorResponse, setPriorResponse]);
+    if (props && priorResponse !== props) setPriorResponse(props)
+  }, [props, priorResponse, setPriorResponse])
 
   return (
     <RelayQueryContext.Provider value={{ reload: retry }}>
@@ -45,25 +44,18 @@ const RenderedQueryContainer = ({
         props: props || priorResponse,
       })}
     </RelayQueryContext.Provider>
-  );
-};
+  )
+}
 
 const QueryWrapper: React.FC<QueryWrapperProps> = ({
   query,
   variables = {},
   render,
   apiBase,
-  fetchPolicy = "network-only",
+  fetchPolicy = 'network-only',
 }) => {
-  const apiToken = useApiToken(apiBase);
-  const [relayEnv, setRelayEnv] = useState<any>(null);
-
-  useEffect(() => {
-    if (!apiToken || relayEnv) return;
-    setRelayEnv(createEnvironment(apiBase, apiToken));
-  }, [apiToken, setRelayEnv, relayEnv]);
-
-  if (!relayEnv) return null;
+  const relayEnv = useRelayEnvironment(apiBase)
+  if (!relayEnv) return null
 
   return (
     <RelayEnvironmentContext.Provider value={relayEnv}>
@@ -75,7 +67,7 @@ const QueryWrapper: React.FC<QueryWrapperProps> = ({
         fetchPolicy={fetchPolicy}
       />
     </RelayEnvironmentContext.Provider>
-  );
-};
+  )
+}
 
-export default QueryWrapper;
+export default QueryWrapper
