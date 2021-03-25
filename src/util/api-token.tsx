@@ -15,19 +15,14 @@ export const clearAnonToken = () =>
     secure: !!window.location.host.match('gethank.com'),
   })
 
+export const getAnonToken = () => getCookie('anonymous_user_token')
+
 export const useApiTokensWithReady = (apiBase: string) => {
   const { isLoading, user, getAccessTokenSilently } = useAuth0()
   const [auth0Token, setAuth0Token] = useState<string | null | undefined>()
-  const [anonymousToken, setAnonymousToken] = useState<
-    string | null | undefined
-  >()
 
   useEffect(() => {
     if (isLoading || auth0Token) return
-
-    if (anonymousToken === undefined) {
-      setAnonymousToken(getCookie('anonymous_user_token') || null)
-    }
 
     if (!user) {
       setAuth0Token(null)
@@ -47,32 +42,20 @@ export const useApiTokensWithReady = (apiBase: string) => {
     }
 
     getToken()
-  }, [
-    isLoading,
-    user,
-    getAccessTokenSilently,
-    auth0Token,
-    setAuth0Token,
-    anonymousToken,
-    setAnonymousToken,
-  ])
+  }, [isLoading, user, getAccessTokenSilently, auth0Token, setAuth0Token])
 
   // Clear anon cookie once we have an authenticated token
   useEffect(() => {
-    if (!(auth0Token && anonymousToken)) return
+    if (!(auth0Token && getAnonToken())) return
 
     clearAnonToken()
-    setAnonymousToken(null)
-  }, [auth0Token, anonymousToken, setAnonymousToken])
+  }, [auth0Token])
 
-  const hasNoTokens = auth0Token === null && anonymousToken === null
   return {
     auth0Token,
-    anonymousToken,
+    anonymousToken: getAnonToken(),
     // auth0Token is priority, so can return early if we have one, otherwise wait until we've checked for both tokens
-    ready:
-      auth0Token ||
-      (auth0Token === null && (anonymousToken || anonymousToken === null)),
+    ready: auth0Token || auth0Token === null,
   }
 }
 
@@ -81,7 +64,7 @@ export const useApiTokens: (
 ) => { auth0Token?: string | null; anonymousToken?: string | null } = (
   apiBase: string
 ) => {
-  const { ready, ...tokens } = useApiTokensWithReady(apiBase)
-  if (!ready) return {}
-  return tokens
-}
+    const { ready, ...tokens } = useApiTokensWithReady(apiBase)
+    if (!ready) return {}
+    return tokens
+  }
