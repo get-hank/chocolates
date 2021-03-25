@@ -2,20 +2,21 @@ import { useEffect, useState } from 'react'
 import { useAuth0 } from '@auth0/auth0-react'
 import { clearCookie, getCookie, setCookie } from './cookies'
 
+const anonTokenKey = 'anonymous_user_token'
+
 export const setAnonToken = (token: string) =>
   setCookie({
-    name: 'anonymous_user_token',
+    name: anonTokenKey,
     value: token,
     secure: !!window.location.host.match('gethank.com'),
   })
 
 export const clearAnonToken = () =>
   clearCookie({
-    name: 'anonymous_user_token',
-    secure: !!window.location.host.match('gethank.com'),
+    name: anonTokenKey,
   })
 
-export const getAnonToken = () => getCookie('anonymous_user_token')
+export const getAnonToken = () => getCookie(anonTokenKey)
 
 export const useApiTokensWithReady = (apiBase: string) => {
   const { isLoading, user, getAccessTokenSilently } = useAuth0()
