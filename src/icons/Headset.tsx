@@ -1,7 +1,13 @@
 import React from 'react'
 
-const Icon = () => (
-  <svg width="64" height="64" fill="none" xmlns="http://www.w3.org/2000/svg">
+const Icon = ({ scale = 1 }: { scale?: number }) => (
+  <svg
+    viewBox="0 0 64 64"
+    width={scale * 64}
+    height={scale * 64}
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+  >
     <path
       d="M10.575 54.803H9.88c-3.416 0-6.196-2.748-6.196-6.125V38.589c0-3.377 2.78-6.126 6.196-6.126h.694c1.694 0 3.073 1.363 3.073 3.038v16.264c0 1.675-1.379 3.038-3.072 3.038zM9.88 34.42c-2.324 0-4.216 1.87-4.216 4.17v10.088c0 2.298 1.892 4.167 4.216 4.167h.694c.603 0 1.093-.484 1.093-1.08V35.501c0-.596-.49-1.08-1.092-1.08H9.88z"
       fill="#43CBAE"
