@@ -104,21 +104,35 @@ const FAQItem = ({ question, answer, num }: ItemProps) => {
   )
 }
 
-const FAQ = ({ title = 'Frequently asked questions' }: { title?: string }) => {
+const FAQ = ({
+  title = 'Frequently asked questions',
+  questionsOnly = false,
+}: {
+  title?: string
+  questionsOnly?: boolean
+}) => {
+  const inner = (
+    <>
+      {questions.map((question, idx) => (
+        <FAQItem
+          key={`faq-${idx}`}
+          question={question.q}
+          answer={question.a}
+          num={idx + 1}
+        />
+      ))}
+    </>
+  )
+
+  if (questionsOnly) return inner
+
   return (
     <LayoutWrapper pb={8}>
       <Container center direction="column">
         <H2 center pt={15} pb={8} weight={700}>
           {title}
         </H2>
-        {questions.map((question, idx) => (
-          <FAQItem
-            key={`faq-${idx}`}
-            question={question.q}
-            answer={question.a}
-            num={idx + 1}
-          />
-        ))}
+        {inner}
       </Container>
     </LayoutWrapper>
   )
