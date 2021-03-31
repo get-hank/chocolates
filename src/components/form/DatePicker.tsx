@@ -31,8 +31,8 @@ export const DatePicker = ({
         ? DateTime.fromISO(newDate)
         : // TODO: update this when implementing date range picking
         Array.isArray(newDate)
-          ? null
-          : DateTime.fromISO(newDate.toISOString())
+        ? null
+        : DateTime.fromISO(newDate.toISOString())
     if (newDateLuxon.invalidExplanation) {
       console.error(newDateLuxon.invalidExplanation)
     } else {
@@ -53,10 +53,12 @@ export const DatePicker = ({
         onChange={(e) => dateChanged(e.target.value)}
         value={
           mobileViewport
-            ? value.toFormat('yyyy-MM-dd')
-            : value
-              ? value.toFormat('MM / dd / yyyy')
+            ? value
+              ? value.toFormat('yyyy-MM-dd')
               : ''
+            : value
+            ? value.toFormat('MM / dd / yyyy')
+            : ''
         }
         placeholder={!mobileViewport && 'MM / DD / YYYY'}
         {...rest}
