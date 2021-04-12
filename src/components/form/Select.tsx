@@ -1,24 +1,25 @@
-import React, { SelectHTMLAttributes } from "react";
-import styled from "styled-components";
-import { Text, TextProps, rulesForTextProps } from "../typography";
-import { Div } from "../spacing";
-import { space } from "../../util/layout";
+import React, { SelectHTMLAttributes } from 'react'
+import styled from 'styled-components'
+import { rulesForTextProps } from '../typography'
+import { Div } from '../spacing'
+import { space } from '../../util/layout'
 
-import { inputStyle, InputProps } from "./utils";
+import { inputStyle, InputProps } from './utils'
 
 export type Option = {
-  value: string;
-  label?: string;
-};
+  value: string
+  label?: string
+}
 
 export type SelectProps = {
-  styledProps?: InputProps;
-  nativeProps: SelectHTMLAttributes<HTMLSelectElement>;
-  options: Option[];
-};
+  styledProps?: InputProps
+  nativeProps: SelectHTMLAttributes<HTMLSelectElement>
+  options: Option[]
+}
 
 const SelectStyle = styled(Div) <InputProps>`
   position: relative;
+  cursor: pointer;
 
   select {
     -moz-appearance: none; /* Firefox */
@@ -32,6 +33,7 @@ const SelectStyle = styled(Div) <InputProps>`
     overflow: hidden;
 
     text-overflow: ellipsis;
+    cursor: pointer;
   }
 
   option {
@@ -45,14 +47,16 @@ const SelectStyle = styled(Div) <InputProps>`
     right: ${space(1)};
     top: 50%;
     margin-top: -3px;
+    pointer-events: none;
   }
-`;
+`
 
 export const Select = ({
   options,
   styledProps = {},
   nativeProps,
-}: SelectProps) => (
+}: SelectProps) => {
+  return (
     <SelectStyle {...styledProps}>
       <select {...nativeProps}>
         {options.map((o: Option) => (
@@ -70,4 +74,5 @@ export const Select = ({
         />
       </svg>
     </SelectStyle>
-  );
+  )
+}
