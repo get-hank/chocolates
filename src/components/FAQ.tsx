@@ -6,6 +6,11 @@ import { space } from '../util/layout'
 
 const questions = [
   {
+    q: 'Is Hank a retirement home?',
+    a:
+      'Hank is not a retirement home, but rather a new option for senior living. We empower people to grow older in the homes that they already love by providing the services that are typically found in retirement communities.',
+  },
+  {
     q: 'How can I contact you?',
     a:
       'You can contact us by email at <a href="mailto:hello@gethank.com">hello@gethank.com</a> or by phone at <a href="tel:+18559164265">855-916-4265</a> Monday-Friday from 10 AM - 5 PM EST. We would love to hear from you!',
@@ -13,17 +18,22 @@ const questions = [
   {
     q: 'What do I get by signing up for Hank?',
     a:
-      'Included with all Hank subscriptions is a personalized Care Plan. A Care Plan is a monthly schedule of all of the meal deliveries, groceries, rides, and daily activities that your loved one needs to enjoy themselves day-to-day. Care Plans allow you to schedule tasks for Hank to do, as well as to plan out activities and reminders for your loved one such as exercise classes, meal reminders, and more.',
+      'Hank organizes and manages the services your loved one needs to grow older at home. You or your loved one can schedule all of the meal deliveries, groceries, rides, and daily activities that they need to enjoy at home. Hank makes it easy to manage different services all in one place and is designed for older adults to use.',
   },
   {
     q: 'How much does Hank cost?',
     a:
-      'Hank costs $19.99 per month per family to use. Additional costs apply for any services that Hank schedules on your loved one’s behalf (such as meal delivery or transportation), and you have complete control over how much is spent on services.',
+      'Hank costs $19.99 per month per family to use. Any services that you order (such as meal delivery or home cleaning) are provided at cost with no extra charges.',
   },
   {
     q: 'Which areas do you serve?',
     a:
-      'We are in all 50 states. We will confirm that we service your area before you sign up.',
+      'We provide service in all 50 states. Availability of specific services varies by region. Please sign up to check service availability in your area.',
+  },
+  {
+    q: 'Who performs the tasks scheduled through Hank?',
+    a:
+      'We partner with a network of national service providers to ensure quality and safety no matter where you are.',
   },
   {
     q: 'Is Hank safe to use during the Covid-19 pandemic?',
@@ -33,22 +43,23 @@ const questions = [
   {
     q: 'How does my loved one place an order?',
     a:
-      'They can call or text <a href="tel:+18559164265">855-916-4265</a> to place an order. They can also create an account at gethank.com if they prefer to order online.',
+      'They can call or text 855-916-4265 to place an order. They can also create an account at gethank.com if they prefer to order online.',
   },
   {
     q: 'Does my loved one need a smartphone or computer to order?',
     a:
       'No, anyone can place an order by calling or texting <a href="tel:+18559164265">855-916-4265</a>.',
   },
+
   {
-    q: 'Can I request services for someone other than myself?',
+    q: 'Can I request services for someone else?',
     a:
-      'Yes, Hank is designed to allow anyone to schedule services on behalf of their loved one, or for their loved one to order things for themselves.',
+      'Yes, Hank is designed to allow anyone to schedule services on behalf of their loved one, or for their loved one to place orders for themselves.',
   },
   {
     q: 'Can I set an order schedule in advance?',
     a:
-      'Yes, you can set a recurring schedule for your loved one ahead of time so that you won’t have to worry placing an order every day.',
+      'Yes, you can set your order on a recurring cadence so tasks are scheduled automatically and ahead of time.',
   },
   {
     q: 'What happens if I have a problem with an order?',
