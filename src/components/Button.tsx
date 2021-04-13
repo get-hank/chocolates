@@ -51,7 +51,7 @@ const Button = styled.button<ButtonProps>`
   font-weight: 500;
 
   border-width: 1px;
-  border-radius: 3px;
+  border-radius: 8px;
   border-style: solid;
 
   ${({ theme }) => passThroughRule('font-family', theme.typography.baseType)}
