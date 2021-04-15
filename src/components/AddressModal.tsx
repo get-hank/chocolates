@@ -115,6 +115,7 @@ const AddressModal = ({
     <Modal
       open
       titleText={address ? 'Edit address' : 'Add address'}
+      onDismiss={dismiss}
       {...modalProps}
       renderFooter={() => (
         <>

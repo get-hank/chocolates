@@ -138,6 +138,7 @@ const StripeCardForm = ({
     <Modal
       open={true}
       titleText="Add new card"
+      onDismiss={onCancel}
       {...modalProps}
       renderFooter={() => (
         <>
