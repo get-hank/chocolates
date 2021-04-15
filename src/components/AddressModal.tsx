@@ -1,5 +1,15 @@
 import React, { useMemo, useReducer, useState } from 'react'
-import { Container, Div, FormField, FieldEdit, Item, Modal } from '../ui'
+import {
+  Button,
+  Container,
+  Div,
+  FormField,
+  FieldEdit,
+  Item,
+  Modal,
+  Notice,
+  severities,
+} from '../ui'
 import { useRequest } from '../util/api'
 
 type Address = {
@@ -37,6 +47,7 @@ const AddressModal = ({
   const request = useRequest(apiBase)
 
   const [submitting, setSubmitting] = useState(false)
+  const [showMissingFields, setShowMissingFields] = useState(false)
   const [errors, setErrors] = useState<{ [field: string]: string }>({})
   const [addressEdits, updateField] = useReducer(
     (prevUserEdits: object, { field, value }: FieldEdit) => ({
@@ -55,13 +66,26 @@ const AddressModal = ({
   )
 
   const hasEdits = Object.keys(addressEdits).length > 0
+  const fieldFilled = (
+    field: 'line1' | 'line2' | 'city' | 'state' | 'zipcode'
+  ) => (address && !!address[field]) || !!addressEdits[field]
+  const allFieldsFilled =
+    fieldFilled('line1') &&
+    fieldFilled('city') &&
+    fieldFilled('state') &&
+    fieldFilled('zipcode')
 
   const submit = async () => {
+    if (!allFieldsFilled) {
+      setShowMissingFields(true)
+      return
+    }
     if (submitting || !hasEdits) return
     setSubmitting(true)
 
-    const path = `/users/${address && address.userId ? address.userId : userId
-      }/addresses`
+    const path = `/users/${
+      address && address.userId ? address.userId : userId
+    }/addresses`
 
     const { body, error } = await request({
       path: address ? `${path}/${address.resourceId}` : path,
@@ -84,31 +108,54 @@ const AddressModal = ({
     }
 
     setSubmitting(false)
+    setShowMissingFields(false)
   }
 
   return (
     <Modal
       open
       titleText={address ? 'Edit address' : 'Add address'}
-      onCancel={dismiss}
-      cancelText="Cancel"
-      submitText="Save address"
       {...modalProps}
-      onSubmit={submit}
-      submitDisabled={submitting || !hasEdits}
+      renderFooter={() => (
+        <>
+          {!allFieldsFilled && showMissingFields && (
+            <Div pb={2}>
+              <Notice severity={severities.WARN}>
+                Please fill out the required fields above.
+              </Notice>
+            </Div>
+          )}
+          <Container justify="flex-end">
+            <Div pr={2}>
+              <Button secondary onClick={dismiss}>
+                Cancel
+              </Button>
+            </Div>
+            <Button disabled={submitting} onClick={submit}>
+              Save address
+            </Button>
+          </Container>
+        </>
+      )}
     >
       <Div px={1} pb={2}>
         <Container>
           <Item cols={12} pr={1}>
             <FormField
               pb={3}
+              required
               field="line1"
               value={address ? address.line1 : null}
               placeholder="Ex: 123 Main St."
               label="Street address"
               onChange={updateField}
               autoComplete="address-line1"
-              error={errors['line1']}
+              error={
+                errors['line1'] ||
+                (showMissingFields &&
+                  !fieldFilled('line1') &&
+                  'This field is required')
+              }
             />
           </Item>
           <Item cols={12} pr={1}>
@@ -128,18 +175,25 @@ const AddressModal = ({
           <Item cols={6} mdCols={12} pr={1}>
             <FormField
               pb={3}
+              required
               field="city"
               value={address ? address.city : null}
               placeholder="Ex: New York"
               label="City"
               autoComplete="address-level2"
               onChange={updateField}
-              error={errors['city']}
+              error={
+                errors['city'] ||
+                (showMissingFields &&
+                  !fieldFilled('city') &&
+                  'This field is required')
+              }
             />
           </Item>
           <Item cols={6} mdCols={12} pr={1}>
             <FormField
               pb={3}
+              required
               field="state"
               value={address ? address.state : null}
               label="State"
@@ -148,7 +202,12 @@ const AddressModal = ({
               inputType="select"
               autoComplete="address-level1"
               options={stateOptions}
-              error={errors['state']}
+              error={
+                errors['state'] ||
+                (showMissingFields &&
+                  !fieldFilled('state') &&
+                  'This field is required')
+              }
             />
           </Item>
         </Container>
@@ -156,13 +215,19 @@ const AddressModal = ({
           <Item cols={6} mdCols={12} pr={1}>
             <FormField
               pb={3}
+              required
               field="zipcode"
               value={address ? address.zipcode : null}
               label="Zip code"
               placeholder="Ex: 12345"
               autoComplete="postal-code"
               onChange={updateField}
-              error={errors['zipcode']}
+              error={
+                errors['zipcode'] ||
+                (showMissingFields &&
+                  !fieldFilled('zipcode') &&
+                  'This field is required')
+              }
             />
           </Item>
           <Item cols={12} pr={1}>

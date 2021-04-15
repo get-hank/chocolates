@@ -1,41 +1,43 @@
-import React, { useContext, useEffect, useReducer, useState } from "react";
-import styled, { ThemeContext } from "styled-components";
+import React, { useContext, useEffect, useReducer, useState } from 'react'
+import styled, { ThemeContext } from 'styled-components'
 import {
   CardNumberElement,
   CardCvcElement,
   CardExpiryElement,
   Elements,
-  ElementsConsumer,
   useStripe,
   useElements,
-} from "@stripe/react-stripe-js";
-import { loadStripe, Source } from "@stripe/stripe-js";
-import { FormField, FieldEdit } from "./form";
-import { Container, Item } from "./grid";
-import Modal from "./Modal";
-import { P } from "./typography";
-import { inputStyle } from "./form/utils";
-import { breakPoint, space } from "../util/layout";
-import { Lock } from "../icons";
+} from '@stripe/react-stripe-js'
+import { loadStripe, Source } from '@stripe/stripe-js'
+import Button from './Button'
+import { FormField, FieldEdit } from './form'
+import { Container, Item } from './grid'
+import Modal from './Modal'
+import Notice, { severities } from './Notice'
+import { Div } from './spacing'
+import { P } from './typography'
+import { inputStyle } from './form/utils'
+import { breakPoint, space } from '../util/layout'
+import { Lock } from '../icons'
 
 type StripeCardFormProps = {
-  publishableKey: string;
-  onSuccess: (source: Source) => any;
-  onCancel: () => any;
-  loading?: boolean;
-  error?: string | null;
-  modalProps?: Partial<React.ComponentProps<typeof Modal>>;
-};
+  publishableKey: string
+  onSuccess: (source: Source) => any
+  onCancel: () => any
+  loading?: boolean
+  error?: string | null
+  modalProps?: Partial<React.ComponentProps<typeof Modal>>
+}
 
 const StripeInputWrapper = styled.div`
   ${inputStyle}
-`;
+`
 
 const PadRightMd = styled.div`
-  @media (min-width: ${breakPoint("md")}px) {
+  @media (min-width: ${breakPoint('md')}px) {
     padding-right: ${space(2)};
   }
-`;
+`
 
 const StripeCardForm = ({
   onSuccess,
@@ -43,8 +45,8 @@ const StripeCardForm = ({
   loading,
   modalProps,
   error: parentError,
-}: Omit<StripeCardFormProps, "publishableKey">) => {
-  const theme = useContext(ThemeContext);
+}: Omit<StripeCardFormProps, 'publishableKey'>) => {
+  const theme = useContext(ThemeContext)
   const stripeElementOptions = {
     style: {
       base: {
@@ -55,7 +57,7 @@ const StripeCardForm = ({
         color: theme.colors.error,
       },
     },
-  };
+  }
 
   const [cardEdits, updateField] = useReducer(
     (prevEdits: object, { field, value }: FieldEdit) => ({
@@ -63,8 +65,10 @@ const StripeCardForm = ({
       [field]: value,
     }),
     {}
-  );
-  const [error, setError] = useState<string | null>(null);
+  )
+  const [submitting, setSubmitting] = useState(false)
+  const [showMissingFields, setShowMissingFields] = useState(false)
+  const [error, setError] = useState<string | null>(null)
   const [errors, setErrors] = useReducer(
     (
       errors: object,
@@ -74,39 +78,43 @@ const StripeCardForm = ({
       [field]: message,
     }),
     {}
-  );
+  )
 
-  const stripe = useStripe();
-  const elements = useElements();
-  const canSubmit =
-    stripe &&
-    !loading &&
-    elements &&
+  const stripe = useStripe()
+  const elements = useElements()
+  const allFieldsFilled =
     cardEdits.name &&
     cardEdits.zipcode &&
     cardEdits.card &&
     cardEdits.expiry &&
-    cardEdits.cvv;
+    cardEdits.cvv
+  const canSubmit = stripe && !loading && elements && !submitting
 
   const onStripeChange = (field: string, e: any) => {
     if (e.error) {
-      setErrors({ field, message: e.error.message });
+      setErrors({ field, message: e.error.message })
     } else {
-      setErrors({ field, message: null });
+      setErrors({ field, message: null })
     }
 
-    updateField({ field, value: e.complete });
-  };
+    updateField({ field, value: e.complete })
+  }
 
   const submit = async () => {
-    if (!canSubmit) {
-      return;
+    if (!allFieldsFilled) {
+      setShowMissingFields(true)
+      return
     }
+    if (!canSubmit) {
+      return
+    }
+    setSubmitting(true)
+
     const { error, source } = await stripe.createSource(
       elements.getElement(CardNumberElement),
       {
-        type: "card",
-        currency: "usd",
+        type: 'card',
+        currency: 'usd',
         owner: {
           name: cardEdits.name,
           address: {
@@ -114,26 +122,44 @@ const StripeCardForm = ({
           },
         },
       }
-    );
+    )
 
     if (error) {
-      setError(error.message);
-      return;
+      setError(error.message)
+      return
     }
 
-    onSuccess(source);
-  };
+    setShowMissingFields(false)
+    setSubmitting(false)
+    onSuccess(source)
+  }
 
   return (
     <Modal
       open={true}
       titleText="Add new card"
-      submitText="Save card"
-      cancelText="Cancel"
       {...modalProps}
-      onSubmit={submit}
-      onCancel={onCancel}
-      submitDisabled={!canSubmit}
+      renderFooter={() => (
+        <>
+          {!allFieldsFilled && showMissingFields && (
+            <Div pb={2}>
+              <Notice severity={severities.WARN}>
+                Please fill out the required fields above.
+              </Notice>
+            </Div>
+          )}
+          <Container justify="flex-end">
+            <Div pr={2}>
+              <Button secondary onClick={onCancel}>
+                Cancel
+              </Button>
+            </Div>
+            <Button disabled={!canSubmit} onClick={submit}>
+              Save card
+            </Button>
+          </Container>
+        </>
+      )}
     >
       <Container px={1} pb={4}>
         <Item cols={12} pb={3}>
@@ -143,6 +169,10 @@ const StripeCardForm = ({
             autoComplete="name"
             onChange={updateField}
             placeholder="Jane Doe"
+            required
+            error={
+              showMissingFields && !cardEdits.name && 'This field is required'
+            }
           />
         </Item>
         <Item cols={12} pb={3}>
@@ -150,12 +180,16 @@ const StripeCardForm = ({
             label="Card number"
             field="card"
             inputType="none"
-            error={errors["card"]}
+            error={
+              errors['card'] ||
+              (showMissingFields && !cardEdits.card && 'This field is required')
+            }
+            required
           >
             <StripeInputWrapper>
               <CardNumberElement
                 options={stripeElementOptions}
-                onChange={(e: any) => onStripeChange("card", e)}
+                onChange={(e: any) => onStripeChange('card', e)}
               />
             </StripeInputWrapper>
           </FormField>
@@ -166,12 +200,18 @@ const StripeCardForm = ({
               label="Exp. date"
               field="expiry"
               inputType="none"
-              error={errors["expiry"]}
+              required
+              error={
+                errors['expiry'] ||
+                (showMissingFields &&
+                  !cardEdits.expiry &&
+                  'This field is required')
+              }
             >
               <StripeInputWrapper>
                 <CardExpiryElement
                   options={stripeElementOptions}
-                  onChange={(e: any) => onStripeChange("expiry", e)}
+                  onChange={(e: any) => onStripeChange('expiry', e)}
                 />
               </StripeInputWrapper>
             </FormField>
@@ -182,12 +222,16 @@ const StripeCardForm = ({
             label="CVV"
             field="cvv"
             inputType="none"
-            error={errors["cvv"]}
+            required
+            error={
+              errors['cvv'] ||
+              (showMissingFields && !cardEdits.cvv && 'This field is required')
+            }
           >
             <StripeInputWrapper>
               <CardCvcElement
                 options={stripeElementOptions}
-                onChange={(e: any) => onStripeChange("cvv", e)}
+                onChange={(e: any) => onStripeChange('cvv', e)}
               />
             </StripeInputWrapper>
           </FormField>
@@ -201,6 +245,13 @@ const StripeCardForm = ({
               autoComplete="postal-code"
               onChange={updateField}
               placeholder="12345"
+              required
+              error={
+                errors['zipcode'] ||
+                (showMissingFields &&
+                  !cardEdits.zipcode &&
+                  'This field is required')
+              }
             />
           </PadRightMd>
         </Item>
@@ -217,23 +268,23 @@ const StripeCardForm = ({
         ) : null}
       </Container>
     </Modal>
-  );
-};
+  )
+}
 
 const StripeCardFormWithContext = ({
   publishableKey,
   ...rest
 }: StripeCardFormProps) => {
-  const [stripePromise, setStripePromise] = useState<any>(null);
+  const [stripePromise, setStripePromise] = useState<any>(null)
   useEffect(() => setStripePromise(loadStripe(publishableKey)), [
     publishableKey,
-  ]);
+  ])
 
   return (
     <Elements stripe={stripePromise}>
       <StripeCardForm {...rest} />
     </Elements>
-  );
-};
+  )
+}
 
-export default StripeCardFormWithContext;
+export default StripeCardFormWithContext
