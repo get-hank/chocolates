@@ -24,6 +24,7 @@ const Overlay = styled(Container)`
 
 type WrapperProps = React.ComponentProps<typeof Container> & {
   size: 'big' | 'small' | 'full'
+  animate: boolean
 }
 
 const bigWidth = '576px'
@@ -73,6 +74,23 @@ const ModalWrapper = styled(Container)<WrapperProps>`
   flex-wrap: nowrap;
   overflow: hidden;
 
+  @keyframes slide-modal-in {
+    from {
+      transform: translateY(200%);
+    }
+    to {
+      transform: translateY(0%);
+    }
+  }
+
+  ${({ animate }) =>
+    animate
+      ? `
+  animation-duration: 500ms;
+  animation-name: slide-modal-in;
+`
+      : ''}
+
   ${sizeRules}
 `
 
@@ -108,6 +126,7 @@ type ModalProps = {
   submitDisabled?: boolean
   renderFooter?: () => React.ReactNode
   headerCenterContent?: React.ReactNode
+  animate?: boolean
 }
 
 const Modal: React.FC<ModalProps> = ({
@@ -124,6 +143,7 @@ const Modal: React.FC<ModalProps> = ({
   renderFooter,
   banner,
   headerCenterContent,
+  animate = false,
   submitDisabled = false,
   size = 'big',
 }) => {
@@ -254,6 +274,7 @@ const Modal: React.FC<ModalProps> = ({
           size={size}
           direction="column"
           onClick={(e: MouseEvent) => e.stopPropagation()}
+          animate={animate}
         >
           {size !== 'small' && (
             <Container

@@ -40,6 +40,7 @@ Wide.args = {
   titleText: 'Wide ol modal',
   submitText: 'Submit',
   cancelText: 'Cancel',
+  animate: true,
 }
 
 export const Long = Template.bind({})
