@@ -66,7 +66,7 @@ const sizeRules = ({ size }: WrapperProps) => {
   }
 }
 
-const ModalWrapper = styled(Container) <WrapperProps>`
+const ModalWrapper = styled(Container)<WrapperProps>`
   background-color: ${colors.white};
   box-shadow: 0px 16px 24px rgba(41, 40, 39, 0.1);
 
@@ -107,6 +107,7 @@ type ModalProps = {
   onDismiss?: () => any
   submitDisabled?: boolean
   renderFooter?: () => React.ReactNode
+  headerCenterContent?: React.ReactNode
 }
 
 const Modal: React.FC<ModalProps> = ({
@@ -122,6 +123,7 @@ const Modal: React.FC<ModalProps> = ({
   children,
   renderFooter,
   banner,
+  headerCenterContent,
   submitDisabled = false,
   size = 'big',
 }) => {
@@ -232,8 +234,8 @@ const Modal: React.FC<ModalProps> = ({
           {titleText}
         </TitleComponent>
       ) : (
-          (size === 'small' || headerBorder) && <Div pb={3} />
-        )}
+        (size === 'small' || headerBorder) && <Div pb={3} />
+      )}
       {children}
       {inlineFooterContents}
     </>
@@ -257,34 +259,51 @@ const Modal: React.FC<ModalProps> = ({
             <Container
               px={3}
               py={2}
-              align="center"
-              style={{ flexWrap: 'nowrap' }}
+              wrap={false}
               bb={headerBorder}
+              justify={headerCenterContent ? 'space-between' : 'flex-start'}
+              align="center"
             >
-              <IconButton
-                icon={back ? 'back' : 'close'}
-                name="Close"
-                onClick={dismiss}
-              />
-              {!back && size === 'full' && !isMobileViewport && (
-                <Div onClick={dismiss} style={{ cursor: 'pointer' }} pl={1}>
-                  <P>Close</P>
-                </Div>
-              )}
-              {back && (
-                <Div onClick={dismiss} style={{ cursor: 'pointer' }} pl={1}>
-                  <P>Back</P>
-                </Div>
-              )}
+              <Container
+                align="center"
+                justify="flex-start"
+                style={{
+                  overflow: 'hidden',
+                  ...(headerCenterContent && { width: '30%' }),
+                }}
+                wrap={false}
+              >
+                <IconButton
+                  icon={back ? 'back' : 'close'}
+                  name="Close"
+                  onClick={dismiss}
+                />
+                {!back && size === 'full' && !isMobileViewport && (
+                  <Div onClick={dismiss} style={{ cursor: 'pointer' }} pl={1}>
+                    <P>Close</P>
+                  </Div>
+                )}
+                {back && (
+                  <Div onClick={dismiss} style={{ cursor: 'pointer' }} pl={1}>
+                    <P>Back</P>
+                  </Div>
+                )}
 
-              {titleText && (
-                <AnimateH3
-                  weight={600}
-                  pl={3}
-                  style={{ opacity: titleVisible ? 1 : 0 }}
-                >
-                  {titleText}
-                </AnimateH3>
+                {titleText && (
+                  <AnimateH3
+                    weight={600}
+                    pl={3}
+                    style={{ opacity: titleVisible ? 1 : 0 }}
+                  >
+                    {titleText}
+                  </AnimateH3>
+                )}
+              </Container>
+              {headerCenterContent && (
+                <>
+                  <Container center>{headerCenterContent}</Container>
+                  <Container style={{ width: '30%' }}></Container>
+                </>
               )}
             </Container>
           )}
@@ -293,8 +312,8 @@ const Modal: React.FC<ModalProps> = ({
             {size === 'full' ? (
               <LayoutWrapper>{inner}</LayoutWrapper>
             ) : (
-                <Div px={3}>{inner}</Div>
-              )}
+              <Div px={3}>{inner}</Div>
+            )}
           </Contents>
           {footer}
         </ModalWrapper>
