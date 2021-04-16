@@ -127,6 +127,7 @@ type ModalProps = {
   renderFooter?: () => React.ReactNode
   headerCenterContent?: React.ReactNode
   animate?: boolean
+  noPadding?: boolean
 }
 
 const Modal: React.FC<ModalProps> = ({
@@ -143,6 +144,7 @@ const Modal: React.FC<ModalProps> = ({
   renderFooter,
   banner,
   headerCenterContent,
+  noPadding = false,
   animate = false,
   submitDisabled = false,
   size = 'big',
@@ -330,10 +332,10 @@ const Modal: React.FC<ModalProps> = ({
           )}
           <Contents ref={scrollRegionRef}>
             {banner ? banner : null}
-            {size === 'full' ? (
+            {size === 'full' && !noPadding ? (
               <LayoutWrapper>{inner}</LayoutWrapper>
             ) : (
-              <Div px={3}>{inner}</Div>
+              <Div px={noPadding ? 0 : 3}>{inner}</Div>
             )}
           </Contents>
           {footer}
