@@ -69,6 +69,7 @@ export const DatePicker = ({
         onClick={(_) => setPickerVisible(true)}
         {...rest}
         onChange={(e) => dateChanged(e.target.value)}
+        readOnly
         value={value ? value.toFormat('MM / dd / yyyy') : ''}
         placeholder="MM / DD / YYYY"
         ref={inputRef}
