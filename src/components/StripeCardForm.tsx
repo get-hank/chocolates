@@ -246,6 +246,7 @@ const StripeCardForm = ({
               autoComplete="postal-code"
               onChange={updateField}
               placeholder="12345"
+              inputmode="numeric"
               required
               error={
                 errors['zipcode'] ||
