@@ -1,8 +1,24 @@
 import React, { useState } from 'react'
+import styled from 'styled-components'
 import { DateTime } from 'luxon'
 import CalendarPicker from '../CalendarPicker'
 import { InputStyle, _InputProps } from './Input'
 import { isMobileViewport } from '../../util/layout'
+
+const PickerWrapper = styled.div`
+  .mobile-picker {
+    position: fixed;
+    left: 0;
+    right: 0;
+    width: 100%;
+
+    .react-calendar__tile,
+    .react-calendar__navigation__arrow {
+      height: 2.5rem;
+      width: 2.5rem;
+    }
+  }
+`
 
 export type DatePickerProps = _InputProps & {
   onDateChange: (d: DateTime) => any
@@ -42,7 +58,6 @@ export const DatePicker = ({
     }
   }
 
-  const showPicker = !mobileViewport && pickerVisible
   const { minDate, maxDate } = pickerProps
 
   return (
@@ -50,35 +65,23 @@ export const DatePicker = ({
       <input
         onFocus={(_) => setPickerVisible(true)}
         onClick={(_) => setPickerVisible(true)}
+        {...rest}
         onChange={(e) => dateChanged(e.target.value)}
-        value={
-          mobileViewport
-            ? value
-              ? value.toFormat('yyyy-MM-dd')
-              : ''
-            : value
-            ? value.toFormat('MM / dd / yyyy')
-            : ''
-        }
-        placeholder={!mobileViewport && 'MM / DD / YYYY'}
-        {...{
-          ...rest,
-          ...(mobileViewport &&
-            minDate && { min: minDate.toFormat('yyyy-MM-dd') }),
-          ...(mobileViewport &&
-            maxDate && { max: maxDate.toFormat('yyyy-MM-dd') }),
-        }}
-        type={mobileViewport ? 'date' : 'text'}
+        value={value ? value.toFormat('MM / dd / yyyy') : ''}
+        placeholder="MM / DD / YYYY"
       />
-      {showPicker ? (
-        <CalendarPicker
-          minDetail="month"
-          defaultValue={value ? new Date(value.valueOf()) : null}
-          minDate={minDate ? new Date(minDate.valueOf()) : null}
-          maxDate={maxDate ? new Date(maxDate.valueOf()) : null}
-          onChange={dateChanged}
-          onDismiss={() => setPickerVisible(false)}
-        />
+      {pickerVisible ? (
+        <PickerWrapper>
+          <CalendarPicker
+            pickerClassName={mobileViewport ? 'mobile-picker' : ''}
+            minDetail="month"
+            defaultValue={value ? new Date(value.valueOf()) : null}
+            minDate={minDate ? new Date(minDate.valueOf()) : null}
+            maxDate={maxDate ? new Date(maxDate.valueOf()) : null}
+            onChange={dateChanged}
+            onDismiss={() => setPickerVisible(false)}
+          />
+        </PickerWrapper>
       ) : null}
     </InputStyle>
   )

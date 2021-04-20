@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react'
+import React from 'react'
 import styled from 'styled-components'
 import Calendar from 'react-calendar'
 import type { CalendarProps } from 'react-calendar'
@@ -93,16 +93,16 @@ const StyledCalendar = styled.div`
         display: flex;
         justify-content: center;
         align-items: center;
+      }
 
-        &:hover {
-          cursor: pointer;
-          background-color: ${({ theme }) => theme.colors.primary};
-          color: white;
-        }
+      &:not([disabled]) abbr:hover {
+        cursor: pointer;
+        background-color: ${({ theme }) => theme.colors.primary};
+        color: white;
       }
     }
 
-    .react-calendar__tile--now abbr {
+    .react-calendar__tile--now:not([disabled]) abbr {
       background-color: ${({ theme }) => theme.colors.grayBorder};
     }
 
@@ -135,26 +135,26 @@ const CalendarPicker = ({
   overlayClassName,
   ...calendarProps
 }: CalendarPickerProps) => (
-    <StyledCalendar>
-      <Overlay
-        onClick={(e) => {
-          e.stopPropagation()
-          onDismiss && onDismiss()
-        }}
-        {...(overlayClassName && { className: overlayClassName })}
-      />
-      <Calendar
-        locale="en-US"
-        next2Label={null}
-        prev2Label={null}
-        prevLabel={<IconButton noButton icon="left" />}
-        nextLabel={<IconButton noButton icon="right" />}
-        formatShortWeekday={(locale, date) => toDow(date)}
-        formatMonth={(locale, date) => format(date, 'MMM')}
-        {...(pickerClassName && { className: pickerClassName })}
-        {...calendarProps}
-      />
-    </StyledCalendar>
-  )
+  <StyledCalendar>
+    <Overlay
+      onClick={(e) => {
+        e.stopPropagation()
+        onDismiss && onDismiss()
+      }}
+      {...(overlayClassName && { className: overlayClassName })}
+    />
+    <Calendar
+      locale="en-US"
+      next2Label={null}
+      prev2Label={null}
+      prevLabel={<IconButton noButton icon="left" />}
+      nextLabel={<IconButton noButton icon="right" />}
+      formatShortWeekday={(locale, date) => toDow(date)}
+      formatMonth={(locale, date) => format(date, 'MMM')}
+      {...(pickerClassName && { className: pickerClassName })}
+      {...calendarProps}
+    />
+  </StyledCalendar>
+)
 
 export default CalendarPicker
