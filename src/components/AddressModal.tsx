@@ -87,24 +87,18 @@ const AddressModal = ({
       address && address.userId ? address.userId : userId
     }/addresses`
 
-    const { body, error } = await request({
+    const { body, error, fieldErrors } = await request({
       path: address ? `${path}/${address.resourceId}` : path,
       method: address ? 'put' : 'post',
       body: addressEdits,
     })
 
-    if (!error) {
-      dismiss()
+    if (error) {
+      console.error('Unexpected response updating address', body, error.message)
+    } else if (fieldErrors) {
+      setErrors(fieldErrors)
     } else {
-      if (body && body.errors) {
-        setErrors(body.errors as { [field: string]: string })
-      } else {
-        console.error(
-          'Unexpected response updating address',
-          body,
-          error.message
-        )
-      }
+      dismiss()
     }
 
     setSubmitting(false)
