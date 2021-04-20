@@ -61,7 +61,13 @@ export const DatePicker = ({
             : ''
         }
         placeholder={!mobileViewport && 'MM / DD / YYYY'}
-        {...rest}
+        {...{
+          ...rest,
+          ...(mobileViewport &&
+            minDate && { min: minDate.toFormat('yyyy-MM-dd') }),
+          ...(mobileViewport &&
+            maxDate && { max: maxDate.toFormat('yyyy-MM-dd') }),
+        }}
         type={mobileViewport ? 'date' : 'text'}
       />
       {showPicker ? (
