@@ -22,7 +22,7 @@ export const Radio = RadioInput
 export const DatePicker = DatePickerInput
 export const TimePicker = TimePickerInput
 
-const TextAreaStyle = styled(Div) <InputProps>`
+const TextAreaStyle = styled(Div)<InputProps>`
   textarea {
     ${inputStyle}
     line-height: 150%;
@@ -36,14 +36,14 @@ export const TextArea = ({
   styledProps?: InputProps
   nativeProps: TextareaHTMLAttributes<HTMLTextAreaElement>
 }) => (
-    <TextAreaStyle {...styledProps}>
-      <textarea {...nativeProps} />
-    </TextAreaStyle>
-  )
+  <TextAreaStyle {...styledProps}>
+    <textarea {...nativeProps} />
+  </TextAreaStyle>
+)
 
 export const Label = styled.label<
   TextProps & LabelHTMLAttributes<HTMLLabelElement>
-  >`
+>`
   font-family: ${({ theme }) => theme.typography.baseType};
   ${rulesForTextProps}
 `
@@ -51,7 +51,7 @@ export const Label = styled.label<
 type FormFieldWrapperProps = ContainerProps & {
   fillBg?: boolean
 }
-const FieldWrapper = styled(Container) <FormFieldWrapperProps>`
+const FieldWrapper = styled(Container)<FormFieldWrapperProps>`
   ${({ fillBg }) => (fillBg ? `background-color: ${colors.gray50};` : '')}
   border-radius: 8px;
 `
@@ -68,14 +68,15 @@ type FieldProps = Omit<FormFieldWrapperProps, 'onChange'> & {
   autoComplete?: string
   help?: string
   inputType?:
-  | 'text'
-  | 'multiLineText'
-  | 'select'
-  | 'checkbox'
-  | 'radio'
-  | 'date'
-  | 'time'
-  | 'none'
+    | 'text'
+    | 'multiLineText'
+    | 'select'
+    | 'checkbox'
+    | 'radio'
+    | 'date'
+    | 'time'
+    | 'none'
+  inputmode?: string
   fillBg?: boolean
   error?: boolean | string | null
   disabled?: boolean
@@ -104,12 +105,14 @@ export const FormField: React.FC<FieldProps> = ({
   pickerProps,
   containerProps,
   required = false,
+  inputmode,
   ...wrapperProps
 }) => {
   const baseNativeProps = {
     disabled,
     placeholder,
     autoComplete,
+    inputmode,
     onChange: (e: any) =>
       onChange && onChange({ field, value: e.target.value }),
     name: field,
@@ -177,11 +180,11 @@ export const FormField: React.FC<FieldProps> = ({
             {children ? (
               children
             ) : (
-                <Label>
-                  {requiredPrefix}
-                  {label}
-                </Label>
-              )}
+              <Label>
+                {requiredPrefix}
+                {label}
+              </Label>
+            )}
           </Checkbox>
         </Container>
       ) : null}
@@ -200,11 +203,11 @@ export const FormField: React.FC<FieldProps> = ({
             {children ? (
               children
             ) : (
-                <Label>
-                  {requiredPrefix}
-                  {label}
-                </Label>
-              )}
+              <Label>
+                {requiredPrefix}
+                {label}
+              </Label>
+            )}
           </Radio>
         </Container>
       ) : null}
