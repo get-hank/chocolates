@@ -25,6 +25,7 @@ const Overlay = styled(Container)`
 type WrapperProps = React.ComponentProps<typeof Container> & {
   size: 'big' | 'small' | 'full'
   animate: boolean
+  animateDelay?: string
 }
 
 const bigWidth = '576px'
@@ -83,11 +84,12 @@ const ModalWrapper = styled(Container)<WrapperProps>`
     }
   }
 
-  ${({ animate }) =>
+  ${({ animate, animateDelay }) =>
     animate
       ? `
   animation-duration: 500ms;
   animation-name: slide-modal-in;
+  animation-delay: ${animateDelay || '0s'};
 `
       : ''}
 
@@ -127,6 +129,7 @@ type ModalProps = {
   renderFooter?: () => React.ReactNode
   headerCenterContent?: React.ReactNode
   animate?: boolean
+  animateDelay?: string
   noPadding?: boolean
 }
 
@@ -146,6 +149,7 @@ const Modal: React.FC<ModalProps> = ({
   headerCenterContent,
   noPadding = false,
   animate = false,
+  animateDelay,
   submitDisabled = false,
   size = 'big',
 }) => {
@@ -276,7 +280,7 @@ const Modal: React.FC<ModalProps> = ({
           size={size}
           direction="column"
           onClick={(e: MouseEvent) => e.stopPropagation()}
-          animate={animate}
+          {...{ animate, animateDelay }}
         >
           {size !== 'small' && (
             <Container
