@@ -26,9 +26,7 @@ const StyledCalendar = styled.div`
     position: absolute;
     background-color: white;
     border: 1px solid ${({ theme }) => theme.colors.grayBorder};
-    border-top: none;
-    border-bottom-left-radius: 8px;
-    border-bottom-right-radius: 8px;
+    border-radius: 8px;
     box-shadow: 0px 8px 8px rgba(41, 40, 39, 0.1);
 
     .react-calendar__navigation__arrow {

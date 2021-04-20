@@ -6,6 +6,15 @@ import { InputStyle, _InputProps } from './Input'
 import { isMobileViewport } from '../../util/layout'
 
 const PickerWrapper = styled.div<{ inputLeftPx: number; inputRightPx: number }>`
+  .picker {
+    margin-top: 4px;
+
+    button,
+    abbr {
+      font-size: 14px;
+    }
+  }
+
   .mobile-picker {
     position: absolute;
     top: 0;
@@ -82,7 +91,7 @@ export const DatePicker = ({
           }
         >
           <CalendarPicker
-            pickerClassName={mobileViewport ? 'mobile-picker' : ''}
+            pickerClassName={mobileViewport ? 'picker mobile-picker' : 'picker'}
             minDetail="month"
             defaultValue={value ? new Date(value.valueOf()) : null}
             minDate={minDate ? new Date(minDate.valueOf()) : null}
