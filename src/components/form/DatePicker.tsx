@@ -1,16 +1,17 @@
-import React, { useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
 import { DateTime } from 'luxon'
 import CalendarPicker from '../CalendarPicker'
 import { InputStyle, _InputProps } from './Input'
 import { isMobileViewport } from '../../util/layout'
 
-const PickerWrapper = styled.div`
+const PickerWrapper = styled.div<{ inputLeftPx: number; inputRightPx: number }>`
   .mobile-picker {
-    position: fixed;
-    left: 0;
-    right: 0;
-    width: 100%;
+    position: absolute;
+    top: 0;
+    left: -${({ inputLeftPx }) => inputLeftPx}px;
+    right: -${({ inputRightPx }) => inputRightPx}px;
+    width: 100vw;
 
     .react-calendar__tile,
     .react-calendar__navigation__arrow {
@@ -40,6 +41,7 @@ export const DatePicker = ({
   )
   const [pickerVisible, setPickerVisible] = useState(false)
   const mobileViewport = isMobileViewport()
+  const inputRef = useRef(null)
 
   const dateChanged = (newDate: Date[] | Date | string) => {
     const newDateLuxon =
@@ -69,9 +71,15 @@ export const DatePicker = ({
         onChange={(e) => dateChanged(e.target.value)}
         value={value ? value.toFormat('MM / dd / yyyy') : ''}
         placeholder="MM / DD / YYYY"
+        ref={inputRef}
       />
-      {pickerVisible ? (
-        <PickerWrapper>
+      {pickerVisible && inputRef.current && (
+        <PickerWrapper
+          inputLeftPx={inputRef.current.offsetLeft}
+          inputRightPx={
+            inputRef.current.offsetLeft + inputRef.current.offsetWidth
+          }
+        >
           <CalendarPicker
             pickerClassName={mobileViewport ? 'mobile-picker' : ''}
             minDetail="month"
@@ -82,7 +90,7 @@ export const DatePicker = ({
             onDismiss={() => setPickerVisible(false)}
           />
         </PickerWrapper>
-      ) : null}
+      )}
     </InputStyle>
   )
 }
