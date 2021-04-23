@@ -81,7 +81,11 @@ export const DatePicker = ({
   const { minDate, maxDate } = pickerProps
 
   return (
-    <InputStyle {...styledProps} style={{ position: 'relative' }}>
+    <InputStyle
+      {...styledProps}
+      style={{ position: 'relative' }}
+      ref={inputRef}
+    >
       <input
         style={{ paddingLeft: '1.75rem', cursor: 'pointer' }}
         onFocus={(_) => setPickerVisible(true)}
@@ -91,7 +95,6 @@ export const DatePicker = ({
         readOnly
         value={value ? value.toFormat('ccc LLL d') : ''}
         placeholder="Select a date"
-        ref={inputRef}
       />
       <CalendarIcon style={{ pointerEvents: 'none' }}>
         <Calendar color={colors.gray800} />
