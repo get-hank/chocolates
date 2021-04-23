@@ -2,8 +2,10 @@ import React, { useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
 import { DateTime } from 'luxon'
 import CalendarPicker from '../CalendarPicker'
+import { Calendar } from '../../icons'
 import { InputStyle, _InputProps } from './Input'
 import { isMobileViewport } from '../../util/layout'
+import { colors } from '../../util/colors'
 
 const PickerWrapper = styled.div<{ inputLeftPx: number; inputRightPx: number }>`
   .picker {
@@ -28,6 +30,13 @@ const PickerWrapper = styled.div<{ inputLeftPx: number; inputRightPx: number }>`
       width: 2.5rem;
     }
   }
+`
+
+const CalendarIcon = styled.span`
+  pointer-events: none;
+  position: absolute;
+  left: 9px;
+  top: 9px;
 `
 
 export type DatePickerProps = _InputProps & {
@@ -72,17 +81,21 @@ export const DatePicker = ({
   const { minDate, maxDate } = pickerProps
 
   return (
-    <InputStyle {...styledProps}>
+    <InputStyle {...styledProps} style={{ position: 'relative' }}>
       <input
+        style={{ paddingLeft: '1.75rem', cursor: 'pointer' }}
         onFocus={(_) => setPickerVisible(true)}
         onClick={(_) => setPickerVisible(true)}
         {...rest}
         onChange={(e) => dateChanged(e.target.value)}
         readOnly
-        value={value ? value.toFormat('MM / dd / yyyy') : ''}
-        placeholder="MM / DD / YYYY"
+        value={value ? value.toFormat('ccc LLL d') : ''}
+        placeholder="Select a date"
         ref={inputRef}
       />
+      <CalendarIcon style={{ pointerEvents: 'none' }}>
+        <Calendar color={colors.gray800} />
+      </CalendarIcon>
       {pickerVisible && inputRef.current && (
         <PickerWrapper
           inputLeftPx={inputRef.current.offsetLeft}

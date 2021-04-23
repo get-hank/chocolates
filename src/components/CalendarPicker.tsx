@@ -33,6 +33,11 @@ const StyledCalendar = styled.div`
       appearance: none;
       border: none;
       background: none;
+
+      &:disabled {
+        opacity: 0;
+        cursor: inherit;
+      }
     }
 
     .react-calendar__navigation__label:disabled {
