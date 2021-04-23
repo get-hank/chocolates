@@ -21,11 +21,6 @@ const questions = [
       'Hank organizes and manages the services your loved one needs to grow older at home. You or your loved one can schedule all of the meal deliveries, groceries, rides, and daily activities that they need to enjoy at home. Hank makes it easy to manage different services all in one place and is designed for older adults to use.',
   },
   {
-    q: 'How much does Hank cost?',
-    a:
-      'Hank costs $19.99 per month per family to use. Any services that you order (such as meal delivery or home cleaning) are provided at cost with no extra charges.',
-  },
-  {
     q: 'Which areas do you serve?',
     a:
       'We provide service in all 50 states. Availability of specific services varies by region. Please sign up to check service availability in your area.',
