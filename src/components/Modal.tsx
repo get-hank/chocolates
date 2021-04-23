@@ -76,10 +76,15 @@ const ModalWrapper = styled(Container)<WrapperProps>`
   overflow: hidden;
 
   @keyframes slide-modal-in {
-    from {
+    0% {
+      opacity: 0;
+    }
+    1% {
+      opacity: 1;
       transform: translateY(200%);
     }
-    to {
+    100% {
+      opacity: 1;
       transform: translateY(0%);
     }
   }
@@ -89,6 +94,7 @@ const ModalWrapper = styled(Container)<WrapperProps>`
       ? `
   animation-duration: 500ms;
   animation-name: slide-modal-in;
+  animation-fill-mode: both;
   animation-delay: ${animateDelay || '0s'};
 `
       : ''}
