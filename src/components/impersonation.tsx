@@ -44,7 +44,7 @@ export const ImpersonationModule = ({
 
   return (
     <Footer>
-      <Container align="center" justify="space-between" px={3} py={2}>
+      <Container align="center" justify="space-between" px={3} py={1}>
         <Item
           cols={isNarrow ? 12 : 6}
           pb={isNarrow ? 2 : 0}
