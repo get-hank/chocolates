@@ -29,13 +29,14 @@ export const impersonate = (
     setSessionKey({
       name: impersonateKey,
       value: userId,
-      expireAt: DateTime.local().plus({ minutes: 10 }),
+      expireAt: DateTime.local().plus({ minutes: 30 }),
     })
   } else {
     setCookie({
       name: impersonateKey,
       value: userId,
-      expiresInSeconds: 600,
+      // 30 minutes
+      expiresInSeconds: 30 * 60,
       ...getHostInfo(apiBase),
     })
   }
