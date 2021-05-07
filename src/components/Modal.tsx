@@ -179,7 +179,9 @@ const Modal: React.FC<ModalProps> = ({
     const oldOverflow = body.style.overflow
     body.style.overflow = 'hidden'
 
-    return () => (document.querySelector('body').style.overflow = oldOverflow)
+    return () => {
+      document.querySelector('body').style.overflow = oldOverflow
+    }
   }, [open])
 
   const { scrollRegionRef, watchElementRef: titleRef } = useScrollPosition(
