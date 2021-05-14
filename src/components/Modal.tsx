@@ -294,7 +294,7 @@ const Modal: React.FC<ModalProps> = ({
           {size === 'full' && (
             <PromoBanner>
               For a limited time, get 50% off all orders that you place through
-              Hank. Prices as marked.
+              Hank.
             </PromoBanner>
           )}
           {size !== 'small' && (
