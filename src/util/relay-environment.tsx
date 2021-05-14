@@ -1,5 +1,5 @@
-import { createContext, useContext, useEffect } from 'react'
-import { requestSubscription } from 'react-relay'
+import React, { createContext, useContext, useEffect } from 'react'
+import { RelayEnvironmentProvider, requestSubscription } from 'react-relay'
 import {
   Environment,
   Network,
@@ -8,15 +8,13 @@ import {
   SubscribeFunction,
 } from 'relay-runtime'
 import { defaultHeaders } from './api'
-import { useApiTokensWithReady } from './api-token'
+import { useApiTokens } from './api-token'
 
 // cannot use destructured import because of https://github.com/rails/rails/issues/35501
 import { createSubscriptionHandler } from './relay-environment/subscription-handler'
 
 export const useRelayEnvironment = (apiBase: string) => {
-  const { ready, ...apiTokens } = useApiTokensWithReady(apiBase)
-  if (!ready) return null
-
+  const apiTokens = useApiTokens(apiBase)
   const headers = defaultHeaders(apiTokens)
 
   const fetchQuery = (operation: any, variables: any) => {
@@ -88,4 +86,16 @@ export const useSubscription = ({
       sub.dispose()
     }
   }, [relayEnv, subscription, variables, ready, callback])
+}
+
+export const WithRelayEnv: React.FC<{ apiBase: string }> = ({
+  apiBase,
+  children,
+}) => {
+  const relayEnv = useRelayEnvironment(apiBase)
+  return (
+    <RelayEnvironmentProvider environment={relayEnv}>
+      {children}
+    </RelayEnvironmentProvider>
+  )
 }
