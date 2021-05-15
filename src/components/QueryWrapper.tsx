@@ -1,9 +1,5 @@
 import React, { createContext, useEffect, useState } from 'react'
-import { QueryRenderer, FetchPolicy } from 'react-relay'
-import {
-  useRelayEnvironment,
-  RelayEnvironmentContext,
-} from '../util/relay-environment'
+import { QueryRenderer, useRelayEnvironment, FetchPolicy } from 'react-relay'
 
 type QueryWrapperProps = {
   // todo: graphql query type?
@@ -21,7 +17,7 @@ type RenderedQueryContainerProps = Parameters<renderType>[0] & {
 
 type QueryContextType = { reload: () => void }
 export const RelayQueryContext = createContext<QueryContextType>({
-  reload: () => { },
+  reload: () => {},
 })
 
 const RenderedQueryContainer = ({
@@ -51,22 +47,19 @@ const QueryWrapper: React.FC<QueryWrapperProps> = ({
   query,
   variables = {},
   render,
-  apiBase,
   fetchPolicy = 'network-only',
 }) => {
-  const relayEnv = useRelayEnvironment(apiBase)
+  const relayEnv = useRelayEnvironment()
   if (!relayEnv) return null
 
   return (
-    <RelayEnvironmentContext.Provider value={relayEnv}>
-      <QueryRenderer
-        environment={relayEnv}
-        query={query}
-        variables={variables}
-        render={(args) => <RenderedQueryContainer {...args} render={render} />}
-        fetchPolicy={fetchPolicy}
-      />
-    </RelayEnvironmentContext.Provider>
+    <QueryRenderer
+      environment={relayEnv}
+      query={query}
+      variables={variables}
+      render={(args) => <RenderedQueryContainer {...args} render={render} />}
+      fetchPolicy={fetchPolicy}
+    />
   )
 }
 

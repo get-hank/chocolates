@@ -1,5 +1,9 @@
-import React, { createContext, useContext, useEffect } from 'react'
-import { RelayEnvironmentProvider, requestSubscription } from 'react-relay'
+import React, { createContext, useEffect } from 'react'
+import {
+  RelayEnvironmentProvider,
+  requestSubscription,
+  useRelayEnvironment,
+} from 'react-relay'
 import {
   Environment,
   Network,
@@ -8,26 +12,26 @@ import {
   SubscribeFunction,
 } from 'relay-runtime'
 import { defaultHeaders } from './api'
-import { useApiTokens } from './api-token'
+import { useApiTokensWithReady } from './api-token'
 
 // cannot use destructured import because of https://github.com/rails/rails/issues/35501
 import { createSubscriptionHandler } from './relay-environment/subscription-handler'
 
-export const useRelayEnvironment = (apiBase: string) => {
-  const apiTokens = useApiTokens(apiBase)
+export const useInitialRelayEnvironment = (apiBase: string) => {
+  const { ready, ...apiTokens } = useApiTokensWithReady(apiBase)
+  if (!ready) return null
   const headers = defaultHeaders(apiTokens)
 
-  const fetchQuery = (operation: any, variables: any) => {
-    return fetch(`${apiBase}/graphql`, {
+  const fetchQuery = async (operation: any, variables: any) => {
+    const response = await fetch(`${apiBase}/graphql`, {
       headers,
       method: 'POST',
       body: JSON.stringify({
         query: operation.text,
         variables,
       }),
-    }).then((response) => {
-      return response.json()
     })
+    return response.json()
   }
 
   let subUrl = `${apiBase}/cable?auth_token=${apiTokens.auth0Token}`
@@ -37,14 +41,13 @@ export const useRelayEnvironment = (apiBase: string) => {
     // @ts-ignore
     network: Network.create(
       fetchQuery,
-      (createSubscriptionHandler(subUrl) as unknown) as SubscribeFunction
+      apiTokens.auth0Token
+        ? ((createSubscriptionHandler(subUrl) as unknown) as SubscribeFunction)
+        : undefined
     ),
     store: new Store(new RecordSource()),
   })
 }
-
-export const RelayEnvironmentContext = createContext<Environment | null>(null)
-RelayEnvironmentContext.displayName = 'RelayEnvironmentContext'
 
 type useSubscriptionArgs = {
   // TODO: graphql type?
@@ -60,7 +63,7 @@ export const useSubscription = ({
   variables,
   ready = true,
 }: useSubscriptionArgs) => {
-  const relayEnv = useContext(RelayEnvironmentContext)
+  const relayEnv = useRelayEnvironment()
 
   useEffect(() => {
     if (!relayEnv) {
@@ -92,7 +95,7 @@ export const WithRelayEnv: React.FC<{ apiBase: string }> = ({
   apiBase,
   children,
 }) => {
-  const relayEnv = useRelayEnvironment(apiBase)
+  const relayEnv = useInitialRelayEnvironment(apiBase)
   return (
     <RelayEnvironmentProvider environment={relayEnv}>
       {children}
