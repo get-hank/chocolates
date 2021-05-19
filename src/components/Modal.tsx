@@ -6,8 +6,7 @@ import { DefaultThemeProvider } from './theme'
 import { colors } from '../util/colors'
 import { useBreakpoint } from '../util/hooks'
 import { useScrollPosition } from '../util/scroll'
-import { Container, LayoutWrapper } from './grid'
-import PromoBanner from './PromoBanner'
+import { Container, Item, LayoutWrapper } from './grid'
 import { Div } from './spacing'
 import { H2, H3, P } from './typography'
 import Button from './Button'
@@ -291,12 +290,6 @@ const Modal: React.FC<ModalProps> = ({
           onClick={(e: MouseEvent) => e.stopPropagation()}
           {...{ animate, animateDelay }}
         >
-          {size === 'full' && (
-            <PromoBanner>
-              For a limited time, get 50% off all orders that you place through
-              Hank. Prices as marked.
-            </PromoBanner>
-          )}
           {size !== 'small' && (
             <Container
               px={3}
