@@ -19,6 +19,7 @@ export * from './components/theme'
 export * from './components/typography'
 
 export * from './util/cookies'
+export * from './util/debounce'
 export * from './util/hooks'
 export * from './util/layout'
 export * from './util/colors'
