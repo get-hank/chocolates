@@ -76,7 +76,7 @@ type FieldProps = Omit<FormFieldWrapperProps, 'onChange'> & {
     | 'date'
     | 'time'
     | 'none'
-  inputmode?: string
+  inputMode?: string
   fillBg?: boolean
   error?: boolean | string | null
   disabled?: boolean
@@ -105,14 +105,14 @@ export const FormField: React.FC<FieldProps> = ({
   pickerProps,
   containerProps,
   required = false,
-  inputmode,
+  inputMode,
   ...wrapperProps
 }) => {
   const baseNativeProps = {
     disabled,
     placeholder,
     autoComplete,
-    inputmode,
+    inputMode,
     onChange: (e: any) =>
       onChange && onChange({ field, value: e.target.value }),
     name: field,

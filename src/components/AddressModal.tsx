@@ -216,7 +216,7 @@ const AddressModal = ({
               label="Zip code"
               placeholder="Ex: 12345"
               autoComplete="postal-code"
-              inputmode="numeric"
+              inputMode="numeric"
               onChange={updateField}
               error={
                 errors['zipcode'] ||
