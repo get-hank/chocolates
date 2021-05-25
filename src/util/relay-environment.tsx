@@ -22,27 +22,26 @@ export const useInitialRelayEnvironment = (apiBase: string) => {
   if (!ready) return null
   const headers = defaultHeaders(apiTokens)
 
-  const fetchQuery = async (operation: any, variables: any) => {
-    const response = await fetch(`${apiBase}/graphql`, {
-      headers,
-      method: 'POST',
-      body: JSON.stringify({
-        query: operation.text,
-        variables,
-      }),
-    })
-    return response.json()
-  }
-
   let subUrl = `${apiBase}/cable?auth_token=${apiTokens.auth0Token}`
   const impersonateId = headers['X-Impersonate-Id']
   if (impersonateId) subUrl = `${subUrl}&impersonate_id=${impersonateId}`
+
   return new Environment({
-    // @ts-ignore
     network: Network.create(
-      fetchQuery,
+      async (operation: any, variables: any) => {
+        const response = await fetch(`${apiBase}/graphql`, {
+          headers,
+          method: 'POST',
+          body: JSON.stringify({
+            id: operation.id,
+            query: operation.text,
+            variables,
+          }),
+        })
+        return response.json()
+      },
       apiTokens.auth0Token
-        ? ((createSubscriptionHandler(subUrl) as unknown) as SubscribeFunction)
+        ? (createSubscriptionHandler(subUrl) as unknown as SubscribeFunction)
         : undefined
     ),
     store: new Store(new RecordSource()),
