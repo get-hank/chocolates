@@ -1,22 +1,25 @@
-// @ts-nocheck
-import React, { ComponentProps } from "react";
-import { Story, Meta } from "@storybook/react/types-6-0";
-import { Container } from "../components/grid";
-import StripeCardForm from "../components/StripeCardForm";
-import { colors } from "../util/colors";
+import React, { ComponentProps } from 'react'
+import { Story, Meta } from '@storybook/react/types-6-0'
+import { Container } from '../components/grid'
+import StripeCardForm from '../components/StripeCardForm'
 
 export default {
-  title: "StripeCardForm",
+  title: 'StripeCardForm',
   component: StripeCardForm,
-} as Meta;
+} as Meta
 
 const Template: Story<ComponentProps<typeof StripeCardForm>> = (args) => (
   <Container center>
     <StripeCardForm {...args} />
   </Container>
-);
+)
 
-export const Standard = Template.bind({});
+export const Standard = Template.bind({})
 Standard.args = {
-  publishableKey: "pk_test_oeb0blKIHxA1LZLddd05HFN000lMyXCGDm",
-};
+  publishableKey: 'pk_test_oeb0blKIHxA1LZLddd05HFN000lMyXCGDm',
+}
+export const Modal = Template.bind({})
+Modal.args = {
+  ...Standard.args,
+  modal: true,
+}

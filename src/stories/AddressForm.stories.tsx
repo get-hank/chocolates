@@ -26,9 +26,19 @@ const Template: Story<ComponentProps<typeof AddressForm>> = (args) => {
 export const Standard = Template.bind({})
 export const CustomFooter = Template.bind({})
 CustomFooter.args = {
-  renderFooter: ({ submitting, submit }) => (
+  renderFooter: ({
+    submitDisabled,
+    submit,
+  }: {
+    submitDisabled: boolean
+    submit: () => void
+  }) => (
     <Div py={2}>
-      <Button disabled={submitting} onClick={submit} style={{ width: '100%' }}>
+      <Button
+        disabled={submitDisabled}
+        onClick={submit}
+        style={{ width: '100%' }}
+      >
         Custom Submit
       </Button>
     </Div>

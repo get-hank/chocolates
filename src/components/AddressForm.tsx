@@ -36,7 +36,7 @@ type AddressFormProps = {
   modal?: boolean
   modalProps?: Partial<React.ComponentProps<typeof Modal>>
   renderFooter?: (args: {
-    submitting: boolean
+    submitDisabled: boolean
     submit: () => void
   }) => React.ReactNode
 }
@@ -234,7 +234,7 @@ const AddressForm = ({
   )
 
   const footer = renderFooter ? (
-    renderFooter({ submit, submitting })
+    renderFooter({ submit, submitDisabled: !submitting })
   ) : (
     <>
       {!allFieldsFilled && showMissingFields && (

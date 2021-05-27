@@ -22,11 +22,16 @@ import { Lock } from '../icons'
 
 type StripeCardFormProps = {
   publishableKey: string
-  onSuccess: (source: Source) => any
-  onCancel: () => any
+  onSuccess: (source: Source) => void
+  onCancel: () => void
   loading?: boolean
   error?: string | null
   modalProps?: Partial<React.ComponentProps<typeof Modal>>
+  modal?: boolean
+  renderFooter?: (args: {
+    submitDisabled: boolean
+    submit: () => void
+  }) => React.ReactNode
 }
 
 const StripeInputWrapper = styled.div`
@@ -45,6 +50,8 @@ const StripeCardForm = ({
   loading,
   modalProps,
   error: parentError,
+  modal,
+  renderFooter,
 }: Omit<StripeCardFormProps, 'publishableKey'>) => {
   const theme = useContext(ThemeContext)
   const stripeElementOptions = {
@@ -134,142 +141,162 @@ const StripeCardForm = ({
     onSuccess(source)
   }
 
-  return (
-    <Modal
-      open={true}
-      titleText="Add new card"
-      onDismiss={onCancel}
-      {...modalProps}
-      renderFooter={() => (
-        <>
-          {!allFieldsFilled && showMissingFields && (
-            <Div pb={2}>
-              <Notice severity={severities.WARN}>
-                Please fill out the required fields above.
-              </Notice>
-            </Div>
-          )}
-          <Container justify="flex-end">
-            <Div pr={2}>
-              <Button secondary onClick={onCancel}>
-                Cancel
-              </Button>
-            </Div>
-            <Button disabled={!canSubmit} onClick={submit}>
-              Save card
-            </Button>
-          </Container>
-        </>
-      )}
-    >
-      <Container px={1} pb={4}>
-        <Item cols={12} pb={3}>
+  const contents = (
+    <>
+      <Item cols={12} pb={3}>
+        <FormField
+          label="Name on card"
+          field="name"
+          autoComplete="name"
+          onChange={updateField}
+          placeholder="Jane Doe"
+          required
+          error={
+            showMissingFields && !cardEdits.name && 'This field is required'
+          }
+        />
+      </Item>
+      <Item cols={12} pb={3}>
+        <FormField
+          label="Card number"
+          field="card"
+          inputType="none"
+          error={
+            errors['card'] ||
+            (showMissingFields && !cardEdits.card && 'This field is required')
+          }
+          required
+        >
+          <StripeInputWrapper>
+            <CardNumberElement
+              options={stripeElementOptions}
+              onChange={(e: any) => onStripeChange('card', e)}
+            />
+          </StripeInputWrapper>
+        </FormField>
+      </Item>
+      <Item cols={6} mdCols={12} pb={3}>
+        <PadRightMd>
           <FormField
-            label="Name on card"
-            field="name"
-            autoComplete="name"
-            onChange={updateField}
-            placeholder="Jane Doe"
+            label="Exp. date"
+            field="expiry"
+            inputType="none"
             required
             error={
-              showMissingFields && !cardEdits.name && 'This field is required'
+              errors['expiry'] ||
+              (showMissingFields &&
+                !cardEdits.expiry &&
+                'This field is required')
+            }
+          >
+            <StripeInputWrapper>
+              <CardExpiryElement
+                options={stripeElementOptions}
+                onChange={(e: any) => onStripeChange('expiry', e)}
+              />
+            </StripeInputWrapper>
+          </FormField>
+        </PadRightMd>
+      </Item>
+      <Item cols={6} mdCols={12} pb={3}>
+        <FormField
+          label="CVV"
+          field="cvv"
+          inputType="none"
+          required
+          error={
+            errors['cvv'] ||
+            (showMissingFields && !cardEdits.cvv && 'This field is required')
+          }
+        >
+          <StripeInputWrapper>
+            <CardCvcElement
+              options={stripeElementOptions}
+              onChange={(e: any) => onStripeChange('cvv', e)}
+            />
+          </StripeInputWrapper>
+        </FormField>
+      </Item>
+
+      <Item cols={6} mdCols={12} pb={3}>
+        <PadRightMd>
+          <FormField
+            label="Zipcode"
+            field="zipcode"
+            autoComplete="postal-code"
+            onChange={updateField}
+            placeholder="12345"
+            inputMode="numeric"
+            required
+            error={
+              errors['zipcode'] ||
+              (showMissingFields &&
+                !cardEdits.zipcode &&
+                'This field is required')
             }
           />
+        </PadRightMd>
+      </Item>
+      <Item cols={12} direction="row" align="center">
+        <Lock />
+        <P pl={1}>Your payment info will be stored securely</P>
+      </Item>
+      {error || parentError ? (
+        <Item cols={12}>
+          <P pt={2} error>
+            {error || parentError}
+          </P>
         </Item>
-        <Item cols={12} pb={3}>
-          <FormField
-            label="Card number"
-            field="card"
-            inputType="none"
-            error={
-              errors['card'] ||
-              (showMissingFields && !cardEdits.card && 'This field is required')
-            }
-            required
-          >
-            <StripeInputWrapper>
-              <CardNumberElement
-                options={stripeElementOptions}
-                onChange={(e: any) => onStripeChange('card', e)}
-              />
-            </StripeInputWrapper>
-          </FormField>
-        </Item>
-        <Item cols={6} mdCols={12} pb={3}>
-          <PadRightMd>
-            <FormField
-              label="Exp. date"
-              field="expiry"
-              inputType="none"
-              required
-              error={
-                errors['expiry'] ||
-                (showMissingFields &&
-                  !cardEdits.expiry &&
-                  'This field is required')
-              }
-            >
-              <StripeInputWrapper>
-                <CardExpiryElement
-                  options={stripeElementOptions}
-                  onChange={(e: any) => onStripeChange('expiry', e)}
-                />
-              </StripeInputWrapper>
-            </FormField>
-          </PadRightMd>
-        </Item>
-        <Item cols={6} mdCols={12} pb={3}>
-          <FormField
-            label="CVV"
-            field="cvv"
-            inputType="none"
-            required
-            error={
-              errors['cvv'] ||
-              (showMissingFields && !cardEdits.cvv && 'This field is required')
-            }
-          >
-            <StripeInputWrapper>
-              <CardCvcElement
-                options={stripeElementOptions}
-                onChange={(e: any) => onStripeChange('cvv', e)}
-              />
-            </StripeInputWrapper>
-          </FormField>
-        </Item>
+      ) : null}
+    </>
+  )
 
-        <Item cols={6} mdCols={12} pb={3}>
-          <PadRightMd>
-            <FormField
-              label="Zipcode"
-              field="zipcode"
-              autoComplete="postal-code"
-              onChange={updateField}
-              placeholder="12345"
-              inputMode="numeric"
-              required
-              error={
-                errors['zipcode'] ||
-                (showMissingFields &&
-                  !cardEdits.zipcode &&
-                  'This field is required')
-              }
-            />
-          </PadRightMd>
-        </Item>
-        <Item cols={12} direction="row" align="center">
-          <Lock />
-          <P pl={1}>Your payment info will be stored securely</P>
-        </Item>
-        {error || parentError ? (
-          <Item cols={12}>
-            <P pt={2} error>
-              {error || parentError}
-            </P>
-          </Item>
-        ) : null}
-      </Container>
-    </Modal>
+  const footer = (
+    <>
+      {!allFieldsFilled && showMissingFields && (
+        <Div pb={2}>
+          <Notice severity={severities.WARN}>
+            Please fill out the required fields above.
+          </Notice>
+        </Div>
+      )}
+      {renderFooter ? (
+        renderFooter({ submitDisabled: !canSubmit, submit })
+      ) : (
+        <Container justify="flex-end">
+          <Div pr={2}>
+            <Button secondary onClick={onCancel}>
+              Cancel
+            </Button>
+          </Div>
+          <Button disabled={!canSubmit} onClick={submit}>
+            Save card
+          </Button>
+        </Container>
+      )}
+    </>
+  )
+
+  if (modal)
+    return (
+      <Modal
+        open={true}
+        titleText="Add new card"
+        onDismiss={onCancel}
+        {...modalProps}
+        renderFooter={() => footer}
+      >
+        <Container px={1} pb={4}>
+          {contents}
+        </Container>
+      </Modal>
+    )
+
+  return (
+    <>
+      {contents}
+      {footer}
+    </>
   )
 }
 
@@ -278,9 +305,10 @@ const StripeCardFormWithContext = ({
   ...rest
 }: StripeCardFormProps) => {
   const [stripePromise, setStripePromise] = useState<any>(null)
-  useEffect(() => setStripePromise(loadStripe(publishableKey)), [
-    publishableKey,
-  ])
+  useEffect(
+    () => setStripePromise(loadStripe(publishableKey)),
+    [publishableKey]
+  )
 
   return (
     <Elements stripe={stripePromise}>
