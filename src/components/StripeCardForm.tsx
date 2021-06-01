@@ -22,7 +22,7 @@ import { Lock } from '../icons'
 
 type StripeCardFormProps = {
   publishableKey: string
-  onSuccess: (source: Source) => void
+  onSuccess?: (source: Source) => void
   onCancel: () => void
   loading?: boolean
   error?: string | null
@@ -30,7 +30,7 @@ type StripeCardFormProps = {
   modal?: boolean
   renderFooter?: (args: {
     submitDisabled: boolean
-    submit: () => void
+    submit: () => Promise<{ source?: Source; error?: Error }>
   }) => React.ReactNode
 }
 
@@ -110,10 +110,10 @@ const StripeCardForm = ({
   const submit = async () => {
     if (!allFieldsFilled) {
       setShowMissingFields(true)
-      return
+      return { error: new Error('Has invalid fields') }
     }
     if (!canSubmit) {
-      return
+      return { error: new Error('Stripe not loaded') }
     }
     setSubmitting(true)
 
@@ -133,12 +133,14 @@ const StripeCardForm = ({
 
     if (error) {
       setError(error.message)
-      return
+      return { error: new Error(error.message) }
     }
 
     setShowMissingFields(false)
     setSubmitting(false)
-    onSuccess(source)
+
+    onSuccess && onSuccess(source)
+    return { source }
   }
 
   const contents = (
