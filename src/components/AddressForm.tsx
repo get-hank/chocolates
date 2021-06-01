@@ -28,7 +28,7 @@ type AddressFormProps = {
   apiBase: string
   address?: Address
   userId?: string
-  done: () => void
+  done?: () => void
   states: {
     code: string
     name: string
@@ -37,7 +37,7 @@ type AddressFormProps = {
   modalProps?: Partial<React.ComponentProps<typeof Modal>>
   renderFooter?: (args: {
     submitDisabled: boolean
-    submit: () => void
+    submit: () => Promise<Error | null>
   }) => React.ReactNode
 }
 
@@ -85,7 +85,7 @@ const AddressForm = ({
   const submit = async () => {
     if (!allFieldsFilled) {
       setShowMissingFields(true)
-      return
+      return new Error('Incomplete fields')
     }
     if (submitting || !hasEdits) return
     setSubmitting(true)
@@ -100,16 +100,19 @@ const AddressForm = ({
       body: addressEdits,
     })
 
-    if (error) {
-      console.error('Unexpected response updating address', body, error.message)
-    } else if (fieldErrors) {
-      setErrors(fieldErrors)
-    } else {
-      done()
-    }
-
     setSubmitting(false)
     setShowMissingFields(false)
+
+    if (error) {
+      console.error('Unexpected response updating address', body, error.message)
+      return error
+    } else if (fieldErrors) {
+      setErrors(fieldErrors)
+      return new Error('Invalid fields')
+    }
+
+    done && done()
+    return null
   }
 
   const contents = (
@@ -247,7 +250,7 @@ const AddressForm = ({
       {modal ? (
         <Container justify="flex-end">
           <Div pr={2}>
-            <Button secondary onClick={done}>
+            <Button secondary onClick={done ? done : () => {}}>
               Cancel
             </Button>
           </Div>
@@ -270,7 +273,7 @@ const AddressForm = ({
       <Modal
         open
         titleText={address ? 'Edit address' : 'Add address'}
-        onDismiss={done}
+        onDismiss={done ? done : () => {}}
         {...modalProps}
         renderFooter={() => footer}
       >
