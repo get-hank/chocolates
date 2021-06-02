@@ -237,7 +237,7 @@ const AddressForm = ({
   )
 
   const footer = renderFooter ? (
-    renderFooter({ submit, submitDisabled: !submitting })
+    renderFooter({ submit, submitDisabled: submitting })
   ) : (
     <>
       {!allFieldsFilled && showMissingFields && (
