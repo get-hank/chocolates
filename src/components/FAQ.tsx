@@ -7,59 +7,48 @@ import { space } from '../util/layout'
 const questions = [
   {
     q: 'Is Hank a retirement home?',
-    a:
-      'Hank is not a retirement home, but rather a new option for senior living. We empower people to grow older in the homes that they already love by providing the services that are typically found in retirement communities.',
+    a: 'Hank is not a retirement home, but rather a new option for senior living. We empower people to grow older in the homes that they already love by providing the services that are typically found in retirement communities.',
   },
   {
     q: 'How can I contact you?',
-    a:
-      'You can contact us by email at <a href="mailto:hello@gethank.com">hello@gethank.com</a> or by phone at <a href="tel:+18559164265">855-916-4265</a> Monday-Friday from 10 AM - 5 PM EST. We would love to hear from you!',
+    a: 'You can contact us by email at <a href="mailto:hello@gethank.com">hello@gethank.com</a> or by phone at <a href="tel:+18559164265">855-916-4265</a> Monday-Friday from 10 AM - 5 PM Eastern. We would love to hear from you!',
   },
   {
     q: 'What do I get by signing up for Hank?',
-    a:
-      'Hank organizes and manages the services your loved one needs to grow older at home. You or your loved one can schedule all of the meal deliveries, groceries, rides, and daily activities that they need to enjoy at home. Hank makes it easy to manage different services all in one place and is designed for older adults to use.',
+    a: 'Hank organizes and manages the services your loved one needs to grow older at home. You or your loved one can schedule all of the meal deliveries, groceries, rides, and daily activities that they need to enjoy at home. Hank makes it easy to manage different services all in one place and is designed for older adults to use.',
   },
   {
     q: 'Which areas do you serve?',
-    a:
-      'We provide service in all 50 states. Availability of specific services varies by region. Please sign up to check service availability in your area.',
+    a: 'We provide service in all 50 states. Availability of specific services varies by region. Please sign up to check service availability in your area.',
   },
   {
     q: 'Who performs the tasks scheduled through Hank?',
-    a:
-      'We partner with a network of national service providers to ensure quality and safety no matter where you are.',
+    a: 'We partner with a network of national service providers to ensure quality and safety no matter where you are.',
   },
   {
     q: 'Is Hank safe to use during the Covid-19 pandemic?',
-    a:
-      'Yes, we use contactless delivery for all our orders, so your loved one can maintain a safe distance from your delivery person. If you would like, you can also pick up your food from your restaurant to ensure that you are the only one carrying it back to your home.',
+    a: 'Yes, we use contactless delivery for all our orders, so your loved one can maintain a safe distance from your delivery person. If you would like, you can also pick up your food from your restaurant to ensure that you are the only one carrying it back to your home.',
   },
   {
     q: 'How does my loved one place an order?',
-    a:
-      'They can call or text 855-916-4265 to place an order. They can also create an account at gethank.com if they prefer to order online.',
+    a: 'They can call or text 855-916-4265 to place an order. They can also create an account at gethank.com if they prefer to order online.',
   },
   {
     q: 'Does my loved one need a smartphone or computer to order?',
-    a:
-      'No, anyone can place an order by calling or texting <a href="tel:+18559164265">855-916-4265</a>.',
+    a: 'No, anyone can place an order by calling or texting <a href="tel:+18559164265">855-916-4265</a>.',
   },
 
   {
     q: 'Can I request services for someone else?',
-    a:
-      'Yes, Hank is designed to allow anyone to schedule services on behalf of their loved one, or for their loved one to place orders for themselves.',
+    a: 'Yes, Hank is designed to allow anyone to schedule services on behalf of their loved one, or for their loved one to place orders for themselves.',
   },
   {
     q: 'Can I set an order schedule in advance?',
-    a:
-      'Yes, you can set your order on a recurring cadence so tasks are scheduled automatically and ahead of time.',
+    a: 'Yes, you can set your order on a recurring cadence so tasks are scheduled automatically and ahead of time.',
   },
   {
     q: 'What happens if I have a problem with an order?',
-    a:
-      'You can call or email us at any time and we will be able to assist you with your order.',
+    a: 'You can call or email us at any time and we will be able to assist you with your order.',
   },
 ]
 
