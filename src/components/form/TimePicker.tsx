@@ -27,7 +27,7 @@ export const TimePicker = ({
       ? DateTime.fromISO(nativeProps.defaultValue as string)
       : DateTime.local()
 
-    let initial = min || defaultValue.startOf('hour').set({ hour: 9 })
+    let initial = min || defaultValue.startOf('hour').set({ hour: 7 })
     let final = max || defaultValue.startOf('hour').set({ hour: 21 })
     if (timezone) {
       initial = initial.setZone(timezone)
