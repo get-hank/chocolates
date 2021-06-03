@@ -28,7 +28,7 @@ type AddressFormProps = {
   apiBase: string
   address?: Address
   userId?: string
-  done?: () => void
+  done?: (addressId?: string) => void
   states: {
     code: string
     name: string
@@ -111,7 +111,7 @@ const AddressForm = ({
       return new Error('Invalid fields')
     }
 
-    done && done()
+    done && done(body.id as string)
     return null
   }
 
@@ -245,7 +245,7 @@ const AddressForm = ({
       {modal ? (
         <Container justify="flex-end">
           <Div pr={2}>
-            <Button secondary onClick={done ? done : () => {}}>
+            <Button secondary onClick={() => done && done()}>
               Cancel
             </Button>
           </Div>
@@ -268,7 +268,7 @@ const AddressForm = ({
       <Modal
         open
         titleText={address ? 'Edit address' : 'Add address'}
-        onDismiss={done ? done : () => {}}
+        onDismiss={() => done && done()}
         {...modalProps}
         renderFooter={() => footer}
       >
