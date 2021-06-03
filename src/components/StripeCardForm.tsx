@@ -259,7 +259,7 @@ const StripeCardForm = ({
   const footer = (
     <>
       {!allFieldsFilled && showMissingFields && (
-        <Div pb={2}>
+        <Div py={2}>
           <Notice severity={severities.WARN}>
             Please fill out the required fields above.
           </Notice>
