@@ -151,7 +151,6 @@ const StripeCardForm = ({
           field="name"
           autoComplete="name"
           onChange={updateField}
-          placeholder="Jane Doe"
           required
           error={
             showMissingFields && !cardEdits.name && 'This field is required'
@@ -171,7 +170,10 @@ const StripeCardForm = ({
         >
           <StripeInputWrapper>
             <CardNumberElement
-              options={stripeElementOptions}
+              options={{
+                ...stripeElementOptions,
+                placeholder: '0000 0000 0000 0000',
+              }}
               onChange={(e: any) => onStripeChange('card', e)}
             />
           </StripeInputWrapper>
@@ -205,6 +207,7 @@ const StripeCardForm = ({
           label="CVV"
           field="cvv"
           inputType="none"
+          placeholder="123"
           required
           error={
             errors['cvv'] ||
@@ -213,7 +216,7 @@ const StripeCardForm = ({
         >
           <StripeInputWrapper>
             <CardCvcElement
-              options={stripeElementOptions}
+              options={{ ...stripeElementOptions, placeholder: '123' }}
               onChange={(e: any) => onStripeChange('cvv', e)}
             />
           </StripeInputWrapper>
@@ -223,7 +226,7 @@ const StripeCardForm = ({
       <Item cols={6} mdCols={12} pb={3}>
         <PadRightMd>
           <FormField
-            label="Zipcode"
+            label="ZIP code"
             field="zipcode"
             autoComplete="postal-code"
             onChange={updateField}
