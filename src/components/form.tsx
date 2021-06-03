@@ -85,6 +85,7 @@ type FieldProps = Omit<FormFieldWrapperProps, 'onChange'> & {
   options?: Option[]
   containerProps?: ContainerProps
   pickerProps?: DatePickerProps['pickerProps']
+  passThroughProps?: Partial<React.ComponentProps<typeof TimePicker>>
 }
 
 export const FormField: React.FC<FieldProps> = ({
@@ -106,6 +107,7 @@ export const FormField: React.FC<FieldProps> = ({
   containerProps,
   required = false,
   inputMode,
+  passThroughProps,
   ...wrapperProps
 }) => {
   const baseNativeProps = {
@@ -152,9 +154,10 @@ export const FormField: React.FC<FieldProps> = ({
       ) : null}
       {inputType === 'time' ? (
         <TimePicker
-          onTimeChange={(value) => onChange && onChange({ field, value })}
+          onChange={(value) => onChange && onChange({ field, value })}
           styledProps={styleProps}
           nativeProps={nativeProps}
+          {...passThroughProps}
         />
       ) : null}
       {inputType === 'date' ? (
