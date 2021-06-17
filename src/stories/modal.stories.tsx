@@ -34,7 +34,13 @@ export const Wide = Template.bind({})
 Wide.args = {
   children: (
     <Container center direction="column">
-      <P pb={2}>{[...Array(20)].map((idx) => 'more text').join(', ')}</P>
+      <P pb={2}>
+        {[...Array(20)]
+          .map((_, idx) => (
+            <React.Fragment key={idx}>'more text'</React.Fragment>
+          ))
+          .join(', ')}
+      </P>
     </Container>
   ),
   titleText: 'Wide ol modal',
@@ -47,7 +53,7 @@ export const Long = Template.bind({})
 Long.args = {
   children: (
     <Container center direction="column">
-      {[...Array(20)].map((idx) => (
+      {[...Array(20)].map((_, idx) => (
         <P p={3} key={idx}>
           Hello!!
         </P>

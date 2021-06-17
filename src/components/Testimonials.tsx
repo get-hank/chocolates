@@ -55,8 +55,8 @@ const TestimonialCards = () => (
             style={{ maxWidth: '360px' }}
           >
             <Container center>
-              {[...Array(5)].map((s) => (
-                <Star key={`start-${s}`} />
+              {[...Array(5)].map((_, idx) => (
+                <Star key={`star-${idx}`} />
               ))}
             </Container>
             <P py={2} lineHeight={150} center>
