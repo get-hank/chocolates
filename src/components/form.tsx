@@ -59,7 +59,7 @@ const FieldWrapper = styled(Container)<FormFieldWrapperProps>`
 export type FieldEdit = { field: string; value: any }
 
 type FieldProps = Omit<FormFieldWrapperProps, 'onChange'> & {
-  label: string
+  label?: string | null
   field: string
   onChange?: (edit: FieldEdit) => any
   value?: any
@@ -130,14 +130,14 @@ export const FormField: React.FC<FieldProps> = ({
 
   return (
     <FieldWrapper direction="column" {...wrapperProps} grow>
-      {!selectable ? (
+      {!selectable && label && (
         <Div pb={1}>
           <Label weight={600}>
             {requiredPrefix}
             {label}
           </Label>
         </Div>
-      ) : null}
+      )}
       {children && !selectable ? children : null}
       {inputType === 'text' ? (
         <Input styledProps={styleProps} nativeProps={nativeProps} />
@@ -168,7 +168,7 @@ export const FormField: React.FC<FieldProps> = ({
           pickerProps={pickerProps}
         />
       ) : null}
-      {inputType === 'checkbox' ? (
+      {inputType === 'checkbox' && (
         <Container p={wrapperProps.fillBg ? 2 : 0} align="center" grow>
           <Checkbox
             styledProps={styleProps}
@@ -180,18 +180,18 @@ export const FormField: React.FC<FieldProps> = ({
             }}
             containerProps={containerProps}
           >
-            {children ? (
-              children
-            ) : (
-              <Label>
-                {requiredPrefix}
-                {label}
-              </Label>
-            )}
+            {children
+              ? children
+              : label && (
+                  <Label>
+                    {requiredPrefix}
+                    {label}
+                  </Label>
+                )}
           </Checkbox>
         </Container>
-      ) : null}
-      {inputType === 'radio' ? (
+      )}
+      {inputType === 'radio' && (
         <Container p={wrapperProps.fillBg ? 2 : 0} align="center" grow>
           <Radio
             styledProps={styleProps}
@@ -203,27 +203,27 @@ export const FormField: React.FC<FieldProps> = ({
             }}
             containerProps={containerProps}
           >
-            {children ? (
-              children
-            ) : (
-              <Label>
-                {requiredPrefix}
-                {label}
-              </Label>
-            )}
+            {children
+              ? children
+              : label && (
+                  <Label>
+                    {requiredPrefix}
+                    {label}
+                  </Label>
+                )}
           </Radio>
         </Container>
-      ) : null}
-      {help ? (
+      )}
+      {help && (
         <P pt={1} color={colors.gray600}>
           {help}
         </P>
-      ) : null}
-      {typeof error === 'string' ? (
+      )}
+      {typeof error === 'string' && (
         <P pt={1} error>
           {error}
         </P>
-      ) : null}
+      )}
     </FieldWrapper>
   )
 }

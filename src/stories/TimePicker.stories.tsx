@@ -22,4 +22,5 @@ Standard.args = {
   },
   onChange: (d: DateTime) => console.log(d),
   step: 10,
+  timezone: 'America/Chicago',
 }
