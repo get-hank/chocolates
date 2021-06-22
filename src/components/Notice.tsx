@@ -12,6 +12,7 @@ export const severities: { [key: string]: Severity } = {
 
 type NoticeProps = React.ComponentProps<typeof Div> & {
   severity?: Severity
+  color?: string
   noticeProps?: React.ComponentProps<typeof Div>
 }
 
@@ -22,6 +23,7 @@ const severityColors = {
 }
 
 const Notice: React.FC<NoticeProps> = ({
+  color,
   severity,
   children,
   noticeProps = {},
@@ -33,7 +35,7 @@ const Notice: React.FC<NoticeProps> = ({
       {...noticeProps}
       style={{
         borderRadius: '8px',
-        backgroundColor: severityColors[severity || 'info'],
+        backgroundColor: color || severityColors[severity || 'info'],
         ...noticeProps.style,
       }}
     >
