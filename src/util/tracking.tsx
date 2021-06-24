@@ -1,3 +1,7 @@
+import React, { useEffect } from 'react'
+import { useParams } from 'react-router-dom'
+import { useQuery } from './routes'
+
 type Properties = { [key: string]: string | boolean | null }
 type TrackArgs = {
   event: string
@@ -59,4 +63,22 @@ export const track = ({ event, properties = {} }: TrackArgs) => {
 
 export const identify = (userId: string, traits: Properties) => {
   analyticsCall('identify', userId, traits)
+}
+
+export const VisitTrack: React.FC<{
+  pageName: string
+  getTraits?: (args: {
+    query: URLSearchParams
+    params: { [key: string]: string }
+  }) => NonNullable<TrackArgs['properties']>
+}> = ({ pageName, getTraits, children }) => {
+  const query = useQuery()
+  const params = useParams()
+
+  useEffect(() => {
+    const traits = getTraits ? getTraits({ query, params }) : {}
+    trackVisit(pageName, traits)
+  }, [query, params, pageName, getTraits])
+
+  return <>{children}</>
 }
