@@ -1,4 +1,10 @@
-import React, { useContext, useEffect, useReducer, useState } from 'react'
+import React, {
+  useContext,
+  useEffect,
+  useReducer,
+  useRef,
+  useState,
+} from 'react'
 import styled, { ThemeContext } from 'styled-components'
 import {
   CardNumberElement,
@@ -28,6 +34,7 @@ type StripeCardFormProps = {
   error?: string | null
   modalProps?: Partial<React.ComponentProps<typeof Modal>>
   modal?: boolean
+  scrollOnError?: boolean
   renderFooter?: (args: {
     submitDisabled: boolean
     submit: () => Promise<{ source?: Source; error?: Error }>
@@ -36,6 +43,10 @@ type StripeCardFormProps = {
 
 const StripeInputWrapper = styled.div`
   ${inputStyle}
+`
+
+const FieldWrapper = styled.div`
+  max-width: 360px;
 `
 
 const PadRightMd = styled.div`
@@ -52,6 +63,7 @@ const StripeCardForm = ({
   error: parentError,
   modal,
   renderFooter,
+  scrollOnError,
 }: Omit<StripeCardFormProps, 'publishableKey'>) => {
   const theme = useContext(ThemeContext)
   const stripeElementOptions = {
@@ -107,6 +119,18 @@ const StripeCardForm = ({
     updateField({ field, value: e.complete })
   }
 
+  const form = useRef<HTMLDivElement>()
+  useEffect(() => {
+    if (!scrollOnError || !form.current) return
+    if (
+      error ||
+      Object.keys(errors).length > 0 ||
+      (showMissingFields && !allFieldsFilled)
+    ) {
+      window.scrollTo(0, form.current.offsetTop - 20)
+    }
+  }, [form, showMissingFields, allFieldsFilled, scrollOnError, error, errors])
+
   const submit = async () => {
     if (!allFieldsFilled) {
       setShowMissingFields(true)
@@ -144,102 +168,112 @@ const StripeCardForm = ({
   }
 
   const contents = (
-    <>
+    <div ref={form}>
       <Item cols={12} pb={3}>
-        <FormField
-          label="Name on card"
-          field="name"
-          autoComplete="name"
-          onChange={updateField}
-          required
-          error={
-            showMissingFields && !cardEdits.name && 'This field is required'
-          }
-        />
-      </Item>
-      <Item cols={12} pb={3}>
-        <FormField
-          label="Card number"
-          field="card"
-          inputType="none"
-          error={
-            errors['card'] ||
-            (showMissingFields && !cardEdits.card && 'This field is required')
-          }
-          required
-        >
-          <StripeInputWrapper>
-            <CardNumberElement
-              options={{
-                ...stripeElementOptions,
-                placeholder: '0000 0000 0000 0000',
-              }}
-              onChange={(e: any) => onStripeChange('card', e)}
-            />
-          </StripeInputWrapper>
-        </FormField>
-      </Item>
-      <Item cols={6} mdCols={12} pb={3}>
-        <PadRightMd>
+        <FieldWrapper>
           <FormField
-            label="Exp. date"
-            field="expiry"
-            inputType="none"
+            label="Name on card"
+            field="name"
+            autoComplete="name"
+            onChange={updateField}
             required
             error={
-              errors['expiry'] ||
-              (showMissingFields &&
-                !cardEdits.expiry &&
-                'This field is required')
+              showMissingFields && !cardEdits.name && 'This field is required'
             }
+          />
+        </FieldWrapper>
+      </Item>
+      <Item cols={12} pb={3}>
+        <FieldWrapper>
+          <FormField
+            label="Card number"
+            field="card"
+            inputType="none"
+            error={
+              errors['card'] ||
+              (showMissingFields && !cardEdits.card && 'This field is required')
+            }
+            required
           >
             <StripeInputWrapper>
-              <CardExpiryElement
-                options={stripeElementOptions}
-                onChange={(e: any) => onStripeChange('expiry', e)}
+              <CardNumberElement
+                options={{
+                  ...stripeElementOptions,
+                  placeholder: '0000 0000 0000 0000',
+                }}
+                onChange={(e: any) => onStripeChange('card', e)}
               />
             </StripeInputWrapper>
           </FormField>
+        </FieldWrapper>
+      </Item>
+      <Item cols={6} mdCols={12} pb={3}>
+        <PadRightMd>
+          <FieldWrapper>
+            <FormField
+              label="Exp. date"
+              field="expiry"
+              inputType="none"
+              required
+              error={
+                errors['expiry'] ||
+                (showMissingFields &&
+                  !cardEdits.expiry &&
+                  'This field is required')
+              }
+            >
+              <StripeInputWrapper>
+                <CardExpiryElement
+                  options={stripeElementOptions}
+                  onChange={(e: any) => onStripeChange('expiry', e)}
+                />
+              </StripeInputWrapper>
+            </FormField>
+          </FieldWrapper>
         </PadRightMd>
       </Item>
       <Item cols={6} mdCols={12} pb={3}>
-        <FormField
-          label="CVV"
-          field="cvv"
-          inputType="none"
-          placeholder="123"
-          required
-          error={
-            errors['cvv'] ||
-            (showMissingFields && !cardEdits.cvv && 'This field is required')
-          }
-        >
-          <StripeInputWrapper>
-            <CardCvcElement
-              options={{ ...stripeElementOptions, placeholder: '123' }}
-              onChange={(e: any) => onStripeChange('cvv', e)}
-            />
-          </StripeInputWrapper>
-        </FormField>
+        <FieldWrapper>
+          <FormField
+            label="CVV"
+            field="cvv"
+            inputType="none"
+            placeholder="123"
+            required
+            error={
+              errors['cvv'] ||
+              (showMissingFields && !cardEdits.cvv && 'This field is required')
+            }
+          >
+            <StripeInputWrapper>
+              <CardCvcElement
+                options={{ ...stripeElementOptions, placeholder: '123' }}
+                onChange={(e: any) => onStripeChange('cvv', e)}
+              />
+            </StripeInputWrapper>
+          </FormField>
+        </FieldWrapper>
       </Item>
 
       <Item cols={6} mdCols={12} pb={3}>
         <PadRightMd>
-          <FormField
-            label="ZIP code"
-            field="zipcode"
-            autoComplete="postal-code"
-            onChange={updateField}
-            placeholder="12345"
-            inputMode="numeric"
-            required
-            error={
-              errors['zipcode'] ||
-              (showMissingFields &&
-                !cardEdits.zipcode &&
-                'This field is required')
-            }
-          />
+          <FieldWrapper>
+            <FormField
+              label="ZIP code"
+              field="zipcode"
+              autoComplete="postal-code"
+              onChange={updateField}
+              placeholder="12345"
+              inputMode="numeric"
+              required
+              error={
+                errors['zipcode'] ||
+                (showMissingFields &&
+                  !cardEdits.zipcode &&
+                  'This field is required')
+              }
+            />
+          </FieldWrapper>
         </PadRightMd>
       </Item>
       <Item cols={12} direction="row" align="center">
@@ -253,7 +287,7 @@ const StripeCardForm = ({
           </P>
         </Item>
       ) : null}
-    </>
+    </div>
   )
 
   const footer = (

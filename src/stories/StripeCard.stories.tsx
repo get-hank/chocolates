@@ -17,6 +17,7 @@ const Template: Story<ComponentProps<typeof StripeCardForm>> = (args) => (
 export const Standard = Template.bind({})
 Standard.args = {
   publishableKey: 'pk_test_oeb0blKIHxA1LZLddd05HFN000lMyXCGDm',
+  scrollOnError: true,
 }
 export const Modal = Template.bind({})
 Modal.args = {
