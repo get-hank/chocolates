@@ -37,7 +37,10 @@ const flushPendingAnalyticsCalls = () => {
     return
   }
 
-  window._pending_segment_calls.map(
+  const toCall = window._pending_segment_calls
+  window._pending_segment_calls = []
+
+  toCall.map(
     (args) => window.analytics && window.analytics[args[0]](args[1], args[2])
   )
 }
