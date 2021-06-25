@@ -34,7 +34,6 @@ type StripeCardFormProps = {
   error?: string | null
   modalProps?: Partial<React.ComponentProps<typeof Modal>>
   modal?: boolean
-  scrollOnError?: boolean
   renderFooter?: (args: {
     submitDisabled: boolean
     submit: () => Promise<{ source?: Source; error?: Error }>
@@ -63,7 +62,6 @@ const StripeCardForm = ({
   error: parentError,
   modal,
   renderFooter,
-  scrollOnError,
 }: Omit<StripeCardFormProps, 'publishableKey'>) => {
   const theme = useContext(ThemeContext)
   const stripeElementOptions = {
@@ -119,18 +117,6 @@ const StripeCardForm = ({
     updateField({ field, value: e.complete })
   }
 
-  const form = useRef<HTMLDivElement>()
-  useEffect(() => {
-    if (!scrollOnError || !form.current) return
-    if (
-      error ||
-      Object.keys(errors).length > 0 ||
-      (showMissingFields && !allFieldsFilled)
-    ) {
-      window.scrollTo(0, form.current.offsetTop - 20)
-    }
-  }, [form, showMissingFields, allFieldsFilled, scrollOnError, error, errors])
-
   const submit = async () => {
     if (!allFieldsFilled) {
       setShowMissingFields(true)
@@ -168,7 +154,7 @@ const StripeCardForm = ({
   }
 
   const contents = (
-    <Container ref={form}>
+    <Container>
       <Item cols={12} pb={3}>
         <FieldWrapper>
           <FormField
