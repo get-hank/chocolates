@@ -24,11 +24,6 @@ declare global {
     | undefined
   var _segment_identified: boolean | null | undefined
   var _pending_segment_calls: AnalyticsCallArgs[] | null | undefined
-  var _learnq:
-    | {
-        push: (args: any[]) => any
-      }
-    | undefined
 }
 
 const flushPendingAnalyticsCalls = () => {
@@ -66,12 +61,6 @@ export const trackVisit = (pageName: string, props: Properties) => {
 }
 
 export const track = ({ event, properties = {} }: TrackArgs) => {
-  if (properties.email && window._learnq)
-    window._learnq.push([
-      'track',
-      event,
-      { ...properties, $email: properties.email },
-    ])
   analyticsCall('track', event, properties)
 }
 
@@ -111,24 +100,6 @@ export const useTracking: (user?: User) => null = (user) => {
     // around identity
     identify(user.resourceId, { email: user.email })
     window._segment_identified = true
-  }, [user])
-
-  useEffect(() => {
-    const id = 'klaviyo-tracker'
-    if (document.querySelector(`script#${id}`)) return
-
-    const script = document.createElement('script')
-    script.async = true
-    script.id = id
-    script.type = 'text/javascript'
-    script.src = '//static.klaviyo.com/onsite/js/klaviyo.js?company_id=WR8nhh'
-    document.body.appendChild(script)
-  })
-
-  useEffect(() => {
-    if (!user || !user.email || !window._learnq) return
-
-    window._learnq.push(['identify', { $email: user.email }])
   }, [user])
 
   return null
