@@ -168,7 +168,7 @@ const StripeCardForm = ({
   }
 
   const contents = (
-    <div ref={form}>
+    <Container ref={form}>
       <Item cols={12} pb={3}>
         <FieldWrapper>
           <FormField
@@ -287,7 +287,7 @@ const StripeCardForm = ({
           </P>
         </Item>
       ) : null}
-    </div>
+    </Container>
   )
 
   const footer = (
