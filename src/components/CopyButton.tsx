@@ -5,7 +5,7 @@ import { CopyToClipboard } from 'react-copy-to-clipboard'
 
 type CopyButtonProps = React.ComponentProps<typeof Div> & {
   text: string
-  buttonProps: React.ComponentProps<typeof Button>
+  buttonProps?: React.ComponentProps<typeof Button>
   label?: string
 }
 
