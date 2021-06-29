@@ -10,6 +10,7 @@ type CopyButtonProps = React.ComponentProps<typeof Div> & {
   linkProps?: React.ComponentProps<typeof Link>
   label?: string
   variant?: 'button' | 'link'
+  onCopy?: () => void
 }
 
 const CopyButton = ({
@@ -17,11 +18,12 @@ const CopyButton = ({
   label,
   buttonProps,
   linkProps,
+  onCopy,
   variant = 'link',
   ...divProps
 }: CopyButtonProps) => {
   return (
-    <CopyToClipboard text={text}>
+    <CopyToClipboard {...{ onCopy, text }}>
       <Div {...divProps}>
         {variant === 'button' && (
           <Button {...buttonProps}>{label || 'Copy'}</Button>
