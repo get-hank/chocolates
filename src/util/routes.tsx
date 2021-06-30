@@ -22,7 +22,7 @@ export const mailTo: MailTo = (email, { subject } = {}) => {
 }
 
 export const smsHref = (body: string) =>
-  `sms:?&=body=${encodeURIComponent(body)}`
+  `sms:;?&body=${encodeURIComponent(body)}`
 
 type MaybeString = string | null | undefined
 type ParamSetter = (p?: MaybeString) => any
