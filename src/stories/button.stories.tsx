@@ -23,4 +23,5 @@ Standard.args = {
   secondary: false,
   wide: false,
   color: '#2A69F2',
+  width: 320,
 }

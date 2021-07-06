@@ -13,6 +13,7 @@ export interface ButtonProps extends React.ComponentPropsWithoutRef<'button'> {
   size?: SizeType
   secondary?: boolean
   wide?: boolean
+  width?: number
   disabled?: boolean
   color?: string
 }
@@ -109,9 +110,25 @@ const Button = styled.button<ButtonProps>`
 
   ${({ size, wide }) => sizeRules(size, wide)}
 
+
   @media (max-width: ${breakPoint('sm')}px) {
-    ${({ wide }) => sizeRules('mobile', wide)}
+    ${({ wide, size }) => (size ? '' : sizeRules('mobile', wide))}
   }
+
+${({ width }) =>
+  width
+    ? `
+  @media(max-width: ${width + 32}px) {
+    max-width: ${width}px;
+    width: 100%;
+  }
+
+  @media (min-width: ${width + 32}px) {
+    width: ${width}px;
+  }
+`
+    : ''}
+}
 `
 
 const Component: React.FC<ButtonProps> = ({
