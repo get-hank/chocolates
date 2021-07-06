@@ -71,48 +71,40 @@ const Button = styled.button<ButtonProps>`
   &:hover,
   &:active {
     cursor: pointer;
-    color: ${({ secondary, theme, color }) =>
-    secondary ? theme.colors.primary : theme.colors.white};
+    color: ${({ secondary, theme }) =>
+      secondary ? theme.colors.primary : theme.colors.white};
     background-color: ${({ secondary, theme, color }) =>
-    secondary
-      ? theme.colors.white
-      : color
+      secondary
+        ? theme.colors.white
+        : color
         ? darken(0.1, color)
         : theme.colors.primaryDark};
     border-color: ${({ secondary, theme, color }) =>
-    secondary
-      ? color
+      secondary
         ? color
-        : theme.colors.primary
-      : color
+          ? color
+          : theme.colors.primary
+        : color
         ? darken(0.1, color)
         : theme.colors.primaryDark};
   }
 
   &:active {
     border-color: ${({ theme, color }) =>
-    color ? lighten(0.1, color) : theme.colors.primaryLight};
+      color ? lighten(0.1, color) : theme.colors.primaryLight};
     box-shadow: 0 0 1px 3px
       ${({ theme, color }) =>
-    color ? lighten(0.1, color) : theme.colors.primaryLight};
+        color ? lighten(0.1, color) : theme.colors.primaryLight};
   }
 
   &:disabled {
     cursor: initial;
     color: ${({ secondary, theme }) =>
-    secondary ? theme.colors.textDisabled : theme.colors.white};
-    background-color: ${({ secondary, theme, color }) =>
-    secondary
-      ? theme.colors.grayLightest
-      : color
-        ? lighten(0.2, color)
-        : theme.colors.primaryLightest};
-    border-color: ${({ secondary, theme, color }) =>
-    secondary
-      ? theme.colors.grayLightest
-      : color
-        ? lighten(0.2, color)
-        : theme.colors.primaryLightest};
+      secondary ? theme.colors.textDisabled : theme.colors.white};
+    background-color: ${({ secondary, theme }) =>
+      secondary ? theme.colors.grayLightest : theme.colors.grayBorder};
+    border-color: ${({ secondary, theme }) =>
+      secondary ? theme.colors.grayLightest : theme.colors.grayBorder};
   }
 
   ${({ size, wide }) => sizeRules(size, wide)}
