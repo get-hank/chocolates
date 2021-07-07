@@ -62,7 +62,9 @@ const FullPage: React.FC<Props> = ({
             )}
           </Container>
           {headerCenterContent || <div />}
-          <div style={{ width: '25%' }}>{headerRightContent}</div>
+          <Container justify="flex-end" style={{ width: '25%' }}>
+            {headerRightContent}
+          </Container>
         </Container>
       </Div>
       <Wrapper>{children}</Wrapper>
