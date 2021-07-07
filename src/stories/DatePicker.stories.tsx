@@ -3,7 +3,7 @@ import React, { ComponentProps } from 'react'
 import { DateTime } from 'luxon'
 import { Story, Meta } from '@storybook/react/types-6-0'
 import { Container } from '../components/grid'
-import { DatePicker } from '../components/form'
+import { DatePicker } from '../components/FormField'
 
 export default {
   title: 'Form/DatePicker',

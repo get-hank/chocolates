@@ -16,7 +16,7 @@ import {
 } from '@stripe/react-stripe-js'
 import { loadStripe, Source } from '@stripe/stripe-js'
 import Button from './Button'
-import { FormField, FieldEdit } from './form'
+import { FormField, FieldEdit } from './FormField'
 import { Container, Item } from './grid'
 import Modal from './Modal'
 import Notice, { severities } from './Notice'

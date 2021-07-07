@@ -2,7 +2,7 @@ import React, { ComponentProps } from 'react'
 import { DateTime } from 'luxon'
 import { Story, Meta } from '@storybook/react/types-6-0'
 import { Container } from '../components/grid'
-import { TimePicker } from '../components/form'
+import { TimePicker } from '../components/FormField'
 
 export default {
   title: 'Form/TimePicker',

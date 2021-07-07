@@ -1,14 +1,14 @@
 // @ts-nocheck
-import React, { ComponentProps } from "react";
-import { Story, Meta } from "@storybook/react/types-6-0";
-import { Container } from "../components/grid";
-import { Checkbox, FormField } from "../components/form";
-import { P } from "../components/typography";
+import React, { ComponentProps } from 'react'
+import { Story, Meta } from '@storybook/react/types-6-0'
+import { Container } from '../components/grid'
+import { Checkbox, FormField } from '../components/FormField'
+import { P } from '../components/typography'
 
 export default {
-  title: "Form/Checkbox",
+  title: 'Form/Checkbox',
   component: Checkbox,
-} as Meta;
+} as Meta
 
 const Template: Story<ComponentProps<typeof Checkbox>> = (args) => (
   <Container direction="column">
@@ -33,7 +33,7 @@ const Template: Story<ComponentProps<typeof Checkbox>> = (args) => (
       label="as a form field"
       inputType="checkbox"
       field="field2"
-      containerProps={{ align: "flex-start" }}
+      containerProps={{ align: 'flex-start' }}
     >
       <div>
         <P>Woo block content</P>
@@ -42,9 +42,9 @@ const Template: Story<ComponentProps<typeof Checkbox>> = (args) => (
       </div>
     </FormField>
   </Container>
-);
+)
 
-export const Standard = Template.bind({});
+export const Standard = Template.bind({})
 Standard.args = {
   nativeProps: {},
-};
+}

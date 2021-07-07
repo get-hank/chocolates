@@ -1,14 +1,14 @@
 // @ts-nocheck
-import React, { ComponentProps } from "react";
-import { Story, Meta } from "@storybook/react/types-6-0";
-import { Div } from "../components/spacing";
-import { Container } from "../components/grid";
-import { FormField } from "../components/form";
+import React, { ComponentProps } from 'react'
+import { Story, Meta } from '@storybook/react/types-6-0'
+import { Div } from '../components/spacing'
+import { Container } from '../components/grid'
+import { FormField } from '../components/FormField'
 
 export default {
-  title: "Form/FormField",
+  title: 'Form/FormField',
   component: FormField,
-} as Meta;
+} as Meta
 
 const Template: Story<ComponentProps<typeof Input>> = (args) => (
   <Container direction="column" center>
@@ -20,13 +20,13 @@ const Template: Story<ComponentProps<typeof Input>> = (args) => (
       inputType="time"
     />
   </Container>
-);
+)
 
-export const Standard = Template.bind({});
+export const Standard = Template.bind({})
 Standard.args = {
-  label: "Label",
-  field: "date",
-  placeholder: "Placeholder",
-  inputType: "date",
+  label: 'Label',
+  field: 'date',
+  placeholder: 'Placeholder',
+  inputType: 'date',
   fillBg: false,
-};
+}
