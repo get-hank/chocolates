@@ -1,6 +1,6 @@
 {
   "name": "@hank-technology/chocolates",
-  "version": "2.8.21",
+  "version": "2.9.0",
   "module": "dist/index.js",
   "files": [
     "dist",
