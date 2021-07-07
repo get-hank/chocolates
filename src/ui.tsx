@@ -1,6 +1,7 @@
 export { default as Button } from './components/Button'
 export { default as CopyButton } from './components/CopyButton'
 export { default as CalendarPicker } from './components/CalendarPicker'
+export { default as EmailForm } from './components/EmailForm'
 export { default as FAQ } from './components/FAQ'
 export * from './components/FormField'
 export { default as FullPage } from './components/FullPage'
