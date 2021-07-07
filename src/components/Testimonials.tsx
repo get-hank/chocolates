@@ -1,6 +1,6 @@
 import React from 'react'
-import { Star } from '../icons'
 import { Container, Item } from './grid'
+import Stars from './Stars'
 import { P } from './typography'
 
 const testimonialRows = [
@@ -54,11 +54,7 @@ const TestimonialCards = () => (
             pb={5}
             style={{ maxWidth: '360px' }}
           >
-            <Container center>
-              {[...Array(5)].map((_, idx) => (
-                <Star key={`star-${idx}`} />
-              ))}
-            </Container>
+            <Stars />
             <P py={2} lineHeight={150} center>
               {testimonial.review}
             </P>
