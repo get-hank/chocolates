@@ -2,7 +2,9 @@ import React, { useEffect } from 'react'
 import { useParams } from 'react-router-dom'
 import { useQuery } from './routes'
 
-type Properties = { [key: string]: string | boolean | null }
+type Properties = {
+  [key: string]: string[] | number[] | number | string | boolean | null
+}
 type TrackArgs = {
   event: string
   properties?: Properties
