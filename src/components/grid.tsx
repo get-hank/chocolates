@@ -108,8 +108,11 @@ export const Item = styled(SpacingContainer)<ItemProps>`
 `
 
 export const Container = styled(
-  ({ wrap, center, direction, align, justify, ...rest }) => (
-    <SpacingContainer {...rest} />
+  React.forwardRef(
+    (
+      { wrap, center, direction, align, justify, ...rest }: ContainerProps,
+      ref
+    ) => <SpacingContainer {...rest} ref={ref} />
   )
 )<ContainerProps>`
   display: flex;
